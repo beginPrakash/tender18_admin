@@ -1,0 +1,8 @@
+[06-Nov-2023 10:36:44 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 9
+[06-Nov-2023 10:36:44 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 10
+[06-Nov-2023 10:36:56 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 9
+[06-Nov-2023 10:36:56 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 10
+[06-Nov-2023 10:37:04 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 9
+[06-Nov-2023 10:37:04 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 10
+[06-Nov-2023 10:37:26 UTC] PHP Warning:  mysqli_num_rows() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 9
+[06-Nov-2023 10:37:26 UTC] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home2/clickthe/public_html/tender18/admin/login/index.php on line 10

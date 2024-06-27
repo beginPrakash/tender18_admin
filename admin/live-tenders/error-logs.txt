@@ -1,0 +1,11 @@
+GEM/2024/B/4563742 Invalid city/state
+GEM/2024/B/4563252 Invalid city/state
+GEM/2024/B/4564149 Invalid city/state
+GEM/2024/B/4564065 Invalid city/state
+GEM/2024/B/4564962 Invalid city/state
+GEM/2024/B/4564560 Invalid city/state
+GEM/2024/B/4564789 Invalid city/state
+GEM/2024/B/4562171 Invalid agency
+GEM/2024/B/4498726 Invalid city/state
+GEM/2024/B/4498628 Invalid city/state
+GEM/2024/B/4564788 Invalid city/state
