@@ -3,7 +3,14 @@
 <?php $pages = 'clients'; ?>
 <?php include '../includes/header.php' ?>
 <?php
-if ($_SESSION['role'] != 'admin') {
+$clients_per = _get_user_perby_role($_SESSION['user_id'],'clients',$con);
+
+if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}elseif($_SESSION['role']=='employee' && $clients_per!=1){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';
@@ -13,16 +20,11 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
     if (!empty($_GET['id']) && !empty($_GET['unique_code'])) {
         mysqli_query($con, "DELETE FROM `users` where user_id={$_GET['id']} AND user_unique_id={$_GET['unique_code']}");
         echo "<script>
-            window.location.href='" . ADMIN_URL . "clients';
+            window.location.href='" . ADMIN_URL . "clients/renew.php';
             </script>";
     }
 }
 ?>
-<style>
-    td {
-        white-space: pre-wrap;
-    }
-</style>
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -50,7 +52,7 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
                     </div>
                     <div class="col-2">
                         <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>clients/renew.php">
-                            <h5 class="card-title btn w-100 bg-primary text-white">Renew</h5>
+                            <h5 class="card-title btn w-100 bg-success text-white">Renew</h5>
                         </a>
                     </div>
                     <div class="col-2">
@@ -71,35 +73,23 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
                     <thead>
                         <tr>
                             <th>SR No.</th>
-                            <th>Company Name</th>
+                            <th>Username</th>
                             <th>Email</th>
-                            <th>Mobile</th>
-                            <th>New Tenders Link</th>
-                            <th>Live Tenders Link</th>
+                            <th>Role</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        function truncate_and_append($text, $length = 20)
-                        {
-                            if (strlen($text) <= $length) {
-                                return $text;
-                            } else {
-                                return substr($text, 0, $length) . "...";
-                            }
-                        }
                         $i = 1;
-                        $fetching_users = mysqli_query($con, "SELECT * FROM users where user_role='user' order by user_id desc");
+                        $fetching_users = mysqli_query($con, "SELECT * FROM users where user_role='user' and `status`='Renew' order by user_id desc");
                         while ($row = mysqli_fetch_assoc($fetching_users)) {
                         ?>
                             <tr>
                                 <th scope="row"><?php echo $i; ?></th>
-                                <td><?php echo $row['company_name']; ?></td>
+                                <td><?php echo $row['users_name']; ?></td>
                                 <td><?php echo $row['users_email']; ?></td>
-                                <td><?php echo $row['mobile_number']; ?></td>
-                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/new-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/new-tenders/" . $row['user_unique_id']); ?></td>
-                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/live-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/live-tenders/" . $row['user_unique_id']); ?></td>
+                                <td><?php echo ucfirst($row['user_role']); ?></td>
                                 <td>
                                     <div class="dropdown d-inline-block">
                                         <button class="btn btn-subtle-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -162,21 +152,4 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
         else
             window.location.href = '<?php echo ADMIN_URL; ?>users';
     });
-</script>
-
-<script>
-    //copy text
-    var copy = document.querySelectorAll(".copy");
-    for (const copied of copy) {
-        copied.onclick = function() {
-            document.execCommand("copy");
-        }
-        copied.addEventListener("copy", function(event) {
-            event.preventDefault();
-            if (event.clipboardData) {
-                // event.clipboardData.setData("text/plain", copied.textContent);
-                event.clipboardData.setData("text/plain", copied.getAttribute("data-id"));
-            }
-        });
-    }
 </script>

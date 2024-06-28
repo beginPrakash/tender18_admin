@@ -92,3 +92,9 @@ function htmlspecialcode_generator($string)
     }
     return $string;
 }
+
+function _get_user_perby_role($user_id,$key_name,$con){
+    $fetch_per = mysqli_fetch_assoc(mysqli_query($GLOBALS['con'], "SELECT `key_value` FROM `user_permission` where user_id={$user_id} AND key_name='{$key_name}'"));
+    $val = (!empty($fetch_per['key_value'])) ? $fetch_per['key_value'] : '';
+    return $val;
+  }

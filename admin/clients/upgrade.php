@@ -3,7 +3,14 @@
 <?php $pages = 'clients'; ?>
 <?php include '../includes/header.php' ?>
 <?php
-if ($_SESSION['role'] != 'admin') {
+$clients_per = _get_user_perby_role($_SESSION['user_id'],'clients',$con);
+
+if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}elseif($_SESSION['role']=='employee' && $clients_per!=1){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';
@@ -13,7 +20,7 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
     if (!empty($_GET['id']) && !empty($_GET['unique_code'])) {
         mysqli_query($con, "DELETE FROM `users` where user_id={$_GET['id']} AND user_unique_id={$_GET['unique_code']}");
         echo "<script>
-            window.location.href='" . ADMIN_URL . "clients/renew.php';
+            window.location.href='" . ADMIN_URL . "clients/upgrade.php';
             </script>";
     }
 }
@@ -45,12 +52,12 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
                     </div>
                     <div class="col-2">
                         <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>clients/renew.php">
-                            <h5 class="card-title btn w-100 bg-success text-white">Renew</h5>
+                            <h5 class="card-title btn w-100 bg-primary text-white">Renew</h5>
                         </a>
                     </div>
                     <div class="col-2">
                         <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>clients/upgrade.php">
-                            <h5 class="card-title btn w-100 bg-primary text-white">Upgrade</h5>
+                            <h5 class="card-title btn w-100 bg-success text-white">Upgrade</h5>
                         </a>
                     </div>
                 </div>
@@ -75,7 +82,7 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
                     <tbody>
                         <?php
                         $i = 1;
-                        $fetching_users = mysqli_query($con, "SELECT * FROM users where user_role='user' and `status`='Renew' order by user_id desc");
+                        $fetching_users = mysqli_query($con, "SELECT * FROM users where user_role='user' and `status`='Upgrade' order by user_id desc");
                         while ($row = mysqli_fetch_assoc($fetching_users)) {
                         ?>
                             <tr>

@@ -3,9 +3,9 @@
 
 if ($_SERVER['HTTP_HOST'] == 'localhost') {
 
-	define('HOME_URL', 'http://localhost/tender18/');
-	define('INDEX_URL', 'http://localhost/tender18/');
-	define('ADMIN_URL', 'http://localhost/tender18/admin/');
+	define('HOME_URL', 'http://localhost/tender18_admin/');
+	define('INDEX_URL', 'http://localhost/tender18_admin/');
+	define('ADMIN_URL', 'http://localhost/tender18_admin/admin/');
 	define('ADMIN_EMAIL', 'dev@clickthedemo.com');
 	$server = 'localhost';
 	$user = 'root';
