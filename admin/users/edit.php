@@ -8,7 +8,14 @@ include "../includes/authentication.php";
 
 ?>
 <?php
-if ($_SESSION['role'] != 'admin') {
+$users_per = _get_user_perby_role($_SESSION['user_id'],'users',$con);
+
+if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}elseif($_SESSION['role']=='employee' && $users_per!=1){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';
@@ -42,11 +49,13 @@ if (isset($_POST['submit'])) {
         // var_dump($q);
         $sql = mysqli_query($con, $q);
         mysqli_query($con, "DELETE FROM `user_permission` where user_id={$_GET['id']}");
-        if(!empty($_POST['user_permis']) && count($_POST['user_permis']) > 0):
-            foreach($_POST['user_permis'] as $key => $val):  
-                $per_que = "INSERT INTO user_permission(user_id, key_name ,key_value) VALUES ('$user_id', $key, $val)";
-                $per_sql = mysqli_query($con, $per_que);
-            endforeach;
+        if($user_role == 'employee'):
+            if(!empty($_POST['user_permis']) && count($_POST['user_permis']) > 0):
+                foreach($_POST['user_permis'] as $key => $val):  
+                    $per_que = "INSERT INTO user_permission(user_id, key_name ,key_value) VALUES ('$user_id', $key, $val)";
+                    $per_sql = mysqli_query($con, $per_que);
+                endforeach;
+            endif;
         endif;
         if ($sql) {
             if (isset($_POST['company_name'])) {
@@ -448,10 +457,9 @@ if (!empty($_SESSION['error'])) {
 
         if ($(this).val() == "employee") {
             $('.employee_perm_div').removeClass('d-none');
-            $('.multi_check').prop('checked', true);
         } else {
             $('.employee_perm_div').addClass('d-none');
-            $('.multi_check').prop('checked', false);
+           
         }
 
     });

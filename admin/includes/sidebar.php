@@ -1,8 +1,4 @@
 <?php 
-    function _get_user_perby_role($user_id,$key_name,$con){
-        $fetch_per = mysqli_fetch_assoc(mysqli_query($con, "SELECT `key_value` FROM `user_permission` where user_id={$user_id} AND key_name='{$key_name}'"));
-        return (!empty($fetch_per['key_value'])) ? $fetch_per['key_value'] : '';
-    }
 
     $dashboards_per = _get_user_perby_role($_SESSION['user_id'],'dashboards',$con);
     $archive_tenders_per = _get_user_perby_role($_SESSION['user_id'],'archive_tenders',$con);
