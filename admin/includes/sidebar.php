@@ -11,6 +11,8 @@
     $pages_per = _get_user_perby_role($_SESSION['user_id'],'pages',$con);
     $free_quote_form_per = _get_user_perby_role($_SESSION['user_id'],'free_quote_form',$con);
     $tender_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'tender_inquiry',$con);
+    $feedback_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'feedback_inquiry',$con);
+    $complain_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'complain_inquiry',$con);
     $registration_form_per = _get_user_perby_role($_SESSION['user_id'],'registration_form',$con);
 ?>
 <!-- ========== App Menu ========== -->
@@ -175,6 +177,26 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/tender-inquiry">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Tender Inquiry</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $feedback_inquiry_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'feedback-inquiry') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/feedback-inquiry">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Feedback Inquiry</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $complain_inquiry_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'complain-inquiry') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/complain-inquiry">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Complain Inquiry</span>
                         </a>
                     </li>
                 <?php } ?>

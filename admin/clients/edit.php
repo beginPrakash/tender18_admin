@@ -82,8 +82,25 @@ if (isset($_POST['submit'])) {
             $passw = ", users_password='$pass'";
         else
             $passw = "";
+        
         $q = "UPDATE `users` SET users_name='$username', users_email='$email', user_role='$user_role' $passw where user_id='$user_id' and user_unique_id='$unique_code'";
         $sql = mysqli_query($con, $q);
+        //save payment details
+        mysqli_query($con, "DELETE FROM `client_payment_details` where user_id={$_GET['id']}");
+        if(!empty($_POST['payment_date']) && count($_POST['payment_date'])):
+            foreach($_POST['payment_date'] as $key => $val):
+                if(!empty($val)):
+                    $timestamp2 = strtotime($val);
+                    $payment_date = date("Y-m-d", $timestamp2);
+                    $payment_amount = (isset($_POST['payment_amount']) && !empty($_POST['payment_amount'][$key])) ? $_POST['payment_amount'][$key] : '';
+                    $payment_type = (isset($_POST['payment_type']) && !empty($_POST['payment_type'][$key])) ? $_POST['payment_type'][$key] : '';
+                    $payment_notes = (isset($_POST['payment_notes']) && !empty($_POST['payment_notes'][$key])) ? $_POST['payment_notes'][$key] : '';
+                    $q = "INSERT INTO client_payment_details(user_id, payment_date ,payment_type, payment_amount, payment_notes) VALUES ($user_id, '$payment_date', '$payment_type', '$payment_amount', '$payment_notes')";
+                    $sql = mysqli_query($con, $q);
+                endif;
+                
+            endforeach;
+        endif;
         if ($sql) {
             if (isset($_POST['company_name'])) {
                 $company_name = mysqli_real_escape_string($con, $_POST['company_name']);
@@ -92,9 +109,14 @@ if (isset($_POST['submit'])) {
                 $mobile_number = $_POST['mobile_number'];
                 $alt_mobile = $_POST['alt_mobile'];
                 $whatsapp_alert_no = $_POST['whatsapp_alert_no'];
+                $custom_care_number = $_POST['custom_care_number'];
+                $tech_person_name = $_POST['tech_person_name'];
+                $tech_person_number = $_POST['tech_person_number'];
                 $address = mysqli_real_escape_string($con, $_POST['address']);
                 $state = $_POST['state'];
                 $status = $_POST['status'];
+                $email_ids = $_POST['email_ids'];
+                $mail_type = $_POST['mail_type'];
                 $keywords = mysqli_real_escape_string($con, $_POST['keywords']);
                 $words = mysqli_real_escape_string($con, $_POST['words']);
                 $not_used_keywords = mysqli_real_escape_string($con, $_POST['not_used_keywords']);
@@ -115,7 +137,7 @@ if (isset($_POST['submit'])) {
                 $timestamp2 = strtotime($expired_date);
                 $expired_date = date("Y-m-d", $timestamp2);
 
-                $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date' where user_id='$user_id' and user_unique_id='$unique_code'";
+                $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date', custom_care_number='$custom_care_number', tech_person_name='$tech_person_name', tech_person_number='$tech_person_number', email_ids='$email_ids', mail_type='$mail_type' where user_id='$user_id' and user_unique_id='$unique_code'";
                 $sql1 = mysqli_query($con, $q1);
             }
             $_SESSION['success'] = 'Updated successfully.';
@@ -229,6 +251,25 @@ if (!empty($_SESSION['error'])) {
                             <div class="col-md-6">
                                 <label for="email" class="form-label">Email : <span class="text-danger">*</span></label>
                                 <input type="email" name="email" placeholder="Enter Email " value="<?php echo $fetch_users['users_email']; ?>" class="form-control" id="email">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="email_ids" class="form-label">Email Ids: </label>
+                                <textarea name="email_ids" row="3" placeholder="Enter Comma Seprated Emails " class="form-control" id="email_ids"><?php echo $fetch_users['email_ids']; ?></textarea>
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="row">
+                                <label for="mail_type" class="form-label">Mail Type : </label>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input" type="radio" value="list" name="mail_type" <?php echo ($fetch_users['mail_type'] == 'list') ? 'checked' : '' ?>>
+                                    <label class="form-check-label">List</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input" type="radio" value="link" name="mail_type" <?php echo ($fetch_users['mail_type'] == 'link') ? 'checked' : '' ?>>
+                                    <label class="form-check-label">Link</label>
+                                </div>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -413,7 +454,7 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="keywords" class="form-label">Keywords : <span class="text-danger">*</span></label>
-                                <input type="text" name="keywords" placeholder="Enter Keywords " class="form-control" id="keywords" value="<?php echo htmlspecialcode_generator($fetch_users['keywords']); ?>">
+                                <textarea name="keywords" rows="3" placeholder="Enter Keywords " class="form-control" id="keywords"><?php echo htmlspecialcode_generator($fetch_users['keywords']); ?></textarea>
                                 <!-- <input type="text" name="keywords" placeholder="Enter Keywords " data-choices data-choices-text-unique-true data-choices-removeItem class="form-control" id="keywords" value="<?php echo htmlspecialcode_generator($fetch_users['keywords']); ?>"> -->
                             </div>
                         </div>
@@ -429,7 +470,105 @@ if (!empty($_SESSION['error'])) {
                                 <input type="text" name="not_used_keywords" data-choices data-choices-text-unique-true data-choices-removeItem placeholder="Enter Not Used  Keywords " class="form-control" id="not_used_keywords" value="<?php echo htmlspecialcode_generator($fetch_users['not_used_keywords']); ?>">
                             </div>
                         </div>
-
+                        <div class="col-xxl-12 col-md-12 hidden_fields">
+                            <div class="col-md-6">
+                                <label for="custom_care_number" class="form-label">Custom Care Number : <span class="text-danger">*</span></label>
+                                <input type="text" name="custom_care_number" placeholder="Enter Custom Care Number " class="form-control" id="custom_care_number"  value="<?php echo $fetch_users['custom_care_number']; ?>">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12 hidden_fields">
+                            <div class="col-md-6">
+                                <label for="tech_person_name" class="form-label">Technical Person Name : <span class="text-danger">*</span></label>
+                                <input type="text" name="tech_person_name" placeholder="Enter Technical Person Name " class="form-control" id="tech_person_name"  value="<?php echo $fetch_users['tech_person_name']; ?>">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12 hidden_fields">
+                            <div class="col-md-6">
+                                <label for="tech_person_number" class="form-label">Technical Person Number : <span class="text-danger">*</span></label>
+                                <input type="text" name="tech_person_number" placeholder="Enter Technical Person Number " class="form-control" id="tech_person_number"  value="<?php echo $fetch_users['tech_person_number']; ?>">
+                            </div>
+                        </div>
+                        <?php $fetching_payments = mysqli_query($con, "SELECT * FROM client_payment_details where user_id={$_GET['id']} order by id asc");
+                            $num_rows = mysqli_num_rows($fetching_payments);
+                            if($num_rows > 1){ ?>
+                            
+                                <div class="col-xxl-12 col-md-12">
+                                    <h2>Payment Details</h2>
+                                    <?php $i = 0; ?>
+                                    <?php while ($row = mysqli_fetch_assoc($fetching_payments)) { ?>
+                                        <div class="row add_payment_div">
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                <label class="form-label">Payment Date</label>
+                                                <input type="text" name="payment_date[]" class="form-control flatpickr-input payment_date" data-provider="flatpickr" data-date-format="M d, Y" data-default-date="<?php echo date('M d, Y', strtotime($row['payment_date'])); ?>"  id="payment_date">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 department_div">
+                                                <div class="form-group">
+                                                <label class="form-label">Payment Type</label><br>
+                                                <input type="radio" name="payment_type[<?php echo $i; ?>]" class="radio_btn payment_type" value="half_payment" <?php echo ($row['payment_type'] == 'half_payment') ? "checked" : ''; ?>>Half Payment
+                                                <br><input type="radio" name="payment_type[<?php echo $i; ?>]" class="radio_btn payment_type" value="full_payment" <?php echo ($row['payment_type'] == 'full_payment') ? "checked" : ''; ?>>Full Payment
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-group">
+                                                <label class="form-label">Amount</label>
+                                                <input type="text" name="payment_amount[]" class="form-control payment_amount" id="payment_amount" value="<?php echo $row['payment_amount']; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group">
+                                                <label class="form-label">Notes</label>
+                                                <textarea name="payment_notes[]" class="form-control payment_notes" id="payment_notes"><?php echo $row['payment_notes']; ?></textarea>
+                                                </div>
+                                            </div>
+                                            
+                                            <div class="col-md-2 add_btn_div">
+                                                <?php if($i==0) { ?>
+                                                    <button type="button" class="btn btn-success add_more_pay_btn">Add</button>
+                                                <?php } else { ?>
+                                                    <button type="button" class="btn btn-danger remove_pay_btn">Remove</button>
+                                                <?php } ?>
+                                            </div>
+                                        </div>
+                                    <?php  $i++; } ?>
+                                </div>
+                            <?php }else{?>
+                                <div class="col-xxl-12 col-md-12">
+                                    <h2>Payment Details</h2>
+                                    <div class="row add_payment_div">
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                            <label class="form-label">Payment Date</label>
+                                            <input type="text" name="payment_date[]" class="form-control flatpickr-input payment_date" data-provider="flatpickr" data-date-format="M d, Y" data-default-date=""  id="payment_date">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2 department_div">
+                                            <div class="form-group">
+                                            <label class="form-label">Payment Type</label><br>
+                                            <input type="radio" name="payment_type[0]" class="radio_btn payment_type" value="half_payment" checked>Half Payment
+                                            <br><input type="radio" name="payment_type[0]" class="radio_btn payment_type" value="full_payment">Full Payment
+                                            </div>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <div class="form-group">
+                                            <label class="form-label">Amount</label>
+                                            <input type="text" name="payment_amount[]" class="form-control payment_amount" id="payment_amount">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-group">
+                                            <label class="form-label">Notes</label>
+                                            <textarea name="payment_notes[]" class="form-control payment_notes" id="payment_notes"></textarea>
+                                            </div>
+                                        </div>
+                                        
+                                        <div class="col-md-2 add_btn_div">
+                                            <button type="button" class="btn btn-success add_more_pay_btn">Add</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            <?Php } ?>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="filter_city" class="form-label">Filter City : <span class="text-danger">*</span></label>
@@ -657,5 +796,33 @@ if (!empty($_SESSION['error'])) {
         $(this).parent().parent().parent().attr('aria-expanded', 'false');
         $(this).parent().parent().parent().removeClass('is-focused');
         $(this).parent().parent().parent().removeClass('is-open');
+    });
+
+    // Add More Payment detail
+    $('.add_more_pay_btn').click(function() {
+        var element = $('.add_payment_div:first').clone();
+        element.find('.payment_date').val('');
+        element.find('.payment_date').attr('data-default-date','');
+        element.find('.payment_amount').val('');
+        element.find('.payment_notes').val('');
+        
+
+        var j = $('.add_payment_div').not('.d-none').length;
+        element.find('.payment_type').attr('name','payment_type['+j+']');
+
+        element.insertAfter($(this).parents().find('.add_payment_div:last'));
+        const fp = flatpickr(".payment_date", {
+            dateFormat: "M d, Y",
+        });
+        if(j >= 1){
+                $(".add_more_pay_btn:last").remove();
+                $('.add_btn_div:last').append('<button type="button" class="btn btn-danger remove_pay_btn">Remove</button>');
+            }
+        j++;
+    });
+
+    //remove row when click remove button
+    $(document).on('click','.remove_pay_btn',function(){
+        $(this).closest('div').parent().remove();
     });
 </script>
