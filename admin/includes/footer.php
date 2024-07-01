@@ -122,6 +122,9 @@
                   "all_filters[]": "required",
                   "start_date": "required",
                   "duration": "required",
+                  "custom_care_number": "required",
+                  "tech_person_name": "required",
+                  "tech_person_number": "required",
                   // "expired_date": "required"
                 },
               });
