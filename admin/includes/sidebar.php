@@ -14,6 +14,7 @@
     $feedback_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'feedback_inquiry',$con);
     $complain_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'complain_inquiry',$con);
     $registration_form_per = _get_user_perby_role($_SESSION['user_id'],'registration_form',$con);
+    $blogs_per = _get_user_perby_role($_SESSION['user_id'],'blogs',$con);
 ?>
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -92,6 +93,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/clients">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Clients</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $blogs_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'blogs') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/blogs">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Blogs</span>
                         </a>
                     </li>
                 <?php } ?>

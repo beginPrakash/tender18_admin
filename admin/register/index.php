@@ -212,6 +212,12 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label"> Complain Inquiry</label>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['blogs']">
+                                    <label class="form-check-label">Blogs</label>
+                                </div>
+                            </div>
                         </div>    
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
