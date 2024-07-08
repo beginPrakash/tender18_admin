@@ -7,6 +7,6 @@ while ($row = mysqli_fetch_assoc($fetching_users)) {
     $q = "UPDATE `users` SET status='Expired' where user_id='$user_id'";
         // var_dump($q);
         $sql = mysqli_query($con, $q);
-        echo $sql;
+        //echo $sql;
 }
 ?>

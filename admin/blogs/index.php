@@ -46,7 +46,7 @@ if (isset($_GET['id'])) {
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>blogs/add">
+                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>blogs/add.php">
                     <h5 class="card-title float-end btn bg-success text-white">Add New Blogs</h5>
                 </a>
                 <!-- <h5 class="card-title mb-0">Basic Datatables</h5> -->
