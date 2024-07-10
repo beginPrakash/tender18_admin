@@ -33,14 +33,16 @@ function daily_alert($con, $postData)
     $email = mysqli_real_escape_string($con, $postData['email']);
     $mobile = mysqli_real_escape_string($con, $postData['mobile']);
     $description = mysqli_real_escape_string($con, $postData['description']);
+    $tender_id = mysqli_real_escape_string($con, $postData['tender_id']);
 
-    $q1 = "INSERT INTO feedback_inquiry_form(`name`, `email`, `mobile`, `description`) VALUES ('$name', '$email', '$mobile', '$description')";
+    $q1 = "INSERT INTO feedback_inquiry_form(`name`, `email`, `mobile`, `description`, `tender_id`) VALUES ('$name', '$email', '$mobile', '$description', '$tender_id')";
     mysqli_query($con, $q1);
 
     $result['name'] = htmlspecialcode_generator($name);
     $result['email'] = htmlspecialcode_generator($email);
     $result['mobile'] = htmlspecialcode_generator($mobile);
     $result['description'] = htmlspecialcode_generator($description);
+    $result['tender_id'] = $tender_id;
     $result['message'] = "Data saved";
     return $result;
 }
