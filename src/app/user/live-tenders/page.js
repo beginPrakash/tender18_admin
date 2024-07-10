@@ -1,8 +1,10 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
+import Modal from "react-bootstrap/Modal";
+import StateData from "@/static-data/StateData";
 
 const AfterLoginLiveTenders = () => {
   const [data, setData] = useState([]);
@@ -10,10 +12,35 @@ const AfterLoginLiveTenders = () => {
   const [user, setUser] = useState([]);
   const [loading, setLoading] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [submitMessage, setSubmitMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState(null);
   const [search, setSearch] = useState("");
+  const [show, setShow] = useState(false);
+  const [cshow, setCShow] = useState(false);
+  const [formSubmitted, setFormSubmitted] = useState(false);
   const [formData, setFormData] = useState({
     search: "",
   });
+  const [fformData, setFFormData] = useState({
+    search: "",
+    username: "",
+    email: "",
+    mobile: "",
+    description: "",
+  });
+  const [cformData, setCFormData] = useState({
+    search: "",
+    username: "",
+    email: "",
+    mobile: "",
+    description: "",
+  });
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const handleCClose = () => setCShow(false);
+  const handleCShow = () => setCShow(true);
+  const formRef = useRef(null);
+  const inputRef = useRef(null);
   // const [searchData, setSearchData] = useState(null);
 
   const searchParams = useSearchParams();
@@ -22,6 +49,112 @@ const AfterLoginLiveTenders = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleCChange = (e) => {
+    const { name, value } = e.target;
+    setCFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (fformData.username === "") {
+      setErrorMessage("This Field is Required");
+      return;
+    }
+    if (fformData.email === "") {
+      inputRef.current.classList.add("invalid");
+      return;
+    }
+    if (fformData.mobile === "") {
+      inputRef.current.classList.add("invalid");
+      return;
+    }
+
+    const user = {
+      name: `${fformData.username}`,
+      email: `${fformData.email}`,
+      mobile: `${fformData.mobile}`,
+      description: `${fformData.description}`,
+      endpoint: "saveFeedbackData",
+      tender_id: id,
+    };
+    try {
+      const alert = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASEURL}` + "create_feedback_inquiry.php",
+        user
+      );
+      // console.log(alert.data.status);
+
+      if (alert.data.status == " success") {
+        setSubmitMessage("Feedback saved Successfully");
+
+        setFFormData({
+          username: "",
+          email: "",
+          mobile: "",
+          description: "",
+        });
+      } else {
+        setSubmitMessage("Feedback not saved Successfully");
+      }
+    } catch (error) {
+      setSubmitMessage("Feedback not saved Successfully");
+    }
+
+    setFormSubmitted(true);
+  };
+
+  const handleCSubmit = async (e) => {
+    e.preventDefault();
+
+    if (cformData.username === "") {
+      setErrorMessage("This Field is Required");
+      return;
+    }
+    if (cformData.email === "") {
+      inputRef.current.classList.add("invalid");
+      return;
+    }
+    if (cformData.mobile === "") {
+      inputRef.current.classList.add("invalid");
+      return;
+    }
+
+    const user = {
+      name: `${cformData.username}`,
+      email: `${cformData.email}`,
+      mobile: `${cformData.mobile}`,
+      description: `${cformData.description}`,
+      endpoint: "saveComplainData",
+      tender_id: id,
+    };
+    try {
+      const alert = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_BASEURL}` + "create_complain_inquiry.php",
+        user
+      );
+      // console.log(alert.data.status);
+
+      if (alert.data.status == " success") {
+        setSubmitMessage("Complain   saved Successfully");
+
+        setCFormData({
+          username: "",
+          email: "",
+          mobile: "",
+          description: "",
+        });
+      } else {
+        setSubmitMessage("Complain   not saved Successfully");
+      }
+    } catch (error) {
+      setSubmitMessage("Complain   not saved Successfully");
+    }
+
+    setFormSubmitted(true);
   };
 
   const handleSearch = async () => {
@@ -90,6 +223,9 @@ const AfterLoginLiveTenders = () => {
   };
 
   useEffect(() => {
+    if (formRef.current) {
+      // formRef.current.parsley();
+    }
     const search = localStorage.getItem("search");
     setFormData({ ...formData, search: search });
     const validateLogin = async () => {
@@ -151,8 +287,8 @@ const AfterLoginLiveTenders = () => {
             
             <div className="login-user-search">
               <div className="user-key-btn d-flex gap-2">
-                <a>Feedback</a>
-                <a style={{ ["marginRight"]: "15px" }}>Complain</a>   
+                <a data-bs-toggle="modal" data-bs-target="#tender_modal" onClick={handleShow}>Feedback</a>
+                <a data-bs-toggle="modal" data-bs-target="#complain_modal" onClick={handleCShow} style={{ ["marginRight"]: "15px" }}>Complain</a>   
               </div>
               <div className="login-user-input">
                 <input
@@ -168,6 +304,146 @@ const AfterLoginLiveTenders = () => {
                   <i className="fa-solid fa-magnifying-glass"></i>
                 </button>
               </div>
+            </div>
+            <div className="tender-modal">
+                  <Modal
+                    show={show}
+                    onHide={handleClose}
+                    className="tenders-modal"
+                    id="tender_modal"
+                    centered
+                  >
+                    <Modal.Header closeButton></Modal.Header>
+                    <Modal.Body className="tenders-modal-body">
+                      <form
+                        onSubmit={handleSubmit}
+                        ref={formRef}
+                        className="tender-inquiry"
+                      >
+                        <div className="why-us-form-flex">
+                          <div className="why-us-form-block">
+                            <input
+                              type="text"
+                              placeholder="Name"
+                              name="username"
+                              onChange={handleChange}
+                              value={fformData.username}
+                              required
+                            />
+                          </div>
+                          <div className="why-us-form-block">
+                            <input
+                              type="email"
+                              placeholder="Email"
+                              name="email"
+                              onChange={handleChange}
+                              value={fformData.email}
+                              required
+                            />
+                          </div>
+                          <div className="why-us-form-block">
+                            <input
+                              type="number"
+                              placeholder="Mobile"
+                              name="mobile"
+                              onChange={handleChange}
+                              value={fformData.mobile}
+                              required
+                            />
+                          </div>
+
+                          <div className="why-us-form-block">
+                            <textarea
+                              placeholder="Description"
+                              name="description"
+                              row="3"
+                              onChange={handleChange}
+                              value={fformData.description}
+                              required
+                            ></textarea>
+                          </div>
+                        </div>
+
+                        <div className="why-us-form-submit">
+                          <input type="submit" value="Submit" />
+                        </div>
+                      </form>
+
+                      {submitMessage && (
+                        <p className="submit-text">{submitMessage}</p>
+                      )}
+                    </Modal.Body>
+                  </Modal>
+            </div>
+            <div className="complain-modal">
+                <Modal
+                  show={cshow}
+                  onHide={handleCClose}
+                  className="tenders-modal"
+                  id="complain_modal"
+                  centered
+                >
+                  <Modal.Header closeButton></Modal.Header>
+                  <Modal.Body className="tenders-modal-body">
+                    <form
+                      onSubmit={handleCSubmit}
+                      ref={formRef}
+                      className="tender-inquiry"
+                    >
+                      <div className="why-us-form-flex">
+                        <div className="why-us-form-block">
+                          <input
+                            type="text"
+                            placeholder="Name"
+                            name="username"
+                            onChange={handleCChange}
+                            value={cformData.username}
+                            required
+                          />
+                        </div>
+                        <div className="why-us-form-block">
+                          <input
+                            type="email"
+                            placeholder="Email"
+                            name="email"
+                            onChange={handleCChange}
+                            value={cformData.email}
+                            required
+                          />
+                        </div>
+                        <div className="why-us-form-block">
+                          <input
+                            type="number"
+                            placeholder="Mobile"
+                            name="mobile"
+                            onChange={handleCChange}
+                            value={cformData.mobile}
+                            required
+                          />
+                        </div>
+
+                        <div className="why-us-form-block">
+                          <textarea
+                            placeholder="Description"
+                            name="description"
+                            row="3"
+                            onChange={handleCChange}
+                            value={cformData.description}
+                            required
+                          ></textarea>
+                        </div>
+                      </div>
+
+                      <div className="why-us-form-submit">
+                        <input type="submit" value="Submit" />
+                      </div>
+                    </form>
+
+                    {submitMessage && (
+                      <p className="submit-text">{submitMessage}</p>
+                    )}
+                  </Modal.Body>
+                </Modal>
             </div>
             <div className="tenders-list-main user-tenders-list-main">
               <div className="user-live-tenders-flex">

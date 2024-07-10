@@ -34,6 +34,12 @@ const pathname = usePathname()
     // setHeaderkeywords(value);
   };
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      handleSubmit_header();
+    }
+  }
+
   const handleSubmit_header = async (e) => {
     if (typeof window !== "undefined") {
       let filterData = JSON.parse(localStorage.getItem("filterData"));
@@ -231,6 +237,7 @@ const pathname = usePathname()
   console.log("pathname", pathname);
   return (
     <>
+    <a href={"tel:+" + data.whatsapp_num}><p className="main-header-contact hidden-xs hidden-sm">Sales : +{data.whatsapp_num}</p></a>
       <header>
         <div className="desk-header">
           <div className="header-flex">
@@ -314,6 +321,7 @@ const pathname = usePathname()
                   id="headersearch"
                   name="keywords"
                   onChange={handleChange}
+                  onKeyDown={handleKeyDown}
                   placeholder="Search Your Tender Here"
                   value={keyword_store || ""}
                 />
