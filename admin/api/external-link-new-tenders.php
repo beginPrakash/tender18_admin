@@ -53,6 +53,9 @@ function get_results($con, $postData)
     $condition_new = "";
     $user_name = "";
     $user_email = "";
+    $custom_care_number = "";
+    $tech_person_name = "";
+    $tech_person_number = "";
     $user_unique_id = $postData['user_unique_id'];
     $user_data = mysqli_query($con, "SELECT * FROM `users` WHERE  `user_unique_id`='$user_unique_id'");
 
@@ -68,7 +71,14 @@ function get_results($con, $postData)
             $agency = $row['filter_agency'];
             $department = $row['filter_department'];
             $type = $row['filter_type'];
+            $custom_care_number = $row['custom_care_number'];
+            $tech_person_name = $row['tech_person_name'];
+            $tech_person_number = $row['tech_person_number'];
         }
+
+        $result['custom_care_number'] = $custom_care_number;
+        $result['tech_person_name'] = $tech_person_name;
+        $result['tech_person_number'] = $tech_person_number;
 
         if (!empty($city)) {
             $city = explode(",", $city);

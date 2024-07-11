@@ -272,6 +272,16 @@ const AfterLoginNewTenders = () => {
               </h1>
               <h6>{user.user_name}</h6>
               <h6>{user.user_email}</h6>
+              
+              {user.custom_care_number != '' && 
+                <h6><b>Customer Care Number</b> : {user.custom_care_number}</h6> 
+              }
+              {user.tech_person_name != '' && 
+                <h6><b>Technical Person Number</b> : {user.tech_person_name}</h6> 
+              }
+              {user.tech_person_number != '' && 
+                <h6><b>Technical Person Number</b> : {user.tech_person_number}</h6> 
+              }
             </div>
 
             <div className="login-user-search">

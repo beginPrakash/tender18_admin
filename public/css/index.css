@@ -1595,8 +1595,20 @@ input.rs-picker-toggle-textbox:focus ~ span.rs-picker-toggle-placeholder {
   flex-wrap: wrap;
 }
 .tenders-details-page-left {
-  width: 80%;
+  width: 70%;
 }
+.tenders-details-page-right {
+  width: 30%;
+  padding-left:30px;
+}
+
+.tender-details-inq h6 {
+  background-color: #016492;
+  height: 40px;
+  padding: 10px;
+  color: white;
+}
+
 .tender-details-btn a {
   font-size: 16px;
   color: #fff !important;
@@ -1940,6 +1952,24 @@ body.tenders-details-page .desk-header.is-sticky {
   width: 100%;
   height: 80vh;
 }
+
+.blog-info-services-right {
+  width: 40%;
+}
+.blog-info-services-right img {
+  width: 100%;
+  height: 40vh;
+}
+
+.main-header-contact {
+  background-color: #cb192d;
+  color: #fff;
+  text-align: center;
+  border-radius: 0 0 12px 12px;
+  padding: 2px 8px;
+  float: right;
+}
+
 .tenders-info-services-left h4 {
   font-size: 34px;
   color: #222222;
