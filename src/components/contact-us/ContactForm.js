@@ -47,22 +47,22 @@ const ContactForm = () => {
                   <div className="contact-page-form-flex">
                     <div className="contact-page-block">
                       <label htmlFor="">Name</label>
-                      <input type="text" placeholder="Name" />
+                      <input type="text" placeholder="Name" required/>
                     </div>
 
                     <div className="contact-page-block">
                       <label htmlFor="">Email</label>
-                      <input type="email" placeholder="Email" />
+                      <input type="email" placeholder="Email" required/>
                     </div>
 
                     <div className="contact-page-block">
                       <label htmlFor="">Mobile</label>
-                      <input type="number" placeholder="Mobile" />
+                      <input type="number" placeholder="Mobile" required/>
                     </div>
 
                     <div className="contact-page-block">
                       <label htmlFor="">Subject</label>
-                      <input type="text" placeholder="Subject" />
+                      <input type="text" placeholder="Subject" required/>
                     </div>
 
                     <div className="contact-page-block">
@@ -72,6 +72,7 @@ const ContactForm = () => {
                         cols="0"
                         rows="0"
                         placeholder="Message"
+                        required
                       ></textarea>
                     </div>
                   </div>

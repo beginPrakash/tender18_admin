@@ -334,7 +334,7 @@ const AllTendersDetails = () => {
                         </td>
                       ) : (
                         <>
-                          <td>
+                          {/* <td>
                             <a
                               className="careers-btn"
                               data-bs-toggle="modal"
@@ -342,7 +342,7 @@ const AllTendersDetails = () => {
                             >
                               Download Document
                             </a>
-                          </td>
+                          </td> */}
                         </>
                       )}
                     </tr>
@@ -371,6 +371,7 @@ const AllTendersDetails = () => {
                               name="username"
                               onChange={handleChange}
                               value={formData.username}
+                              required
                             />
                           </div>
                           <div className="why-us-form-block">
@@ -380,6 +381,7 @@ const AllTendersDetails = () => {
                               name="company_name"
                               value={formData.company_name}
                               onChange={handleChange}
+                              required
                             />
                           </div>
                           <div className="why-us-form-block">
@@ -389,6 +391,7 @@ const AllTendersDetails = () => {
                               name="email"
                               onChange={handleChange}
                               value={formData.email}
+                              required
                             />
                           </div>
                           <div className="why-us-form-block">
@@ -398,6 +401,7 @@ const AllTendersDetails = () => {
                               name="mobile"
                               onChange={handleChange}
                               value={formData.mobile}
+                              required
                             />
                           </div>
 
@@ -406,6 +410,7 @@ const AllTendersDetails = () => {
                               name="state"
                               value={formData.state}
                               onChange={handleChange}
+                              required
                             >
                               {StateData?.map((state, index) => {
                                 return (
@@ -430,6 +435,87 @@ const AllTendersDetails = () => {
                   </Modal>
                 </div>
               </div>
+            </div>
+            <div className="tenders-details-page-right">
+              <div className="tender-details-inq">
+                <h6>Tender Inquiry</h6>
+              </div>
+              <div>
+                  <form
+                    onSubmit={handleSubmit}
+                    ref={formRef}
+                    className="tender-inquiry"
+                  >
+                    <div className="why-us-form-flex">
+                      <div className="why-us-form-block">
+                        <input
+                          type="text"
+                          placeholder="Name"
+                          name="username"
+                          onChange={handleChange}
+                          value={formData.username}
+                          required
+                        />
+                      </div>
+                      <div className="why-us-form-block">
+                        <input
+                          type="text"
+                          placeholder="Company Name"
+                          name="company_name"
+                          value={formData.company_name}
+                          onChange={handleChange}
+                          required
+                        />
+                      </div>
+                      <div className="why-us-form-block">
+                        <input
+                          type="email"
+                          placeholder="Email"
+                          name="email"
+                          onChange={handleChange}
+                          value={formData.email}
+                          required
+                        />
+                      </div>
+                      <div className="why-us-form-block">
+                        <input
+                          type="number"
+                          placeholder="Mobile"
+                          name="mobile"
+                          onChange={handleChange}
+                          value={formData.mobile}
+                          required
+                        />
+                      </div>
+
+                      <div className="why-us-form-block">
+                        <select
+                          name="state"
+                          value={formData.state}
+                          onChange={handleChange}
+                          required
+                        >
+                          {StateData?.map((state, index) => {
+                            return (
+                              <option value={state.value} key={index}>
+                                {state.data}
+                              </option>
+                            );
+                          })}
+                        </select>
+                      </div>
+                    </div>
+
+                    <div className="why-us-form-submit">
+                      <input type="submit" value="Submit" />
+                    </div>
+                  </form>
+
+                  {submitMessage && (
+                    <p className="submit-text">{submitMessage}</p>
+                  )}
+                   
+                </div>
             </div>
           </div>
         </div>

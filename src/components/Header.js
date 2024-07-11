@@ -442,6 +442,7 @@ const pathname = usePathname()
                 type="text"
                 name="keywords"
                 onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 placeholder="Search Your Tender Here"
                 value={keyword_store}
               />
