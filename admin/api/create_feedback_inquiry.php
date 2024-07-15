@@ -35,8 +35,19 @@ function daily_alert($con, $postData)
     $description = mysqli_real_escape_string($con, $postData['description']);
     $tender_id = mysqli_real_escape_string($con, $postData['tender_id']);
 
+    $tender_data = mysqli_query($con, "SELECT * FROM `users` where user_unique_id='".$tender_id."'");
+    $tender_result = mysqli_num_rows($tender_data);
+    
+    if ($tender_result == 1) {
+        while ($row = mysqli_fetch_assoc($tender_data)) {
+            $tender_id = $row['user_id'];
+        }
+    }
+
+
     $q1 = "INSERT INTO feedback_inquiry_form(`name`, `email`, `mobile`, `description`, `tender_id`) VALUES ('$name', '$email', '$mobile', '$description', '$tender_id')";
     mysqli_query($con, $q1);
+    
 
     $result['name'] = htmlspecialcode_generator($name);
     $result['email'] = htmlspecialcode_generator($email);

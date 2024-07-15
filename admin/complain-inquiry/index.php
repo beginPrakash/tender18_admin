@@ -72,6 +72,7 @@ if (!empty($_SESSION['error'])) {
                     <thead>
                         <tr>
                             <th>SR No.</th>
+                            <th>Tender ID</th>
                             <th>Name</th>
                             <th>Email</th>
                             <th>Mobile</th>
@@ -91,6 +92,7 @@ if (!empty($_SESSION['error'])) {
                         ?>
                                 <tr>
                                     <th scope="row"><?php echo $i; ?></th>
+                                    <td><?php echo $data['tender_id']; ?></td>
                                     <td><?php echo $data['name']; ?></td>
                                     <td><?php echo $data['email']; ?></td>
                                     <td><?php echo $data['mobile']; ?></td>

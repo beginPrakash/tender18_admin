@@ -76,7 +76,7 @@ if (isset($_GET['id'])) {
                                 }
                                 ?></td>
                                 <td><?php echo $row['title']; ?></td>
-                                <td><?php echo $row['description']; ?></td>
+                                <td><?php echo substr($row['description'], 0, 100); ?>...</td>
                                 <td>
                                     <div class="dropdown d-inline-block">
                                         <button class="btn btn-subtle-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
