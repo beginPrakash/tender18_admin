@@ -1,8 +1,64 @@
 "use client";
-import React from "react";
+import { useEffect, useState } from "react";
+import axios from "axios";
 import DigitalSignatureInfoData from "./DigitalSignatureInfoData";
 
 const DigitalSignatureInfo = () => {
+  const [data, setData] = useState([]);
+  const [details, setDetails] = useState([]);
+  const [last_details, setLastDetails] = useState([]);
+  const [whatdata, setWhatData] = useState([]);
+  const [whatdetails, setWhatDetails] = useState([]);
+  const [whomdata, setWhomData] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASEURL}` +
+            "digital-signature-certificate/feature-section.php?endpoint=getFeatureData"
+        );
+        setData(response.data.data.main);
+        setDetails(response?.data?.data?.details);
+        setLastDetails(response?.data?.data?.last_data);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchWhatData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASEURL}` +
+            "digital-signature-certificate/what-section.php?endpoint=getWhatData"
+        );
+        setWhatData(response.data.data.main);
+        setWhatDetails(response?.data?.data?.details)
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    const fetchWhomData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASEURL}` +
+            "digital-signature-certificate/whom-section.php?endpoint=getWhomData"
+        );
+        setWhomData(response.data.data.main);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+    fetchWhatData();
+    fetchWhomData();
+  }, []);
   return (
     <>
       <div className="features-tender-info-main">
@@ -12,19 +68,19 @@ const DigitalSignatureInfo = () => {
           <div className="features-lists">
             <div className="tenders-info-services-width">
               <div className="services-title">
-                <h2>Features Of Digital Signature Certificate</h2>
+                <h2>{data.title}</h2>
               </div>
 
               <div className="features-list-flex">
-                {DigitalSignatureInfoData.map((infodata, index) => {
+                {Object.values(details)?.map((infodata, index) => {
                   return (
                     <div className="features-list-block" key={index}>
                       <div className="features-list-block-inner">
                         <div className="features-list-img">
-                          <img src={infodata.icon} alt={infodata.alt} />
+                          <img src={infodata.image} alt="Digital Signature" />
                         </div>
                         <div className="features-list-desc">
-                          <p>{infodata.desc}</p>
+                          <p>{infodata.title}</p>
                         </div>
                       </div>
                     </div>
@@ -41,47 +97,22 @@ const DigitalSignatureInfo = () => {
           <div className="tenders-info-services-width">
             <div className="who-will-get-flex">
               <div className="who-will-get-left">
-                <h2>What You Will Get</h2>
+                <h2>{whatdata.title}</h2>
               </div>
 
               <div className="who-will-get-right">
-                <p>
-                  We Deal In Class 3 Digital Signature Certificate For Any Types
-                  Of Online Tender Bidding, GST And ITR Return
-                </p>
+                <p dangerouslySetInnerHTML={{ __html: whatdata.description }}></p>
 
-                <h6>In Digital Signature Certificate You Will Get -</h6>
+                <h6>{whatdata.subtitle}</h6>
 
                 <ul>
-                  <li>
-                    <i className="fa-solid fa-check"></i>Digital Signature
-                    Certificate Token Preinstalled With Your Company Details In
-                    Digital Form
-                  </li>
-                  <li>
-                    <i className="fa-solid fa-check"></i>Not Required Of Any
-                    Physical Documents
-                  </li>
-                  <li>
-                    <i className="fa-solid fa-check"></i>Services At Your Door
-                    Steps
-                  </li>
-                  <li>
-                    <i className="fa-solid fa-check"></i>Document Preparation
-                    For Vendor Registration
-                  </li>
-                  <li>
-                    <i className="fa-solid fa-check"></i>Create Customer Profile
-                    In Particular Department As Per Customer Credential(Vendor
-                    Registration)
-                  </li>
-                  <li>
-                    <i className="fa-solid fa-check"></i>Technical Support
-                    Provided Upto Certificate Expiration Time Period
-                  </li>
-                  <li>
-                    <i className="fa-solid fa-check"></i>Easy To Use And Secure
-                  </li>
+                  {Object.values(whatdetails)?.map((infodata, index) => {
+                    return (
+                    <li key={index}>
+                      <i className="fa-solid fa-check"></i>{infodata.title}
+                    </li>
+                    );
+                  })}
                 </ul>
               </div>
             </div>
@@ -94,14 +125,11 @@ const DigitalSignatureInfo = () => {
           <div className="tenders-info-services-width">
             <div className="useful-flex">
               <div className="useful-left">
-                <h2>For Whom This Service Is Useful</h2>
+                <h2>{whomdata.title}</h2>
               </div>
 
               <div className="useful-right">
-                <p>
-                  For All Who Wants To Participate In Etendering Process. Also
-                  DSC Is Used For ITR Return And GST Return
-                </p>
+                <p dangerouslySetInnerHTML={{ __html: whomdata.description }}></p>
               </div>
             </div>
           </div>

@@ -14,6 +14,8 @@ const TenderInfoForm = (props) => {
     state: "",
   });
   const formRef = useRef(null);
+  const [whydata, setWhyData] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -59,6 +61,20 @@ const TenderInfoForm = (props) => {
     if (formRef.current) {
       // $(formRef.current).parsley();
     }
+    const fetchWhyData = async () => {
+      try {
+        const response = await axios.get(
+          `${process.env.NEXT_PUBLIC_API_BASEURL}` +
+            "tender-information-service/why-section.php?endpoint=getWhyData"
+        );
+        setWhyData(response.data.data.main);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchWhyData();
   }, []);
   return (
     <>
@@ -67,9 +83,8 @@ const TenderInfoForm = (props) => {
           <div className="tenders-info-services-width">
             <div className="tender-info-form-flex">
               <div className="tender-info-form-left">
-                <h2>Why Tender18</h2>
-                <p>{props.desc1}</p>
-                <p>{props.desc2}</p>
+                <h2>{whydata.title}</h2>
+                <p dangerouslySetInnerHTML={{ __html: whydata.description }}></p>
               </div>
 
               <div className="tender-info-form-right">
@@ -90,7 +105,7 @@ const TenderInfoForm = (props) => {
                           name="username"
                           onChange={handleChange}
                           value={formData.username}
-                          data-parsley-required="true"
+                          data-parsley-required="true" required
                         />
                       </div>
                       <div className="why-us-form-block">
@@ -100,6 +115,7 @@ const TenderInfoForm = (props) => {
                           name="company_name"
                           value={formData.company_name}
                           onChange={handleChange}
+                          required
                         />
                       </div>
                       <div className="why-us-form-block">
@@ -110,6 +126,7 @@ const TenderInfoForm = (props) => {
                           onChange={handleChange}
                           value={formData.email}
                           data-parsley-required="true"
+                          required
                         />
                       </div>
                       <div className="why-us-form-block">
@@ -120,6 +137,7 @@ const TenderInfoForm = (props) => {
                           onChange={handleChange}
                           value={formData.mobile}
                           data-parsley-required="true"
+                          required
                         />
                       </div>
 
@@ -129,6 +147,7 @@ const TenderInfoForm = (props) => {
                           data-parsley-required="true"
                           value={formData.state}
                           onChange={handleChange}
+                          required
                         >
                           {StateData?.map((state, index) => {
                             return (
