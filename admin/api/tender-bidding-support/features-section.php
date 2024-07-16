@@ -32,11 +32,16 @@ function get_results($con)
     if ($featuresDetailsResult > 0) {
         $count = 1;
         while ($row = mysqli_fetch_assoc($featuresDetailsData)) {
-            $result['details'][$count]['title'] = htmlspecialcode_generator($row['title']);
-            $count++;
+            if($count <= 4){
+                $result['details'][$count]['title'] = htmlspecialcode_generator($row['title']);
+            }else{
+                $result['last_data'][$count]['title'] = htmlspecialcode_generator($row['title']);
+            }
+                $count++;
         }
     } else {
         $result['details'] = "No data found";
+        $result['last_data'] = "No data found";
     }
 
     return $result;
