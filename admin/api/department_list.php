@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
 $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 
 switch ($endpoint) {
-    case 'getStatesData':
+    case 'getDepartmentList':
         $result = get_results($con);
         break;
     default:
@@ -17,14 +17,12 @@ switch ($endpoint) {
 
 function get_results($con)
 {
-    $state_data = mysqli_query($con, "SELECT * FROM `states`");
-    $state_result = mysqli_num_rows($state_data);
-    if ($state_result > 0) {
+    $dept_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where department != '' group By department");
+    $dept_result = mysqli_num_rows($dept_data);
+    if ($dept_result > 0) {
         $count = 1;
-        while ($row = mysqli_fetch_assoc($state_data)) {
-            $result[$count]['id'] = $row['id'];
-            $result[$count]['name'] = $row['name'];
-            $result[$count]['state_code'] = $row['state_code'];
+        while ($row = mysqli_fetch_assoc($dept_data)) {
+            $result[$count]['name'] = $row['department'];
             $count++;
         }
         $result = array_values($result);

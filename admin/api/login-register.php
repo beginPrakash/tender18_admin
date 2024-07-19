@@ -33,7 +33,7 @@ function get_results($con)
         $count = 1;
         while ($row = mysqli_fetch_assoc($whyDetailsData)) {
             $result['details'][$count]['title'] = htmlspecialcode_generator($row['title']);
-            $result['details'][$count]['icon'] = htmlspecialcode_generator($row['icon']);
+            $result['details'][$count]['icon'] = $row['icon'];
             $count++;
         }
     } else {

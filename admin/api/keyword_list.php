@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
 $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 
 switch ($endpoint) {
-    case 'getStatesData':
+    case 'getKeywordList':
         $result = get_results($con);
         break;
     default:
@@ -17,14 +17,13 @@ switch ($endpoint) {
 
 function get_results($con)
 {
-    $state_data = mysqli_query($con, "SELECT * FROM `states`");
-    $state_result = mysqli_num_rows($state_data);
+    $agency_data = mysqli_query($con, "SELECT * FROM `keywords`");
+    $state_result = mysqli_num_rows($agency_data);
     if ($state_result > 0) {
         $count = 1;
-        while ($row = mysqli_fetch_assoc($state_data)) {
+        while ($row = mysqli_fetch_assoc($agency_data)) {
             $result[$count]['id'] = $row['id'];
             $result[$count]['name'] = $row['name'];
-            $result[$count]['state_code'] = $row['state_code'];
             $count++;
         }
         $result = array_values($result);
