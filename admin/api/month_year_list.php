@@ -7,7 +7,7 @@ header('Access-Control-Allow-Origin: *');
 $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 
 switch ($endpoint) {
-    case 'getStatesData':
+    case 'getMonthYearList':
         $result = get_results($con);
         break;
     default:
@@ -17,15 +17,21 @@ switch ($endpoint) {
 
 function get_results($con)
 {
-    $state_data = mysqli_query($con, "SELECT * FROM `states`");
-    $state_result = mysqli_num_rows($state_data);
-    if ($state_result > 0) {
+    $start    = '2011-01-01';
+    $end      = date('Y-m-d');
+    $getRangeYear   = range(gmdate('Y', strtotime($start)), gmdate('Y', strtotime($end)));
+    if (count($getRangeYear) > 0) {
         $count = 1;
-        while ($row = mysqli_fetch_assoc($state_data)) {
-            $result[$count]['id'] = $row['id'];
-            $result[$count]['name'] = $row['name'];
-            $result[$count]['state_code'] = $row['state_code'];
+        $scount = 100;
+        foreach($getRangeYear as $key => $val){
+            $result[$count]['label'] = 'Jan to June '.$val;
+            $result[$count]['value'] = '01-01-'.$val.'/30-06-'.$val;
+            
+            $result[$scount]['label'] = 'July to Dec '.$val;
+            $result[$scount]['value'] = '01-07-'.$val.'/31-12-'.$val;
             $count++;
+            $scount++;
+            
         }
         $result = array_values($result);
     } else {
