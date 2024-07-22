@@ -6,23 +6,24 @@ header('Access-Control-Allow-Origin: *');
 
 $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 
-switch ($endpoint) {
-    case 'getDepartmentList':
-        $result = get_results($con);
-        break;
-    default:
-        $result = null;
-}
+// switch ($endpoint) {
+//     case 'getDepartmentData':
+//         $result = get_results($con);
+//         break;
+//     default:
+//         $result = null;
+// }
 
-
+$result = get_results($con);
 function get_results($con)
 {
-    $dept_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where department != '' group By department");
+    $dept_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where department != '' Group By department");
     $dept_result = mysqli_num_rows($dept_data);
     if ($dept_result > 0) {
         $count = 1;
         while ($row = mysqli_fetch_assoc($dept_data)) {
-            $result[$count]['name'] = $row['department'];
+            $result[$count]['tender_archieve_id'] = $row['id'];
+            $result[$count]['department'] = $row['department'];
             $count++;
         }
         $result = array_values($result);

@@ -6,14 +6,14 @@ header('Access-Control-Allow-Origin: *');
 
 $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 
-switch ($endpoint) {
-    case 'getKeywordList':
-        $result = get_results($con);
-        break;
-    default:
-        $result = null;
-}
-
+// switch ($endpoint) {
+//     case 'getKeywordList':
+//         $result = get_results($con);
+//         break;
+//     default:
+//         $result = null;
+// }
+$result = get_results($con);
 
 function get_results($con)
 {
