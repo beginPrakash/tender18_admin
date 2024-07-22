@@ -14,22 +14,23 @@ $postData = json_decode($rawData, true);
 
 $endpoint = isset($postData['endpoint']) ? $postData['endpoint'] : '';
 
-switch ($endpoint) {
-    case 'getCityData':
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $result = get_results($con, $postData);
-        } else {
-            $result = null;
-        }
-        break;
-    default:
-        $result = null;
-}
-
+// switch ($endpoint) {
+//     case 'getCityData':
+//         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//             $result = get_results($con, $postData);
+//         } else {
+//             $result = null;
+//         }
+//         break;
+//     default:
+//         $result = null;
+// }
+$result = get_results($con, $postData);
 function get_results($con, $postData)
 {
-    $city_like = $postData['q'];
-    $select = mysqli_query($con, "SELECT * FROM tender_zipcodes WHERE city like '%" . $city_like . "%' group by city");
+    //$city_like = $postData['q'];
+    $city_like = $_GET['q'];
+    $select = mysqli_query($con, "SELECT * FROM tender_zipcodes WHERE city like '$city_like%' group by city");
     $result_data = mysqli_num_rows($select);
     if ($result_data > 0) {
         $count = 1;

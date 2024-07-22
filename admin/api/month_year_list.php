@@ -6,14 +6,14 @@ header('Access-Control-Allow-Origin: *');
 
 $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 
-switch ($endpoint) {
-    case 'getMonthYearList':
-        $result = get_results($con);
-        break;
-    default:
-        $result = null;
-}
-
+// switch ($endpoint) {
+//     case 'getMonthYearList':
+//         $result = get_results($con);
+//         break;
+//     default:
+//         $result = null;
+// }
+$result = get_results($con);
 
 function get_results($con)
 {
@@ -21,6 +21,7 @@ function get_results($con)
     $end      = date('Y-m-d');
     $getRangeYear   = range(gmdate('Y', strtotime($start)), gmdate('Y', strtotime($end)));
     if (count($getRangeYear) > 0) {
+        rsort($getRangeYear);
         $count = 1;
         $scount = 100;
         foreach($getRangeYear as $key => $val){
