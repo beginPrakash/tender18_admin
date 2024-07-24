@@ -244,7 +244,7 @@ if ($banner_result == 1) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="documents" class="form-label">Documents: <span class="text-danger">*</span></label>
-                                <input type="text" name="documents" class="form-control" id="documents" value="<?php echo $documents; ?>">
+                                <textarea rows="5" name="documents" class="form-control" id="documents"><?php echo $documents; ?></textarea>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
