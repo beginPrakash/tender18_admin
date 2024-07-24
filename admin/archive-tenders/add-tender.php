@@ -188,7 +188,7 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="documents" class="form-label">Documents: <span class="text-danger">*</span></label>
-                                <input type="text" name="documents" class="form-control" id="documents">
+                                <textarea rows="5" name="documents" class="form-control" id="documents"></textarea>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
