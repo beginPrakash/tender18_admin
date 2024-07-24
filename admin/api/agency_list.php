@@ -17,7 +17,13 @@ $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 $result = get_results($con);
 function get_results($con)
 {
-    $agency_data = mysqli_query($con, "SELECT * FROM `tender_agencies`");
+    $agency_like = $_GET['q'] ?? '';
+    if(!empty($agency_like)):
+        $agency_data = mysqli_query($con, "SELECT * FROM `tender_agencies` WHERE agency_name like '$agency_like%' order By agency_name ASC");
+    else:
+        $agency_data = mysqli_query($con, "SELECT * FROM `tender_agencies` order By agency_name ASC");
+    endif;
+    
     $state_result = mysqli_num_rows($agency_data);
     if ($state_result > 0) {
         $count = 1;

@@ -321,7 +321,12 @@ function get_results($con, $postData)
         $page = 1;
     }
     $offset = ($page * $limit) - $limit;
-    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition order by id desc LIMIT $offset, $limit");
+    $keyw = $postData['keyword'];
+    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition ORDER BY CASE WHEN description = '%$keyw' THEN 0  
+              WHEN description LIKE '$keyw%' THEN 1  
+              WHEN description LIKE '%$keyw%' THEN 2   
+              ELSE 4
+         END, description ASC LIMIT $offset, $limit");
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;

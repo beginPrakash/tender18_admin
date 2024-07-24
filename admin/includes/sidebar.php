@@ -86,6 +86,16 @@
                         </a>
                     </li>
                 <?php } ?>
+                <?php if($_SESSION['role']=='admin') { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'keywords') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/keywords">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Keywords</span>
+                        </a>
+                    </li>
+                <?php } ?>
                 <?php if($_SESSION['role']=='admin' || $clients_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'clients') {
