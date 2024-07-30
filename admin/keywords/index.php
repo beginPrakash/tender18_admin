@@ -32,7 +32,7 @@ if (isset($_POST['importSubmit'])) {
             // Parse data from CSV file line by line
             while(($line = fgetcsv($csvFile)) !== FALSE){      
                 // Get row data
-                $name   = $line[1];
+                $name   = $line[0];
                 $q = "INSERT INTO keywords(`name`) VALUES ('$name')";
 
                 $sql = mysqli_query($con, $q);

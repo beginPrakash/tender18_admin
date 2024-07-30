@@ -73,7 +73,7 @@ function get_results($con, $postData)
                             $condition_key .= " ( ";
                         }
                         if ($key > 0) {
-                            $condition_key .= " and title LIKE '%$value%'";
+                            $condition_key .= " and title LIKE '%$keyword%' and title LIKE '%$value%'";
                         } else {
                             $condition_key .= "title LIKE '%$value%'";
                         }
@@ -322,11 +322,37 @@ function get_results($con, $postData)
     }
     $offset = ($page * $limit) - $limit;
     $keyw = $postData['keyword'];
-    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition ORDER BY CASE WHEN description = '%$keyw' THEN 0  
-              WHEN description LIKE '$keyw%' THEN 1  
-              WHEN description LIKE '%$keyw%' THEN 2   
-              ELSE 4
-         END, description ASC LIMIT $offset, $limit");
+    $order_query = '';
+    $order_key_val = '';
+    $condition_orderque = '';
+    $counter = 0;
+    $cnt = 0;
+    $g =1 ;
+    $filter_keyword = explode(" ", $keyw);
+
+    foreach ($filter_keyword as $keyword) {
+        $keyword_arr = explode(' ', $keyword);
+        $count = count($keyword_arr);
+        foreach ($keyword_arr as $key => $value) {
+            if ($counter == 0 && $key <= 0) {
+                $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
+            } 
+                $order_query .= " WHEN title LIKE '%$value%' THEN $g";
+            
+            $counter++;
+            $cnt++;
+            $g++;
+        }
+        
+    }
+    if($order_key_val != ''){
+        $condition_orderque .= " " . $order_key_val . "  " . $order_query;
+    }
+    $keywords_arr = explode(' ', $keyw);
+    $k_count = count($keywords_arr);
+    $condition_orderque .= " ELSE " . $k_count+1 . " END, title ASC";
+    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+    //echo "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque LIMIT $offset, $limit";exit;
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;
