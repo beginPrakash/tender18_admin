@@ -7,6 +7,13 @@ import Link from "next/link";
 import StateData from "@/static-data/StateData";
 import { useParams } from "next/navigation";
 
+export async function generateMetadata({ params }) {
+  return {
+    title: `Latest Government Tender Detail | Online eTender, Eprocurement, Bids | Govt ${process.env.NEXT_PUBLIC_SITE_NAME}`,
+    description:
+      "Looking for government tenders? Discover a reliable source to find all published tender details on tender 18. With Tender's 24/7 support system, get access to the latest government tenders, online tender information, and stay updated with local tender news. Explore government tenders today.",
+  };
+}
 const AllTendersDetails = () => {
   // const location = useLocation();
   // const queryParams = new URLSearchParams(location.search);
