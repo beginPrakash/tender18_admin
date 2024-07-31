@@ -131,7 +131,8 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="description" class="form-label">Description : <span class="text-danger">*</span></label>
-                                <textarea name="description" placeholder="Enter Description" class="form-control" id="description"><?php echo $fetch_blogs['description']; ?></textarea>
+                                <textarea rows="5" name="description" class="form-control d-none" id="description"><?php echo $fetch_blogs['description']; ?></textarea>
+                                <div class="ckeditor-classic-total ckeditor-classic-job-profile"><?php echo $fetch_blogs['description']; ?></div>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -169,6 +170,22 @@ if (!empty($_SESSION['error'])) {
                 'description': "required",
             },
             
+        });
+
+        ClassicEditor.create(document.querySelector(".ckeditor-classic-job-profile"))
+        .then(function(c) {
+            c.ui.view.editable.element.style.height = "200px";
+        })
+        .catch(function(c) {
+            console.error(c);
+        });
+
+        $('#blog_form').submit(function(event) {
+            $('.ckeditor-classic-total').each(function(i, obj) {
+                var data = $(this).parent().find(".ck-editor .ck-editor__main .ck-editor__editable").html();
+                if (data != "")
+                    $(this).parent().find('textarea').val(data);
+            });
         });
     });
     

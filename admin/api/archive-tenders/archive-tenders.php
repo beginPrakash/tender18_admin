@@ -16,14 +16,6 @@ $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 $result = get_results($con);
 function get_results($con)
 {
-    $start_date = $_GET['startDate'];
-    $timestamp1 = strtotime($start_date);
-    $start_date = date("Y-m-d", $timestamp1);
-
-    $end_date = $_GET['endDate'];
-    $timestamp2 = strtotime($end_date);
-    $end_date = date("Y-m-d", $timestamp2);
-
     // return $con;
     $whatsapp_no = "";
     $header_data = mysqli_query($con, "SELECT * FROM `header`");
@@ -34,7 +26,7 @@ function get_results($con)
         }
     }
     $limit = 10;
-    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_archive`  where due_date between '$start_date' AND '$end_date' order by id desc "));
+    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_archive`  order by id desc "));
     $total_query = $sql_query['total'];
     $total = ceil($total_query / $limit);
     $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
@@ -42,7 +34,7 @@ function get_results($con)
         $page = 1;
     }
     $offset = ($page * $limit) - $limit;
-    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where due_date between '$start_date' AND '$end_date' order by id desc LIMIT $offset, $limit");
+    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_archive` order by id desc LIMIT $offset, $limit");
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;
