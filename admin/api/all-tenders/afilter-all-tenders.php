@@ -15,7 +15,7 @@ $postData = json_decode($rawData, true);
 $endpoint = isset($postData['endpoint']) ? $postData['endpoint'] : '';
 
 switch ($endpoint) {
-    case 'getFilterArchiveTendersData':
+    case 'getFilterAllTendersData':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = get_results($con, $postData);
         } else {
@@ -48,10 +48,8 @@ function get_results($con, $postData)
     $filter_tender_value_to = $postData['tender_value_to'];
     $filter_department = $postData['department'];
     $filter_type = $postData['type'];
-    $metaState = 'Andaman and Nicobar Islands';
     $condition = "";
     $cnt = 0;
-    $meta_arr = [];
 
     if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type) || !empty($start_date) || !empty($end_date)) {
         $condition = "WHERE";
@@ -60,16 +58,6 @@ function get_results($con, $postData)
     if (!empty($filter_ref_no)) {
         $condition .= " ref_no='$filter_ref_no'";
         $cnt++;
-    }
-
-    if(!empty($metaState)){
-        $state_data = mysqli_query($con, "SELECT `name`,`title`,`description`,`keywords`,`h1`,`content` FROM `states` where name LIKE '%$metaState%'");
-        $state_result = mysqli_num_rows($state_data);
-        if ($state_result == 1) {
-            while ($row = mysqli_fetch_assoc($state_data)) {
-                $meta_arr =  $row;
-            }
-        }
     }
 
     if (!empty($filter_keyword)) {
@@ -341,8 +329,8 @@ function get_results($con, $postData)
         }
     }
     $limit = 10;
-    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_archive` $condition order by id desc "));
-    $result['main']['sql'] = "SELECT * FROM `tenders_archive` $condition order by id desc ";
+    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_all` $condition order by id desc "));
+    $result['main']['sql'] = "SELECT * FROM `tenders_all` $condition order by id desc ";
     $total_query = $sql_query['total'];
     $total = ceil($total_query / $limit);
     $page = isset($postData['page_no']) ? abs((int) $postData['page_no']) : 1;
@@ -350,7 +338,7 @@ function get_results($con, $postData)
         $page = 1;
     }
     $offset = ($page * $limit) - $limit;
-    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_archive` $condition order by id desc LIMIT $offset, $limit");
+    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_all` $condition order by id desc LIMIT $offset, $limit");
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;
@@ -462,19 +450,6 @@ function get_results($con, $postData)
         }
     } else {
         $result['links'] = [];
-    }
-    if(!empty($meta_arr)){
-        $result['meta']['title'] = $meta_arr['title'];
-        $result['meta']['description'] = $meta_arr['description'];
-        $result['meta']['keywords'] = $meta_arr['keywords'];
-        $result['meta']['h1'] = $meta_arr['h1'];
-        $result['meta']['content'] = $meta_arr['content'];
-    }else{
-        $result['meta']['title'] = '';
-        $result['meta']['description'] = '';
-        $result['meta']['keywords'] = '';
-        $result['meta']['h1'] = '';
-        $result['meta']['content'] = '';
     }
     return $result;
 }

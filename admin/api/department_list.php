@@ -17,7 +17,8 @@ $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 $result = get_results($con);
 function get_results($con)
 {
-    $dept_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where department != '' Group By department");
+    $dept_like = $_GET['name'];
+    $dept_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where department like '$dept_like%' Group By department");
     $dept_result = mysqli_num_rows($dept_data);
     if ($dept_result > 0) {
         $count = 1;
