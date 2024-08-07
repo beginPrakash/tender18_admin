@@ -252,6 +252,11 @@ if (!empty($_SESSION['error'])) {
                                     <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($blog_per == '1') ? 'checked' : '';?> name="user_permis['blogs']">
                                     <label class="form-check-label">Blogs</label>
                                 </div>
+                                <div class="col-lg-3">
+                                    <?php $state_per = _get_user_perby_role($_GET['id'],'states',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($state_per == '1') ? 'checked' : '';?> name="user_permis['states']">
+                                    <label class="form-check-label">States</label>
+                                </div>
                             </div>
                         </div>  
                         <div class="col-xxl-12 col-md-12">

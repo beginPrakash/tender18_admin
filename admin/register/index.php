@@ -217,6 +217,10 @@ if (!empty($_SESSION['error'])) {
                                     <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['blogs']">
                                     <label class="form-check-label">Blogs</label>
                                 </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['states']">
+                                    <label class="form-check-label">States</label>
+                                </div>
                             </div>
                         </div>    
                         <div class="col-xxl-12 col-md-12">
