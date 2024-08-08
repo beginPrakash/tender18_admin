@@ -258,6 +258,13 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">States</label>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                <?php $dept_per = _get_user_perby_role($_GET['id'],'departments',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($dept_per == '1') ? 'checked' : '';?> name="user_permis['departments']">
+                                    <label class="form-check-label">Departments</label>
+                                </div>
+                            </div>
                         </div>  
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">

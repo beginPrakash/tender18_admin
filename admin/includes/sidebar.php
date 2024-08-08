@@ -16,6 +16,7 @@
     $registration_form_per = _get_user_perby_role($_SESSION['user_id'],'registration_form',$con);
     $blogs_per = _get_user_perby_role($_SESSION['user_id'],'blogs',$con);
     $states_per = _get_user_perby_role($_SESSION['user_id'],'states',$con);
+    $departments_per = _get_user_perby_role($_SESSION['user_id'],'departments',$con);
 ?>
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -124,6 +125,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/states">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">States</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $departments_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'departments') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/departments">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Departments</span>
                         </a>
                     </li>
                 <?php } ?>

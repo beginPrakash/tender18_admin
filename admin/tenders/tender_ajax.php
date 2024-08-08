@@ -524,6 +524,11 @@ for ($i = 1; $i < count($results); $i++) {
 
         $sql1 = mysqli_query($con, $q1);
 
+        //save data in all tenders table
+        $all1 = "INSERT INTO tenders_all(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "')";
+
+        $all1 = mysqli_query($con, $all1);
+
         $ref = "UPDATE settings SET value = '" . $tender_ref_no . "' WHERE `key` = 'last_ref_id'";
         $ref1 = mysqli_query($con, $ref);
     }
