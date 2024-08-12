@@ -19,9 +19,9 @@ function get_results($con)
 {
     $agency_like = $_GET['q'] ?? '';
     if(!empty($agency_like)):
-        $agency_data = mysqli_query($con, "SELECT * FROM `tender_agencies` WHERE agency_name like '$agency_like%' order By agency_name ASC");
+        $agency_data = mysqli_query($con, "SELECT * FROM `tender_agencies` WHERE agency_name like '$agency_like%' group By agency_name order By agency_name ASC");
     else:
-        $agency_data = mysqli_query($con, "SELECT * FROM `tender_agencies` order By agency_name ASC");
+        $agency_data = mysqli_query($con, "SELECT * FROM `tender_agencies` group By agency_name order By agency_name ASC");
     endif;
     
     $state_result = mysqli_num_rows($agency_data);
