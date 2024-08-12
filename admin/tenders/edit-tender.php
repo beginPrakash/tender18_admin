@@ -43,10 +43,22 @@ if (isset($_POST['submit'])) {
 
 
     $q1 = "UPDATE `tenders_posts` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `id`='$tenderID'";
+    $sql1 = mysqli_query($con, $q1);
+    $tend_data = mysqli_query($con, "SELECT * FROM `tenders_posts` where id='" . $tenderID . "'");
+    $tend_result = mysqli_num_rows($tend_data);
 
+    if ($tend_result == 1) {
+        while ($row = mysqli_fetch_assoc($tend_data)) {
+            $ref_no = $row['ref_no'];
+            if(!empty($ref_no)){
+                $q2 = "UPDATE `tenders_all` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `ref_no`='$ref_no'";
+                $sql2 = mysqli_query($con, $q2);
+            }
+           }
+    }
     // var_dump($q1);
     // die();
-    $sql1 = mysqli_query($con, $q1);
+    
 
     $status = true;
     if ($status) {

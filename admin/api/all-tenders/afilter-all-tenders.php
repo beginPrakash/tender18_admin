@@ -15,7 +15,7 @@ $postData = json_decode($rawData, true);
 $endpoint = isset($postData['endpoint']) ? $postData['endpoint'] : '';
 
 switch ($endpoint) {
-    case 'getFilterArchiveTendersData':
+    case 'getAFilterAllTendersData':
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $result = get_results($con, $postData);
         } else {
