@@ -63,6 +63,9 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
 ?>
 <?php
 if (isset($_POST['submit'])) {
+    
+    $payment_arr = json_decode($_POST['payment_arr']);
+   // print_r($payment_arr);exit;
     $username = $_POST['username'];
     $email = $_POST['email'];
     $pass = md5($_POST['pass']);
@@ -120,14 +123,14 @@ if (isset($_POST['submit'])) {
         $sql = mysqli_query($con, $q);
         $last_insert_id = mysqli_insert_id($con);
         //save payment details
-        if(!empty($_POST['payment_date']) && count($_POST['payment_date'])):
-            foreach($_POST['payment_date'] as $key => $val):
-                if(!empty($val)):
-                    $timestamp2 = strtotime($val);
+        if(!empty($payment_arr) && count($payment_arr)):
+            foreach($payment_arr as $key => $val):
+                if(!empty($val->payment_date)):
+                    $timestamp2 = strtotime($val->payment_date);
                     $payment_date = date("Y-m-d", $timestamp2);
-                    $payment_amount = (isset($_POST['payment_amount']) && !empty($_POST['payment_amount'][$key])) ? $_POST['payment_amount'][$key] : '';
-                    $payment_type = (isset($_POST['payment_type']) && !empty($_POST['payment_type'][$key])) ? $_POST['payment_type'][$key] : '';
-                    $payment_notes = (isset($_POST['payment_notes']) && !empty($_POST['payment_notes'][$key])) ? $_POST['payment_notes'][$key] : '';
+                    $payment_amount = (isset($val->payment_amount) && !empty($val->payment_amount)) ? $val->payment_amount : '';
+                    $payment_type = (isset($val->payment_type) && !empty($val->payment_type)) ? $val->payment_type : '';
+                    $payment_notes = (isset($val->payment_notes) && !empty($val->payment_notes)) ? $val->payment_notes : '';
                     $q = "INSERT INTO client_payment_details(user_id, payment_date ,payment_type, payment_amount, payment_notes) VALUES ($last_insert_id, '$payment_date', '$payment_type', '$payment_amount', '$payment_notes')";
                     $sql = mysqli_query($con, $q);
                 endif;
@@ -412,35 +415,41 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12">
                             <h2>Payment Details</h2>
                             <div class="row add_payment_div">
+                                <input type="hidden" name="payment_arr" class="payment_arr">
                                 <div class="col-md-2">
                                     <div class="form-group">
                                     <label class="form-label">Payment Date</label>
-                                    <input type="text" name="payment_date[]" class="form-control flatpickr-input payment_date" data-provider="flatpickr" data-date-format="M d, Y" data-default-date=""  id="payment_date">
+                                    <input type="text" class="form-control flatpickr-input payment_date" data-provider="flatpickr" data-date-format="M d, Y" data-default-date=""  id="payment_date">
                                     </div>
                                 </div>
                                 <div class="col-md-2 department_div">
                                     <div class="form-group">
                                     <label class="form-label">Payment Type</label><br>
-                                    <input type="radio" name="payment_type[0]" class="radio_btn payment_type" value="half_payment" checked>Half Payment
-                                    <br><input type="radio" name="payment_type[0]" class="radio_btn payment_type" value="full_payment">Full Payment
+                                    <input type="radio" name="payment_type[0]" class="radio_btn payment_type phalf_payment" value="half_payment" checked>Half Payment
+                                    <br><input type="radio" name="payment_type[0]" class="radio_btn payment_type pfull_payment" value="full_payment">Full Payment
                                     </div>
                                 </div>
                                 <div class="col-md-2">
                                     <div class="form-group">
                                     <label class="form-label">Amount</label>
-                                    <input type="text" name="payment_amount[]" class="form-control payment_amount" id="payment_amount">
+                                    <input type="text"  class="form-control payment_amount" id="payment_amount">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group">
                                     <label class="form-label">Notes</label>
-                                    <textarea name="payment_notes[]" class="form-control payment_notes" id="payment_notes"></textarea>
+                                    <textarea class="form-control payment_notes" id="payment_notes"></textarea>
                                     </div>
                                 </div>
                                 
                                 <div class="col-md-2 add_btn_div">
                                     <button type="button" class="btn btn-success add_more_pay_btn">Add</button>
+                                    <button type="button" class="btn btn-success update_pay_btn" style="display:none">Update</button>
                                 </div>
+                            </div>
+                            <div class="row payment_table_data">
+                                <table class="payment_table">
+                                </table>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
@@ -649,29 +658,104 @@ if (!empty($_SESSION['error'])) {
     });
 
     // Add More Payment detail
+    var myArray = [];
     $('.add_more_pay_btn').click(function() {
-        var element = $('.add_payment_div:first').clone();
-        element.find('.payment_date').val('');
-        element.find('.payment_amount').val('');
-        element.find('.payment_notes').val('');
-        element.find('.payment_date').attr('data-default-date','');
+    
+        var total_tr_length = $('.payment_table_data tr').length;
+        if(total_tr_length == 0){           
+            $('.payment_table').append('<tr><th>Payment Date</th><th>Payment Type</th><th>Amount</th><th>Notes</th><th>Action</th></tr>');
+        }
+        var pa_date = $('.payment_date').val();
+        var payment_type = $('.payment_type:checked').val();
+        var payment_notes = $('.payment_notes').val();
+        var payment_amount = $('.payment_amount').val();
+        
+        var pieces = {                              
+           "payment_date" :pa_date,
+           "payment_type" :payment_type,
+           "payment_notes" :payment_notes,
+           "payment_amount" :payment_amount
+        };
 
-        var j = $('.add_payment_div').not('.d-none').length;
-        element.find('.payment_type').attr('name','payment_type['+j+']');
+        if(payment_type == 'half_payment'){
+            payment_type= 'Half';
+        }else{
+            payment_type= 'Full';
+        }
+        
 
-        element.insertAfter($(this).parents().find('.add_payment_div:last'));
-        const fp = flatpickr(".payment_date", {
-            dateFormat: "M d, Y",
-        });
-        if(j >= 1){
-                $(".add_more_pay_btn:last").remove();
-                $('.add_btn_div:last').append('<button type="button" class="btn btn-danger remove_pay_btn">Remove</button>');
-            }
-        j++;
+        myArray.push(pieces);
+
+        var create_td_cnt = $('.create_td').length;
+        console.log(create_td_cnt);
+        $('.payment_arr').val(JSON.stringify(myArray));
+        
+        $('.payment_table tr:last').after('<tr class="create_td"><td class="tsd_date_'+create_td_cnt+'">'+pa_date+'</td><td class="tsd_ptype_'+create_td_cnt+'">'+payment_type+'</td><td class="tsd_amount_'+create_td_cnt+'">'+payment_amount+'</td><td class="tsd_notes_'+create_td_cnt+'">'+payment_notes+'</td><td><a href="javascript:void(0);" class="remove_btn" data-indexid="'+create_td_cnt+'"><i class="ri-delete-bin-5-fill remove"></i></a> <a href="javascript:void(0);" class="edit_btn" data-indexid="'+create_td_cnt+'"><i class="ri-pencil-fill"></i></a></td></tr>');
+        $('.payment_date').val('');
+        $('.payment_notes').val('');
+        $('.payment_amount').val('');
+
     });
 
     //remove row when click remove button
-    $(document).on('click','.remove_pay_btn',function(){
-        $(this).closest('div').parent().remove();
+    $(document).on('click','.remove_btn',function(){
+        var indexid = $(this).attr('data-indexid');
+        myArray.splice(indexid, 1);
+        $('.payment_arr').val(JSON.stringify(myArray));
+        $(this).parent().parent().remove();
+    });
+
+    //get row data when click edit button
+    $(document).on('click','.edit_btn',function(){
+        var indexid = $(this).attr('data-indexid');
+        var edit_date=  myArray[indexid].payment_date;
+        var edit_amount=  myArray[indexid].payment_amount;
+        var edit_ptype=  myArray[indexid].payment_type;
+        var edit_notes=  myArray[indexid].payment_notes;
+        $('.payment_date').val(edit_date);
+        $('.payment_notes').val(edit_notes);
+        $('.payment_amount').val(edit_amount);
+        if(edit_ptype == 'half_payment'){
+            $('.phalf_payment').prop('checked',true);
+            $('.pfull_payment').prop('checked',false);
+        }else{
+            $('.pfull_payment').prop('checked',true);
+            $('.phalf_payment').prop('checked',false);
+        }
+        $('.update_pay_btn').show();
+        $('.update_pay_btn').attr('data-inde',indexid);
+        $('.add_more_pay_btn').hide();
+    });
+
+    $('.update_pay_btn').click(function() {
+        var indexid = $(this).attr('data-inde');
+        var edit_date = $('.payment_date').val();
+        var edit_ptype = $('.payment_type:checked').val();
+        var edit_notes = $('.payment_notes').val();
+        var edit_amount = $('.payment_amount').val();
+
+        myArray[indexid].payment_date = edit_date;
+        myArray[indexid].payment_amount = edit_amount;
+        myArray[indexid].payment_type = edit_ptype;
+        myArray[indexid].payment_notes = edit_notes;
+
+        $('.payment_arr').val(JSON.stringify(myArray));
+        if(edit_ptype == 'half_payment'){
+            edit_ptype= 'Half';
+        }else{
+            edit_ptype= 'Full';
+        }
+
+        $('.tsd_date_'+indexid).html(edit_date);
+        $('.tsd_ptype_'+indexid).html(edit_ptype);
+        $('.tsd_amount_'+indexid).html(edit_amount);
+        $('.tsd_notes_'+indexid).html(edit_notes);
+       
+        $('.payment_date').val('');
+        $('.payment_notes').val('');
+        $('.payment_amount').val('');
+        $('.add_more_pay_btn').show();
+        $('.update_pay_btn').removeAttr('data-inde');
+        $('.update_pay_btn').hide();
     });
 </script>

@@ -1,3 +1,11 @@
 .error {
   color: red;
 }
+.remove_btn .ri-delete-bin-5-fill{
+    color: red;
+    font-size: 20px;
+    cursor: pointer;
+}
+button.btn.btn-success.update_pay_btn {
+  margin-top: 30px;
+}
