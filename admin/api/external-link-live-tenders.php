@@ -56,6 +56,11 @@ function get_results($con, $postData)
     $custom_care_number = "";
     $tech_person_name = "";
     $tech_person_number = "";
+    $uname="";
+    $uemail="";
+    $mno="";
+    $expired_date="";
+    $ustatus="";
     $user_unique_id = $postData['user_unique_id'];
     $user_data = mysqli_query($con, "SELECT * FROM `users` WHERE  `user_unique_id`='$user_unique_id'");
 
@@ -74,11 +79,21 @@ function get_results($con, $postData)
             $custom_care_number = $row['custom_care_number'];
             $tech_person_name = $row['tech_person_name'];
             $tech_person_number = $row['tech_person_number'];
+            $uname = $row['customer_name'];
+            $uemail = $row['users_email'];
+            $mno = $row['mobile_number'];
+            $expired_date = date('M d, Y',strtotime($row['expired_date']));
+            $ustatus = $row['status'];
         }
 
         $result['custom_care_number'] = $custom_care_number;
         $result['tech_person_name'] = $tech_person_name;
         $result['tech_person_number'] = $tech_person_number;
+        $result['uname'] = $uname;
+        $result['uemail'] = $uemail;
+        $result['mno'] = $mno;
+        $result['expired_date'] = $expired_date;
+        $result['ustatus'] = $ustatus;
 
         if (!empty($city)) {
             $city = explode(",", $city);

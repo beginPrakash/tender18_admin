@@ -17,7 +17,7 @@ $result = get_results($con);
 
 function get_results($con)
 {
-    $agency_data = mysqli_query($con, "SELECT * FROM `keywords`");
+    $agency_data = mysqli_query($con, "SELECT * FROM `keywords` order by name ASC");
     $state_result = mysqli_num_rows($agency_data);
     if ($state_result > 0) {
         $count = 1;
