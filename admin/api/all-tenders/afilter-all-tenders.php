@@ -49,11 +49,13 @@ function get_results($con, $postData)
     $filter_department = $postData['department'];
     $filter_type = $postData['type'];
     $metaState = $postData['metaState'];
+    $metaAgency = $postData['metaAgency'];
     $metaDepartment = $postData['metaDepartment'];
     $condition = "";
     $cnt = 0;
     $meta_arr = [];
     $deptmeta_arr = [];
+    $agencymeta_arr = [];
 
     if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type) || !empty($start_date) || !empty($end_date)) {
         $condition = "WHERE";
@@ -70,6 +72,16 @@ function get_results($con, $postData)
         if ($state_result == 1) {
             while ($row = mysqli_fetch_assoc($state_data)) {
                 $meta_arr =  $row;
+            }
+        }
+    }
+
+    if(!empty($metaAgency)){
+        $state_data = mysqli_query($con, "SELECT `agency_name` FROM `tender_agencies` where agency_name LIKE '%$metaAgency%' order by `id` desc limit 1");
+        $state_result = mysqli_num_rows($state_data);
+        if ($state_result == 1) {
+            while ($row = mysqli_fetch_assoc($state_data)) {
+                $agencymeta_arr =  $row;
             }
         }
     }
@@ -487,6 +499,86 @@ function get_results($con, $postData)
         $result['meta']['keywords'] = '';
         $result['meta']['h1'] = '';
         $result['meta']['content'] = '';
+    }
+
+    if(!empty($agencymeta_arr)){
+        $html = "";
+        $ag_name = $agencymeta_arr['agency_name'];
+        $short_form = trim(substr($ag_name, strpos($ag_name, "- ") + 1));
+        $html.= " <div class='container'>";
+        $html.= "<p>";
+        $html.= "<b>";
+        $html.= "Latest $ag_name Tenders View the most recent $ag_name Tenders";
+        $html.= "</b>";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "Tender18 is your trusted online partner for accessing the latest $ag_name "; 
+        $html.= "Tenders, e-tender information. We are dedicated to simplifying the ";
+        $html.= "process of finding valuable business opportunities for organizations ";
+        $html.= "worldwide. Tenderers can effortlessly search, view, and download $ag_name "; 
+        $html.= "India Tenders, all at no cost.";
+        $html.= "</p>";
+
+        $html.= "<p>";
+        $html.= "<b>What We Offer:</b>";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>Comprehensive $ag_name Tenders Information:</b> Tender18 ";
+        $html.= "gathers and delivers up-to-the-minute updates on $ag_name e-procurement, ";
+        $html.= "$ag_name e-tenders, supply tenders, and service tenders directly from the ";
+        $html.= "$ag_name Tenders portal and e-procurement website.";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>Tailored Filtering:</b> Our platform allows you to refine ";
+        $html.= "your search for $ag_name Tenders based on critical criteria such as Bid ";
+        $html.= "Submission Date, Tender Value, Project Location, and Product Category. ";
+        $html.= "This tailored approach ensures that you find precisely the opportunities ";
+        $html.= "that match your business needs.";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>Daily Alerts:</b> Stay ahead of the curve with our daily ";
+        $html.= "alerts on $ag_name Tenders. Receive real-time notifications of new ";
+        $html.= "opportunities directly in your inbox, keeping you informed and ready to ";
+        $html.= "act.";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>Why Choose Tender18:</b>";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>Trusted Resource:</b> Tender18 is your reliable source for "; 
+        $html.= "$ag_name Tenders. We collect information from the purchaser's website, ";
+        $html.= "newspapers, and other central government tenders portals to provide you ";
+        $html.= "with accurate and up-to-date opportunities.";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>User-Friendly Experience:</b> Our platform is designed with ";
+        $html.= "ease of use in mind. Find, view, and download $ag_name Tenders ";
+        $html.= "effortlessly, with a user-friendly interface that simplifies your ";
+        $html.= "search.";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>Global Reach:</b> We serve businesses across the globe, ";
+        $html.= "helping them identify and seize opportunities within the vast landscape ";
+        $html.= "of $ag_name Tenders.";
+        $html.= "</p>";
+        $html.= "<p>";
+        $html.= "<b>Tender18</b> is committed to streamlining your access to ";
+        $html.= "$ag_name Tenders and e-procurement opportunities. As your trusted ";
+        $html.= "partner, we ensure you're always in the know when it comes to valuable ";
+        $html.= "business prospects with $ag_name. Discover the power of informed ";
+        $html.= "decision-making with Tender18.";
+        $html.= "</p>";
+        $html.= "</div>";
+       
+        $result['agency_meta']['title'] = "$short_form Tenders 2024, Get $short_form eprocurement & e Tenders $short_form";
+        $result['agency_meta']['description'] = "Looking for $short_form tenders? Explore the latest $ag_name tenders online, including eTenders and Government eProcurement opportunities. bid on $short_form tenders today";
+        $result['agency_meta']['h1'] = "Explore Current $short_form Tenders - $ag_name E Tenders 2024";
+        $result['agency_meta']['content'] = $html;
+    }else{
+        $result['agency_meta']['title'] = '';
+        $result['agency_meta']['description'] = '';
+        $result['agency_meta']['h1'] = '';
+        $result['agency_meta']['content'] = '';
     }
 
     if(!empty($deptmeta_arr)){
