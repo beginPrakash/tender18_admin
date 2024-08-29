@@ -40,6 +40,7 @@ function get_results($con, $postData)
     $filter_tender_value_to = $postData['tender_value_to'];
     $filter_department = $postData['department'];
     $filter_type = $postData['type'];
+    $keyw = $postData['keyword'];
     $condition = "";
     $cnt = 0;
 
@@ -51,12 +52,15 @@ function get_results($con, $postData)
         $condition .= " ref_no='$filter_ref_no'";
         $cnt++;
     }
-
+    $condition_u = "";
     if (!empty($filter_keyword)) {
         $filter_keyword = explode(",", $filter_keyword);
         if (!empty($filter_keyword)) {
             $condition_key = "";
             $condition_key_val = "";
+            $ucondition_key = "";
+            $ucondition_key_val = "";
+            $notq = "";
             $counter = 0;
             if ($cnt > 0) {
                 $condition_key_val = "and";
@@ -74,8 +78,10 @@ function get_results($con, $postData)
                         }
                         if ($key > 0) {
                             $condition_key .= " and title LIKE '%$keyword%' and title LIKE '%$value%'";
+                            $ucondition_key .= " or title LIKE '%$value%'";
                         } else {
                             $condition_key .= "title LIKE '%$value%'";
+                            $ucondition_key .= "title LIKE '%$value%'";
                         }
                         if ($key == ($count - 1)) {
                             $condition_key .= " ) ";
@@ -83,8 +89,10 @@ function get_results($con, $postData)
                     } else {
                         if ($counter > 0) {
                             $condition_key .= " or ";
+                            $ucondition_key .= " or ";
                         }
                         $condition_key .= "( title LIKE '%$value%' )";
+                        $ucondition_key .= "( title LIKE '%$value%' )";
                     }
                     $counter++;
                     $cnt++;
@@ -125,6 +133,7 @@ function get_results($con, $postData)
                 }
             }
             $condition .= " " . $condition_key_val . " (" . $condition_key . " )";
+            $condition_u .= " WHERE (" . $ucondition_key . " ) AND title NOT LIKE '%$keyw%'";
         }
     }
 
@@ -321,7 +330,7 @@ function get_results($con, $postData)
         $page = 1;
     }
     $offset = ($page * $limit) - $limit;
-    $keyw = $postData['keyword'];
+    
     $order_query = '';
     $order_key_val = '';
     $condition_orderque = '';
@@ -350,9 +359,9 @@ function get_results($con, $postData)
     }
     $keywords_arr = explode(' ', $keyw);
     $k_count = count($keywords_arr);
-    $condition_orderque .= " ELSE " . $k_count+1 . " END, title ASC";
-    $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
-    //echo "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque LIMIT $offset, $limit";exit;
+    $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+    $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_posts` $condition) UNION ALL (SELECT * FROM `tenders_posts` $condition_u) $condition_orderque LIMIT $offset, $limit");
+    //echo "(SELECT * FROM `tenders_posts` $condition $condition_filter) UNION ALL (SELECT * FROM `tenders_posts` $condition_u) $condition_orderque LIMIT $offset, $limit";exit;
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;
