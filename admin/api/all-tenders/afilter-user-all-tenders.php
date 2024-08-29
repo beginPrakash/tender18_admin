@@ -42,6 +42,8 @@ function get_results($con, $postData)
     $filter_type = $postData['type'];
     $metaState = $postData['metaState'];
     $metaAgency = $postData['metaAgency'];
+    $variable = substr($metaAgency, 0, strpos($metaAgency, "-tenders")); 
+    $metaAgencyStr = str_replace('-', ' ', $variable);
     $metaDepartment = $postData['metaDepartment'];
     $condition_filter = "";
     $condition = "";
@@ -69,8 +71,8 @@ function get_results($con, $postData)
         }
     }
 
-    if(!empty($metaAgency)){
-        $state_data = mysqli_query($con, "SELECT `agency_name` FROM `tender_agencies` where agency_name LIKE '%$metaAgency%' order by `id` desc limit 1");
+    if(!empty($metaAgencyStr)){
+        $state_data = mysqli_query($con, "SELECT `agency_name` FROM `tender_agencies` where agency_name LIKE '%$metaAgencyStr%' order by `id` desc limit 1");
         $state_result = mysqli_num_rows($state_data);
         if ($state_result == 1) {
             while ($row = mysqli_fetch_assoc($state_data)) {
