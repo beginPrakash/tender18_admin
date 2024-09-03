@@ -79,7 +79,7 @@ function get_results($con, $postData)
                         }
                         if ($key > 0) {
                             $condition_key .= " and title LIKE '%$value%'";
-                            $ucondition_key .= " or title LIKE '%$value%'";
+                            $ucondition_key .= " and title LIKE '%$value%'";
                         } else {
                             $condition_key .= "title LIKE '%$value%'";
                             $ucondition_key .= "title LIKE '%$value%'";
