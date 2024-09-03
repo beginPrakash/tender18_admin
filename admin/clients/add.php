@@ -65,7 +65,8 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
 if (isset($_POST['submit'])) {
     
     $payment_arr = json_decode($_POST['payment_arr']);
-   // print_r($payment_arr);exit;
+    $plan_arr = json_decode($_POST['plan_arr']);
+//print_r($plan_arr);exit;
     $username = $_POST['username'];
     $email = $_POST['email'];
     $pass = md5($_POST['pass']);
@@ -132,6 +133,22 @@ if (isset($_POST['submit'])) {
                     $payment_type = (isset($val->payment_type) && !empty($val->payment_type)) ? $val->payment_type : '';
                     $payment_notes = (isset($val->payment_notes) && !empty($val->payment_notes)) ? $val->payment_notes : '';
                     $q = "INSERT INTO client_payment_details(user_id, payment_date ,payment_type, payment_amount, payment_notes) VALUES ($last_insert_id, '$payment_date', '$payment_type', '$payment_amount', '$payment_notes')";
+                    $sql = mysqli_query($con, $q);
+                endif;
+                
+            endforeach;
+        endif;
+
+        //save plan details
+        if(!empty($plan_arr) && count($plan_arr)):
+            foreach($plan_arr as $key => $val):
+                if(!empty($val->completion_date)):
+                    $timestamp2 = strtotime($val->completion_date);
+                    $completion_date = date("Y-m-d", $timestamp2);
+                    $comp_count = (isset($val->comp_count) && !empty($val->comp_count)) ? $val->comp_count : '';
+                    $completation_type = (isset($val->completation_type) && !empty($val->completation_type)) ? $val->completation_type : '';
+                    $comp_notes = (isset($val->comp_notes) && !empty($val->comp_notes)) ? $val->comp_notes : '';
+                    $q = "INSERT INTO client_plan_details(user_id, completion_date ,completation_type, comp_count, comp_notes) VALUES ($last_insert_id, '$completion_date', '$completation_type', '$comp_count', '$comp_notes')";
                     $sql = mysqli_query($con, $q);
                 endif;
                 
@@ -452,6 +469,90 @@ if (!empty($_SESSION['error'])) {
                                 </table>
                             </div>
                         </div>
+
+                        <div class="col-xxl-12 col-md-12">
+                            <h2>Plan Details</h2>
+                            <div class="row add_plan_div">
+                                <input type="hidden" name="plan_arr" class="plan_arr">
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                    <label class="form-label">Completion Date</label>
+                                    <input type="text" class="form-control flatpickr-input completion_date" data-provider="flatpickr" data-date-format="M d, Y" data-default-date=""  id="completion_date">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 completion_div">
+                                    <div class="form-group">
+                                    <label class="form-label">Completation Type</label><br>
+                                    <input type="radio" name="completation_type[0]" class="radio_btn completation_type pe_bidding" value="e_bidding" checked>Radio - E-tender bidding
+                                    <br><input type="radio" name="completation_type[0]" class="radio_btn completation_type ps_uploading" value="s_uploading">Product / Service Uploading
+                                    <br><input type="radio" name="completation_type[0]" class="radio_btn completation_type pgem_bidding" value="gem_bidding">Gem Tender Bidding
+                                    </div>
+                                </div>
+                                <div class="col-md-2">
+                                    <div class="form-group">
+                                    <label class="form-label">Count</label>
+                                    <select id="comp_count" class="comp_count form-control">
+                                        <option value="0">Select Count</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="3">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                        <option value="10">10</option>
+                                        <option value="11">11</option>
+                                        <option value="12">12</option>
+                                        <option value="13">13</option>
+                                        <option value="14">14</option>
+                                        <option value="15">15</option>
+                                        <option value="16">16</option>
+                                        <option value="17">17</option>
+                                        <option value="18">18</option>
+                                        <option value="19">19</option>
+                                        <option value="20">20</option>
+                                    </select>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                    <label class="form-label">Notes</label>
+                                    <textarea class="form-control comp_notes" id="comp_notes"></textarea>
+                                    </div>
+                                </div>
+                                
+                                <div class="col-md-2 add_btn_div">
+                                    <button type="button" class="btn btn-success add_more_plan_btn">Add</button>
+                                    <button type="button" class="btn btn-success update_plan_btn" style="display:none">Update</button>
+                                </div>
+                            </div>
+                            <div class="row plan_table_data">
+                                <table class="plan_table">
+                                </table>
+                            </div>
+                            <div class="row col-md-6 plancount_table" style="display:none">
+                                <table class="table table-bordered dt-responsive nowrap table-striped align-middle">
+                                    <tr>
+                                        <th>Type</th>
+                                        <th>Total</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Radio - E-tender bidding</td>
+                                        <td class="p_e_bidding_count">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Product / Service Uploading</td>
+                                        <td class="p_s_uploading_count">0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gem Tender Bidding</td>
+                                        <td class="p_gem_bidding_count">0</td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="filter_city" class="form-label">Filter City : <span class="text-danger">*</span></label>
@@ -757,5 +858,150 @@ if (!empty($_SESSION['error'])) {
         $('.add_more_pay_btn').show();
         $('.update_pay_btn').removeAttr('data-inde');
         $('.update_pay_btn').hide();
+    });
+
+    function _get_total_count(clname){
+        console.log(clname);
+        var s= 0;
+        $(clname).each(function() {
+            var value = parseInt($(this).find('.ptsd_count').text());
+            s = value + s;
+        });
+        return s;
+    }
+
+    var pmyArray = [];
+    $('.add_more_plan_btn').click(function() {
+        
+        var total_ptr_length = $('.plan_table_data tr').length;
+        if(total_ptr_length == 0){           
+            $('.plan_table').append('<tr><th>Completion Date</th><th>Completion Type</th><th>Count</th><th>Notes</th><th>Action</th></tr>');
+        }
+        var pa_date = $('.completion_date').val();
+        var completation_type = $('.completation_type:checked').val();
+        var completation_types = $('.completation_type:checked').val();
+        var comp_notes = $('.comp_notes').val();
+        var comp_count = $('.comp_count').val();
+        
+        var pieces = {                              
+           "completion_date" :pa_date,
+           "completation_type" :completation_type,
+           "comp_notes" :comp_notes,
+           "comp_count" :comp_count
+        };
+
+        if(completation_type == 'e_bidding'){
+            completation_type= 'Radio - E-tender bidding';
+        }else if(completation_type == 's_uploading'){
+            completation_type= 'Product / Service Uploading';
+        }else{
+            completation_type= 'Gem Tender Bidding';
+        }
+        
+
+        pmyArray.push(pieces);
+
+        var create_td_cnt = $('.pcreate_td').length;
+
+        $('.plan_arr').val(JSON.stringify(pmyArray));
+        
+        $('.plan_table tr:last').after('<tr class="pcreate_td p_'+completation_types+'"><td class="ptsd_date_'+create_td_cnt+'">'+pa_date+'</td><td class="ptsd_ptype_'+create_td_cnt+'">'+completation_type+'</td><td class="ptsd_count ptsd_amount_'+create_td_cnt+'">'+comp_count+'</td><td class="ptsd_notes_'+create_td_cnt+'">'+comp_notes+'</td><td><a href="javascript:void(0);" class="remove_plan_btn" data-indexid="'+create_td_cnt+'"><i class="ri-delete-bin-5-fill remove"></i></a> <a href="javascript:void(0);" class="edit_plan_btn" data-indexid="'+create_td_cnt+'"><i class="ri-pencil-fill"></i></a></td></tr>');
+        $('.completion_date').val('');
+        $('.comp_count').val('0').trigger('change');
+        $('.comp_notes').val('');
+        var p_e_bidding_count = _get_total_count('.p_e_bidding');
+        var p_s_uploading_count = _get_total_count('.p_s_uploading');
+        var p_gem_bidding_count = _get_total_count('.p_gem_bidding');
+        $('.p_e_bidding_count').text(p_e_bidding_count);
+        $('.p_s_uploading_count').text(p_s_uploading_count);
+        $('.p_gem_bidding_count').text(p_gem_bidding_count);
+        $('.plancount_table').show();
+
+    });
+
+    //remove row when click remove button
+    $(document).on('click','.remove_plan_btn',function(){
+        var indexid = $(this).attr('data-indexid');
+        pmyArray.splice(indexid, 1);
+        $('.plan_arr').val(JSON.stringify(pmyArray));
+        $(this).parent().parent().remove();
+        var p_e_bidding_count = _get_total_count('.p_e_bidding');
+        var p_s_uploading_count = _get_total_count('.p_s_uploading');
+        var p_gem_bidding_count = _get_total_count('.p_gem_bidding');
+        $('.p_e_bidding_count').text(p_e_bidding_count);
+        $('.p_s_uploading_count').text(p_s_uploading_count);
+        $('.p_gem_bidding_count').text(p_gem_bidding_count);
+        $('.plancount_table').show();
+    });
+
+    //get row data when click edit button
+    $(document).on('click','.edit_plan_btn',function(){
+        var indexid = $(this).attr('data-indexid');
+        var edit_cdate=  pmyArray[indexid].completion_date;
+        var edit_count=  pmyArray[indexid].comp_count;
+        var edit_ctype=  pmyArray[indexid].completation_type;
+        var edit_cnotes=  pmyArray[indexid].comp_notes;
+        $('.completion_date').val(edit_cdate);
+        $('.comp_notes').val(edit_cnotes);
+        $('.comp_count').val(edit_count);
+        if(edit_ctype == 'e_bidding'){
+            $('.pe_bidding').prop('checked',true);
+            $('.ps_uploading').prop('checked',false);
+            $('.pgem_bidding').prop('checked',false);
+        }else if(edit_ctype == 's_uploading'){
+            $('.pe_bidding').prop('checked',false);
+            $('.ps_uploading').prop('checked',true);
+            $('.pgem_bidding').prop('checked',false);
+        }else{
+            $('.pe_bidding').prop('checked',false);
+            $('.ps_uploading').prop('checked',false);
+            $('.pgem_bidding').prop('checked',true);
+        }
+        $('.update_plan_btn').show();
+        $('.update_plan_btn').attr('data-inde',indexid);
+        $('.add_more_plan_btn').hide();
+    });
+
+    $('.update_plan_btn').click(function() {
+        var indexid = $(this).attr('data-inde');
+        var edit_cdate = $('.completion_date').val();
+        var edit_ctype = $('.completation_type:checked').val();
+        var edit_cnotes = $('.comp_notes').val();
+        var edit_count = $('.comp_count').val();
+
+        pmyArray[indexid].completion_date = edit_cdate;
+        pmyArray[indexid].comp_count = edit_count;
+        pmyArray[indexid].completation_type = edit_ctype;
+        pmyArray[indexid].comp_notes = edit_cnotes;
+
+        $('.plan_arr').val(JSON.stringify(pmyArray));
+
+        if(edit_ctype == 'e_bidding'){
+            edit_ctype= 'Radio - E-tender bidding';
+        }else if(edit_ctype == 's_uploading'){
+            edit_ctype= 'Product / Service Uploading';
+        }else{
+            edit_ctype= 'Gem Tender Bidding';
+        }
+        
+
+        $('.ptsd_date_'+indexid).html(edit_cdate);
+        $('.ptsd_ptype_'+indexid).html(edit_ctype);
+        $('.ptsd_amount_'+indexid).html(edit_count);
+        $('.ptsd_notes_'+indexid).html(edit_cnotes);
+       
+        $('.completion_date').val('');
+        $('.comp_count').val('');
+        $('.comp_notes').val('');
+        $('.update_plan_btn').removeAttr('data-inde');
+        $('.update_plan_btn').hide();
+
+        var p_e_bidding_count = _get_total_count('.p_e_bidding');
+        var p_s_uploading_count = _get_total_count('.p_s_uploading');
+        var p_gem_bidding_count = _get_total_count('.p_gem_bidding');
+        $('.p_e_bidding_count').text(p_e_bidding_count);
+        $('.p_s_uploading_count').text(p_s_uploading_count);
+        $('.p_gem_bidding_count').text(p_gem_bidding_count);
+        $('.plancount_table').show();
     });
 </script>
