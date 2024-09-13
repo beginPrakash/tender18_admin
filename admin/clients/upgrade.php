@@ -24,6 +24,45 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
             </script>";
     }
 }
+if (isset($_GET['st'])) {
+    if ($_GET['st'] == 1) {
+        $_SESSION['success'] = 'Mail sent successfully.';
+    }elseif ($_GET['st'] == 0) {
+        $_SESSION['error'] = 'Email Ids not found.';
+    }
+}
+
+if (!empty($_SESSION['success'])) {
+    echo '<div class="alert alert-success alert-dismissible fade show mb-4 show msg_box" role="alert">
+            <strong>' . $_SESSION['success'] . '</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+    $_SESSION['success'] = "";
+    echo "
+             <script>
+                     setTimeout(function(){
+                        window.location.href='" . ADMIN_URL . "/clients/upgrade.php';
+                         document.querySelector('.msg_box').remove();
+                     }, 3000);
+                 
+             </script>";
+}
+
+if (!empty($_SESSION['error'])) {
+    echo '<div class="alert alert-danger alert-dismissible fade show mb-4 msg_box" role="alert">
+            <strong> ' . $_SESSION['error'] . ' </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+    $_SESSION['error'] = "";
+    echo "
+             <script>
+                     setTimeout(function(){
+                         //window.location.reload();
+                         document.querySelector('.msg_box').remove();
+                     }, 3000);
+                 
+             </script>";
+}
 ?>
 <!-- start page title -->
 <div class="row">
@@ -66,12 +105,17 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
                 <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>clients/add.php">
                     <h5 class="card-title float-end btn bg-success text-white">Register New Users</h5>
                 </a>
+                <button type="button" onclick="dataSelected()" class="card-title float-start btn bg-success text-white mb-0">Send Email</button>
                 <!-- <h5 class="card-title mb-0">Basic Datatables</h5> -->
             </div>
             <div class="card-body">
+                <form id="deleteForm" method="POST" action="upgradesend_email.php">
+                    <input type="hidden" name="ids" id="ids">
+                </form>
                 <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%">
                     <thead>
                         <tr>
+                            <th><input type="checkbox" name="check_all" class="check_all"></th>
                             <th>SR No.</th>
                             <th>Username</th>
                             <th>Email</th>
@@ -86,7 +130,8 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
                         while ($row = mysqli_fetch_assoc($fetching_users)) {
                         ?>
                             <tr>
-                                <th scope="row"><?php echo $i; ?></th>
+                                <th scope="row"><input type="checkbox" name="row-check" class="row-check" value="<?php echo $row['user_id']; ?>"></th>
+                                <td><?php echo $i; ?></td>
                                 <td><?php echo $row['users_name']; ?></td>
                                 <td><?php echo $row['users_email']; ?></td>
                                 <td><?php echo ucfirst($row['user_role']); ?></td>
@@ -152,4 +197,26 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
         else
             window.location.href = '<?php echo ADMIN_URL; ?>users';
     });
+    function dataSelected() {
+        const checkboxes = document.querySelectorAll('input[name="row-check"]:checked');
+        const ids = Array.from(checkboxes).map(cb => cb.value);
+
+        if (ids.length > 0) {
+            if (confirm("Are you sure you want to send email to the selected records?")) {
+                const form = document.getElementById('deleteForm');
+                document.getElementById('ids').value = ids.join(',');
+                form.submit();
+            }
+        } else {
+            alert("Please select at least one record.");
+        }
+    }
+
+    $(document).on('click','.check_all',function(){
+        if($(this).prop('checked') == true){
+            $('.row-check').prop('checked',true);
+        }else{
+            $('.row-check').prop('checked',false);
+        }
+    })
 </script>

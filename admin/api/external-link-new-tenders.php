@@ -58,6 +58,7 @@ function get_results($con, $postData)
     $tech_person_number = "";
     $uname="";
     $uemail="";
+    $cname="";
     $mno="";
     $expired_date="";
     $ustatus="";
@@ -81,6 +82,7 @@ function get_results($con, $postData)
             $tech_person_number = $row['tech_person_number'];
             $uname = $row['customer_name'];
             $uemail = $row['users_email'];
+            $cname = $row['company_name'];
             $mno = $row['mobile_number'];
             $expired_date = date('M d, Y',strtotime($row['expired_date']));
             $ustatus = $row['status'];
@@ -94,6 +96,7 @@ function get_results($con, $postData)
         $result['mno'] = $mno;
         $result['expired_date'] = $expired_date;
         $result['ustatus'] = $ustatus;
+        $result['cname'] = $cname;
 
         if (!empty($city)) {
             $city = explode(",", $city);
