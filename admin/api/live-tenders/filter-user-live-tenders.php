@@ -609,7 +609,11 @@ function get_results($con, $postData)
     $keywords_arr = explode(' ', $keyw);
     $k_count = count($keywords_arr);
     $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
-    $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_live` $condition $condition_filter) UNION ALL (SELECT * FROM `tenders_live` $condition_u) $condition_orderque LIMIT $offset, $limit");
+    if(!empty($keyw)):
+        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_live` $condition $condition_filter) UNION ALL (SELECT * FROM `tenders_live` $condition_u) $condition_orderque LIMIT $offset, $limit");
+    else:
+        $tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+    endif;
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;
