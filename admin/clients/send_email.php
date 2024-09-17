@@ -161,7 +161,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </td>
                                         <!-- Right Column -->
                                         <td class="column column-50" style="width:50%; padding: 10px;">
-                                        <p style="text-align:right;margin-top: 0;"><a class="btn" target="_blank" href="'.$HOME_URL.'tenders-details/'.$user_unique_id.'" style="text-decoration:none !important;">View Documents</a></p>
+                                        <p style="text-align:right;margin-top: 0;"><a class="btn" target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;">View Documents</a></p>
                                         </td>
                                     </tr>
                                 </table>';
@@ -207,7 +207,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $mail->Body = $template;
                             //print_r($mail);exit;
                             // Send the email
-                            $mail->send();
+                            if ($tender_result > 0) {
+                                $mail->send();
+                            }
                             $mcount++;
                             //echo 'Email sent successfully';
                         } catch (Exception $e) {

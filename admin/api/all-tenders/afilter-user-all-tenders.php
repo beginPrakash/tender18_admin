@@ -627,9 +627,9 @@ function get_results($con, $postData)
     $counter = 0;
     $cnt = 0;
     $g =1 ;
-    $filter_keyword = explode(" ", $keyw);
+    $filter_keywords = explode(" ", $keyw);
 
-    foreach ($filter_keyword as $keyword) {
+    foreach ($filter_keywords as $keyword) {
         $keyword_arr = explode(' ', $keyword);
         $count = count($keyword_arr);
         foreach ($keyword_arr as $key => $value) {
