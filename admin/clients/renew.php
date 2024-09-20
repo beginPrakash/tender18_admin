@@ -117,14 +117,24 @@ if (!empty($_SESSION['error'])) {
                         <tr>
                             <th><input type="checkbox" name="check_all" class="check_all"></th>
                             <th>SR No.</th>
-                            <th>Username</th>
+                            <th>Company Name</th>
                             <th>Email</th>
-                            <th>Role</th>
+                            <th>Mobile</th>
+                            <th>New Tenders Link</th>
+                            <th>Live Tenders Link</th>
                             <th>Action</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
+                        function truncate_and_append($text, $length = 20)
+                        {
+                            if (strlen($text) <= $length) {
+                                return $text;
+                            } else {
+                                return substr($text, 0, $length) . "...";
+                            }
+                        }
                         $i = 1;
                         $fetching_users = mysqli_query($con, "SELECT * FROM users where user_role='user' and `status`='Renew' order by user_id desc");
                         while ($row = mysqli_fetch_assoc($fetching_users)) {
@@ -132,9 +142,11 @@ if (!empty($_SESSION['error'])) {
                             <tr>
                                 <th scope="row"><input type="checkbox" name="row-check" class="row-check" value="<?php echo $row['user_id']; ?>"></th>
                                 <td><?php echo $i; ?></td>
-                                <td><?php echo $row['users_name']; ?></td>
+                                <td><?php echo $row['company_name']; ?></td>
                                 <td><?php echo $row['users_email']; ?></td>
-                                <td><?php echo ucfirst($row['user_role']); ?></td>
+                                <td><?php echo $row['mobile_number']; ?></td>
+                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/new-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/new-tenders/" . $row['user_unique_id']); ?></td>
+                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/live-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/live-tenders/" . $row['user_unique_id']); ?></td>
                                 <td>
                                     <div class="dropdown d-inline-block">
                                         <button class="btn btn-subtle-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -219,4 +231,20 @@ if (!empty($_SESSION['error'])) {
             $('.row-check').prop('checked',false);
         }
     })
+
+    $(document).on('click', '.row-check', function() {
+        var $row = $(this).closest('tr');
+
+        // Check if the row has the class 'dt-hasChild parent'
+        if ($row.hasClass('dt-hasChild parent')) {
+            // Remove the class
+            $row.removeClass('dt-hasChild parent');
+            var $nextRow = $row.next('tr');
+                if ($nextRow.hasClass('child')) {
+                    $nextRow.remove();
+                }
+        }
+        
+        
+    });
 </script>

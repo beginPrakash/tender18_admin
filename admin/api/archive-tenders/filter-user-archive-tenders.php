@@ -29,6 +29,13 @@ switch ($endpoint) {
 function get_results($con, $postData)
 {
     // return $con;
+    $start_date = $_GET['startDate'];
+    $timestamp1 = strtotime($start_date);
+    $start_date = date("Y-m-d", $timestamp1);
+
+    $end_date = $_GET['endDate'];
+    $timestamp2 = strtotime($end_date);
+    $end_date = date("Y-m-d", $timestamp2);
     $filter_ref_no = $postData['ref_no'];
     $filter_keyword = $postData['keyword'];
     $filter_state = $postData['state'];
@@ -45,7 +52,7 @@ function get_results($con, $postData)
     $condition = "";
     $cnt = 0;
 
-    if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type)) {
+    if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type) || !empty($start_date)) {
         $condition_filter = "WHERE";
     }
 
@@ -229,6 +236,16 @@ function get_results($con, $postData)
             $cnt++;
         }
     }
+
+    if (!empty($start_date) && !empty($end_date)) {
+        if ($cnt > 0) {
+            $condition_filter .= " and due_date between '$start_date' and '$end_date'";
+        } else {
+            $condition_filter .= " due_date between '$start_date' and '$end_date'";
+            $cnt++;
+        }
+    }
+
 
     if (!empty($filter_tender_value) && $filter_tender_value > 0 && !empty($filter_tender_value_to) && $filter_tender_value_to > 0) {
         if ($cnt > 0) {

@@ -4,6 +4,15 @@
 <?php include '../includes/header.php' ?>
 <?php
 if (isset($_GET['id'])) {
+    $tend_data = mysqli_query($con, "SELECT * FROM `tenders_live` where id='" . $_GET['id'] . "'");
+    $tend_result = mysqli_num_rows($tend_data);
+    
+    if ($tend_result == 1) {
+        while ($row = mysqli_fetch_assoc($tend_data)) {
+            $ref_no = $row['ref_no'];
+            $del = mysqli_query($con, "DELETE FROM `tenders_all` where ref_no='" . $ref_no . "'");
+        }
+    }
     $del = mysqli_query($con, "DELETE FROM `tenders_live` where id='" . $_GET['id'] . "'");
     $status = true;
     if ($status) {
@@ -16,6 +25,15 @@ if (isset($_POST['multi_selection_ids'])) {
     // print_r($_POST['multi_selection_ids']);
     $deleteID = explode(",", $_POST['multi_selection_ids']);
     foreach ($deleteID as $delID) {
+        $tend_data = mysqli_query($con, "SELECT * FROM `tenders_live` where id='" . $delID . "'");
+        $tend_result = mysqli_num_rows($tend_data);
+        
+        if ($tend_result == 1) {
+            while ($row = mysqli_fetch_assoc($tend_data)) {
+                $ref_no = $row['ref_no'];
+                $del = mysqli_query($con, "DELETE FROM `tenders_all` where ref_no='" . $ref_no . "'");
+            }
+        }
         $del = mysqli_query($con, "DELETE FROM `tenders_live` where id='" . $delID . "'");
         $status = true;
         if ($status) {

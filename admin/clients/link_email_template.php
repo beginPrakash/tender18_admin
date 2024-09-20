@@ -59,6 +59,8 @@
             <p>Customer Care Number: +91 90819 00466 | +91 74340 61818</p>
             <p>Emai id: <a href="mailto:support@tender18.in">support@tender18.in</a> | <a href="mailto:sales@tender18.in">sales@tender18.in</a></p>
             <p>Website: <a href="www.Tender18.com">www.Tender18.com</a></p>
+            <p><b>Disclaimer:</b></p>
+            <p>You are receiving this communication because you have subscribed to tender alerts from TENDER18 Infotech Private Limited. As part of our service, we send relevant government tender opportunities directly to your registered email. If you no longer wish to receive these notifications, you may opt out at any time by clicking unsubscribe or by replying to this email with "Unsubscribe" in the subject line.</p>
         </div>
     </div>
 </body>

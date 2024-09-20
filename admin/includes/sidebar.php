@@ -253,6 +253,40 @@
                         </a>
                     </li>
                 <?php } ?>
+                <?php if($_SESSION['role']=='admin') { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'smtp_mgmt') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/smtp_mgmt">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">SMTP Management</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'city-content') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/city-content">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">City Content</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'agency-content') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/agency-content">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Agency Content</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'keyword-content') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/keyword-content">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Keyword Content</span>
+                        </a>
+                    </li>
+                <?php } ?>
             </ul>
         </div>
         <!-- Sidebar -->
