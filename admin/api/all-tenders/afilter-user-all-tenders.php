@@ -29,10 +29,19 @@ switch ($endpoint) {
 function get_results($con, $postData)
 {
     // return $con;
+    $start_date = $_GET['startDate'];
+    $timestamp1 = strtotime($start_date);
+    $start_date = date("Y-m-d", $timestamp1);
+
+    $end_date = $_GET['endDate'];
+    $timestamp2 = strtotime($end_date);
+    $end_date = date("Y-m-d", $timestamp2);
+
     $filter_ref_no = $postData['ref_no'];
     $filter_keyword = $postData['keyword'];
     $filter_state = $postData['state'];
     $filter_city = $postData['city'];
+    $city_name = $postData['city'];
     $filter_agency = $postData['agency'];
     $filter_tender_id = $postData['tender_id'];
     $filter_due_date = $postData['due_date'];
@@ -41,21 +50,28 @@ function get_results($con, $postData)
     $filter_department = $postData['department'];
     $filter_type = $postData['type'];
     $metaState = $postData['metaState'];
+    $metaCity = $postData['metaCity']; 
     $metaAgency = $postData['metaAgency']; 
     $metaAgencyStrrepl = str_replace('-', ' ', $metaAgency);
     $formatted = strrchr($metaAgencyStrrepl,' ');
     $withoutLast= preg_replace('/\W\w+\s*(\W*)$/', '$1', $metaAgencyStrrepl);
     $metaAgencyStr = $withoutLast.' -'. strtoupper($formatted);
     $metaDepartment = $postData['metaDepartment'];
+    $metaKeyword = $postData['metaKeyword'];
     $keyw = $postData['keyword'];
     $condition_filter = "";
     $condition = "";
     $cnt = 0;
+   
     $meta_arr = [];
     $deptmeta_arr = [];
+    $citymeta_arr = [];
     $agencymeta_arr = [];
+    $agmeta_arr=[];
+    $keymeta_arr=[];
 
-    if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type)) {
+    if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type) || !empty($start_date)) {
+        //echo $start_date;
         $condition_filter = "WHERE";
     }
 
@@ -80,6 +96,34 @@ function get_results($con, $postData)
         if ($state_result == 1) {
             while ($row = mysqli_fetch_assoc($state_data)) {
                 $agencymeta_arr =  $row;
+            }
+        }
+
+        $ameta_data = mysqli_query($con, "SELECT * FROM `agency_meta_content` where id = 1 ");
+        $ameta_result = mysqli_num_rows($ameta_data);
+        if ($ameta_result == 1) {
+            while ($row = mysqli_fetch_assoc($ameta_data)) {
+                $agmeta_arr =  $row;
+            }
+        }
+    }
+
+    if(!empty($metaCity)){
+        $city_data = mysqli_query($con, "SELECT * FROM `city_meta_content` where id = 1 ");
+        $city_result = mysqli_num_rows($city_data);
+        if ($city_result == 1) {
+            while ($row = mysqli_fetch_assoc($city_data)) {
+                $citymeta_arr =  $row;
+            }
+        }
+    }
+
+    if(!empty($metaKeyword)){
+        $keyw_data = mysqli_query($con, "SELECT * FROM `keyword_meta_content` where id = 1 ");
+        $keyw_result = mysqli_num_rows($keyw_data);
+        if ($keyw_result == 1) {
+            while ($row = mysqli_fetch_assoc($keyw_data)) {
+                $keymeta_arr =  $row;
             }
         }
     }
@@ -263,9 +307,18 @@ function get_results($con, $postData)
         $timestamp2 = strtotime($end_date);
         $end_date = date("Y-m-d", $timestamp2);
         if ($cnt > 0) {
-            $condition_filter .= " and due_date between '$start_date' and '$end_date'";
+            $condition_filter .= " and publish_date between '$start_date' and '$end_date'";
         } else {
-            $condition_filter .= " due_date between '$start_date' and '$end_date'";
+            $condition_filter .= " publish_date between '$start_date' and '$end_date'";
+            $cnt++;
+        }
+    }
+
+    if (!empty($start_date) && !empty($end_date)) {
+        if ($cnt > 0) {
+            $condition_filter .= " and publish_date between '$start_date' and '$end_date'";
+        } else {
+            $condition_filter .= " publish_date between '$start_date' and '$end_date'";
             $cnt++;
         }
     }
@@ -628,32 +681,39 @@ function get_results($con, $postData)
     $cnt = 0;
     $g =1 ;
     $filter_keywords = explode(" ", $keyw);
-
-    foreach ($filter_keywords as $keyword) {
-        $keyword_arr = explode(' ', $keyword);
-        $count = count($keyword_arr);
-        foreach ($keyword_arr as $key => $value) {
-            if ($counter == 0 && $key <= 0) {
-                $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
-            } 
-                $order_query .= " WHEN title LIKE '%$value%' THEN $g";
-            
-            $counter++;
-            $cnt++;
-            $g++;
+    if(count($filter_keywords) > 0){
+        foreach ($filter_keywords as $keyword) {
+            if(!empty($keyword)){
+            $keyword_arr = explode(' ', $keyword);
+            $count = count($keyword_arr);
+            foreach ($keyword_arr as $key => $value) {
+                if ($counter == 0 && $key <= 0) {
+                    $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
+                } 
+                    $order_query .= " WHEN title LIKE '%$value%' THEN $g";
+                
+                $counter++;
+                $cnt++;
+                $g++;
+            }
+        }
         }
         
     }
     if($order_key_val != ''){
         $condition_orderque .= " " . $order_key_val . "  " . $order_query;
     }
-    $keywords_arr = explode(' ', $keyw);
-    $k_count = count($keywords_arr);
-    $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+    if($keyw != ""){
+        $keywords_arr = explode(' ', $keyw);
+        $k_count = count($keywords_arr);
+        $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+    }
+    
     if(!empty($keyw)):
         $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_all` $condition $condition_filter ) UNION ALL (SELECT * FROM `tenders_all` $condition_u) $condition_orderque LIMIT $offset, $limit");
     else:
         $tender_data = mysqli_query($con, "SELECT * FROM `tenders_all` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+        //echo "SELECT * FROM `tenders_all` $condition $condition_filter $condition_orderque LIMIT $offset, $limit";exit;
     endif;
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
@@ -816,86 +876,30 @@ function get_results($con, $postData)
         $result['meta']['content'] = '';
     }
 
-    if(!empty($agencymeta_arr)){
-        $html = "";
-        $ag_name = $agencymeta_arr['agency_name'];
+    if(!empty($agmeta_arr)){
+        $ag_name = $agencymeta_arr['agency_name'] ?? '';
         $short_form = trim(substr($ag_name, strpos($ag_name, "- ") + 1));
-        $html.= " <div class='container'>";
-        $html.= "<p>";
-        $html.= "<b>";
-        $html.= "Latest $ag_name Tenders View the most recent $ag_name Tenders";
-        $html.= "</b>";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "Tender18 is your trusted online partner for accessing the latest $ag_name "; 
-        $html.= "Tenders, e-tender information. We are dedicated to simplifying the ";
-        $html.= "process of finding valuable business opportunities for organizations ";
-        $html.= "worldwide. Tenderers can effortlessly search, view, and download $ag_name "; 
-        $html.= "India Tenders, all at no cost.";
-        $html.= "</p>";
-
-        $html.= "<p>";
-        $html.= "<b>What We Offer:</b>";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>Comprehensive $ag_name Tenders Information:</b> Tender18 ";
-        $html.= "gathers and delivers up-to-the-minute updates on $ag_name e-procurement, ";
-        $html.= "$ag_name e-tenders, supply tenders, and service tenders directly from the ";
-        $html.= "$ag_name Tenders portal and e-procurement website.";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>Tailored Filtering:</b> Our platform allows you to refine ";
-        $html.= "your search for $ag_name Tenders based on critical criteria such as Bid ";
-        $html.= "Submission Date, Tender Value, Project Location, and Product Category. ";
-        $html.= "This tailored approach ensures that you find precisely the opportunities ";
-        $html.= "that match your business needs.";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>Daily Alerts:</b> Stay ahead of the curve with our daily ";
-        $html.= "alerts on $ag_name Tenders. Receive real-time notifications of new ";
-        $html.= "opportunities directly in your inbox, keeping you informed and ready to ";
-        $html.= "act.";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>Why Choose Tender18:</b>";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>Trusted Resource:</b> Tender18 is your reliable source for "; 
-        $html.= "$ag_name Tenders. We collect information from the purchaser's website, ";
-        $html.= "newspapers, and other central government tenders portals to provide you ";
-        $html.= "with accurate and up-to-date opportunities.";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>User-Friendly Experience:</b> Our platform is designed with ";
-        $html.= "ease of use in mind. Find, view, and download $ag_name Tenders ";
-        $html.= "effortlessly, with a user-friendly interface that simplifies your ";
-        $html.= "search.";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>Global Reach:</b> We serve businesses across the globe, ";
-        $html.= "helping them identify and seize opportunities within the vast landscape ";
-        $html.= "of $ag_name Tenders.";
-        $html.= "</p>";
-        $html.= "<p>";
-        $html.= "<b>Tender18</b> is committed to streamlining your access to ";
-        $html.= "$ag_name Tenders and e-procurement opportunities. As your trusted ";
-        $html.= "partner, we ensure you're always in the know when it comes to valuable ";
-        $html.= "business prospects with $ag_name. Discover the power of informed ";
-        $html.= "decision-making with Tender18.";
-        $html.= "</p>";
-        $html.= "</div>";
-       
-        $result['agency_meta']['title'] = "$short_form Tenders 2024, Get $short_form eprocurement & e Tenders $short_form";
-        $result['agency_meta']['description'] = "Looking for $short_form tenders? Explore the latest $ag_name tenders online, including eTenders and Government eProcurement opportunities. bid on $short_form tenders today";
-        $result['agency_meta']['h1'] = "Explore Current $short_form Tenders - $ag_name E Tenders 2024";
-        $result['agency_meta']['content'] = $html;
+        $title = str_replace("(ag_name)",$ag_name,$agmeta_arr['title']);
+        $final_title = str_replace("(short_form)",$short_form,$title);
+        $description = str_replace("(ag_name)",$ag_name,$agmeta_arr['description']);
+        $final_description = str_replace("(short_form)",$short_form,$description);
+        $keywords = str_replace("(ag_name)",$ag_name,$agmeta_arr['keywords']);
+        $h1 = str_replace("(ag_name)",$ag_name,$agmeta_arr['h1']);
+        $h1_final = str_replace("(short_form)",$short_form,$h1);
+        $content = str_replace("(ag_name)",$ag_name,$agmeta_arr['content']);
+        $final_content = str_replace("(short_form)",$short_form,$content);
+        $result['agency_meta']['title'] = $final_title;
+        $result['agency_meta']['description'] = $final_description;
+        $result['agency_meta']['keywords'] = $keywords;
+        $result['agency_meta']['h1'] = $h1_final;
+        $result['agency_meta']['content'] = $final_content;
     }else{
         $result['agency_meta']['title'] = '';
         $result['agency_meta']['description'] = '';
+        $result['agency_meta']['keywords'] = '';
         $result['agency_meta']['h1'] = '';
         $result['agency_meta']['content'] = '';
     }
-
     if(!empty($deptmeta_arr)){
         $result['dept_meta']['title'] = $deptmeta_arr['title'];
         $result['dept_meta']['description'] = $deptmeta_arr['description'];
@@ -909,6 +913,49 @@ function get_results($con, $postData)
         $result['dept_meta']['h1'] = '';
         $result['dept_meta']['content'] = '';
     }
+
+    if(!empty($citymeta_arr)){
+        $title = str_replace("(City)",$metaCity,$citymeta_arr['title']);
+        $final_title = str_replace("(Brand name)",'Tender 18',$title);
+        $description = str_replace("(City)",$metaCity,$citymeta_arr['description']);
+        $final_description = str_replace("(Brand name)",'Tender 18',$description);
+        $keywords = str_replace("(City)",$metaCity,$citymeta_arr['keywords']);
+        $h1 = str_replace("(City)",$metaCity,$citymeta_arr['h1']);
+        $content = str_replace("(City)",$metaCity,$citymeta_arr['content']);
+        $result['city_meta']['title'] = $final_title;
+        $result['city_meta']['description'] = $final_description;
+        $result['city_meta']['keywords'] = $keywords;
+        $result['city_meta']['h1'] = $h1;
+        $result['city_meta']['content'] = $content;
+    }else{
+        $result['city_meta']['title'] = '';
+        $result['city_meta']['description'] = '';
+        $result['city_meta']['keywords'] = '';
+        $result['city_meta']['h1'] = '';
+        $result['city_meta']['content'] = '';
+    }
+
+    if(!empty($keymeta_arr)){
+        $title = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['title']);
+        $final_title = str_replace("(Brand name)",'Tender 18',$title);
+        $description = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['description']);
+        $final_description = str_replace("(Brand name)",'Tender 18',$description);
+        $keywords = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['keywords']);
+        $h1 = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['h1']);
+        $content = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['content']);
+        $result['keyword_meta']['title'] = $final_title;
+        $result['keyword_meta']['description'] = $final_description;
+        $result['keyword_meta']['keywords'] = $keywords;
+        $result['keyword_meta']['h1'] = $h1;
+        $result['keyword_meta']['content'] = $content;
+    }else{
+        $result['keyword_meta']['title'] = '';
+        $result['keyword_meta']['description'] = '';
+        $result['keyword_meta']['keywords'] = '';
+        $result['keyword_meta']['h1'] = '';
+        $result['keyword_meta']['content'] = '';
+    }
+    
 
     if ($user_result != 1) {
         $result = null;

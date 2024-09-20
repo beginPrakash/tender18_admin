@@ -159,6 +159,17 @@
                 },
               });
 
+              $('#smtp_form').validate({
+                rules: {
+                  'host': "required",
+                  'user_name': "required",
+                  'password': "required",
+                  'port': "required",
+                  'from_email': "required",
+                  'from_name': "required",
+                },
+              });
+
               $('#setting').validate({
                 rules: {
                   'button_text': "required",
