@@ -671,7 +671,9 @@ function get_results($con, $postData)
                 foreach ($keywords as $keyword) {
                     $keyword_arr = explode(' ', $keyword);
                     foreach ($keyword_arr as $key) {
-                        $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        if(!empty($key)):
+                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        endif;
                     }
                 }
                 $result_title = htmlspecialcode_generator($highlightedResult);
@@ -680,7 +682,9 @@ function get_results($con, $postData)
                 foreach ($keywords as $keyword) {
                     $keyword_arr = explode(' ', $keyword);
                     foreach ($keyword_arr as $key) {
-                        $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        if(!empty($key)):
+                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        endif;
                     }
                 }
                 $result_title = htmlspecialcode_generator($highlightedResult);
@@ -700,7 +704,9 @@ function get_results($con, $postData)
                 foreach ($filter_keyword as $keyword) {
                     $keyword_arr_new = explode(' ', $keyword);
                     foreach ($keyword_arr_new as $key) {
-                        $keyword_arr[] = $key;
+                        if(!empty($key)):
+                            $keyword_arr[] = $key;
+                        endif;
                     }
                 }
                 usort($keyword_arr, function ($a, $b) {

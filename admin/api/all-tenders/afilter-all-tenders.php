@@ -52,10 +52,11 @@ function get_results($con, $postData)
     $metaCity = $postData['metaCity'];
     $metaKeyword = $postData['metaKeyword'];
     $metaAgency = $postData['metaAgency']; 
-    $metaAgencyStrrepl = str_replace('-', ' ', $metaAgency);
-    $formatted = strrchr($metaAgencyStrrepl,' ');
-    $withoutLast= preg_replace('/\W\w+\s*(\W*)$/', '$1', $metaAgencyStrrepl);
-    $metaAgencyStr = $withoutLast.' -'. strtoupper($formatted);
+    $metaAgencyStr = str_replace('-', ' ', $metaAgency);
+    // $formatted = strrchr($metaAgencyStrrepl,' ');
+    // $metaAgencyStr= preg_replace('/\W\w+\s*(\W*)$/', '$1', $metaAgencyStrrepl);
+
+    //$metaAgencyStr = $withoutLast.' -'. strtoupper($formatted);
 
     $metaDepartment = $postData['metaDepartment'];
     $keyw = $postData['keyword'];
@@ -492,7 +493,9 @@ function get_results($con, $postData)
                 foreach ($filter_keyword as $keyword) {
                     $keyword_arr_new = explode(' ', $keyword);
                     foreach ($keyword_arr_new as $key) {
-                        $keyword_arr[] = $key;
+                        if(!empty($key)):
+                            $keyword_arr[] = $key;
+                        endif;
                     }
                 }
                 usort($keyword_arr, function ($a, $b) {
@@ -598,7 +601,7 @@ function get_results($con, $postData)
         $result['dept_meta']['content'] = '';
     }
     
-    if(!empty($agmeta_arr)){
+    if(!empty($agmeta_arr) && !empty($agencymeta_arr)){
         $ag_name = $agencymeta_arr['agency_name'] ?? '';
         $short_form = trim(substr($ag_name, strpos($ag_name, "- ") + 1));
         $title = str_replace("(ag_name)",$ag_name,$agmeta_arr['title']);
