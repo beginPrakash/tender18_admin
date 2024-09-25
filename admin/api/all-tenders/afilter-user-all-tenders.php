@@ -711,7 +711,7 @@ function get_results($con, $postData)
     }
     
     if(!empty($keyw)):
-        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_all` $condition $condition_filter ) UNION ALL (SELECT * FROM `tenders_all` $condition_u) $condition_orderque LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_all` $condition $condition_filter ) UNION ALL (SELECT * FROM `tenders_all` $condition_u $condition_filter) $condition_orderque LIMIT $offset, $limit");
     else:
         $tender_data = mysqli_query($con, "SELECT * FROM `tenders_all` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
         //echo "SELECT * FROM `tenders_all` $condition $condition_filter $condition_orderque LIMIT $offset, $limit";exit;

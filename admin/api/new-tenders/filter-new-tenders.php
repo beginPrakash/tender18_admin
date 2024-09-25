@@ -361,7 +361,8 @@ function get_results($con, $postData)
     $k_count = count($keywords_arr);
     $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
     if(!empty($keyw)):
-        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_posts` $condition) UNION ALL (SELECT * FROM `tenders_posts` $condition_u) $condition_orderque LIMIT $offset, $limit");
+        $s_condition = str_replace("WHERE","and",$condition);
+        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_posts` $condition) UNION ALL (SELECT * FROM `tenders_posts` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");
     else:
         $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_orderque LIMIT $offset, $limit");
     endif;
