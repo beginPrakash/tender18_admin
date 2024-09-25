@@ -141,7 +141,11 @@ function get_results($con, $postData)
                 }
             }
             $condition_filter .= " " . $condition_key_val . " (" . $condition_key . " )";
-            $condition_u .= " WHERE (" . $ucondition_key . " ) AND title NOT LIKE '%$keyw%'";
+            if(!empty($filter_ref_no)):
+                $condition_u .= " WHERE (" . $ucondition_key . " ) AND title NOT LIKE '%$keyw%' AND ref_no = ".$filter_ref_no."";
+            else:
+                $condition_u .= " WHERE (" . $ucondition_key . " ) AND title NOT LIKE '%$keyw%'";
+            endif;
         }
     }
 
@@ -628,10 +632,11 @@ function get_results($con, $postData)
     $k_count = count($keywords_arr);
     $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
     if(!empty($keyw)):
-        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_archive` $condition $condition_filter ) UNION ALL (SELECT * FROM `tenders_archive` $condition_u) $condition_orderque LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_archive` $condition $condition_filter ) UNION ALL (SELECT * FROM `tenders_archive` $condition_u $condition_filter) $condition_orderque LIMIT $offset, $limit");
     else:
         $tender_data = mysqli_query($con, "SELECT * FROM `tenders_archive` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
     endif;
+    //echo "(SELECT * FROM `tenders_archive` $condition $condition_filter ) UNION ALL (SELECT * FROM `tenders_archive` $condition_u) $condition_orderque LIMIT $offset, $limit";exit;
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;

@@ -452,12 +452,15 @@ function get_results($con, $postData)
     $keywords_arr = explode(' ', $keyw);
     $k_count = count($keywords_arr);
     $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+    
     if(!empty($keyw)):
-        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_all` $condition ) UNION ALL (SELECT * FROM `tenders_all` $condition_u) $condition_orderque LIMIT $offset, $limit");
+        $s_condition = str_replace("WHERE","and",$condition);
+        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_all` $condition ) UNION ALL (SELECT * FROM `tenders_all` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");
     else:
         $tender_data = mysqli_query($con, "SELECT * FROM `tenders_all` $condition $condition_orderque LIMIT $offset, $limit");
-       // echo "SELECT * FROM `tenders_all` $condition $condition_orderque LIMIT $offset, $limit";exit;
+       
     endif;
+    //echo "(SELECT * FROM `tenders_all` $condition ) UNION ALL (SELECT * FROM `tenders_all` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit";exit;
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;
