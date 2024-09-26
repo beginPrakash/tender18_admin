@@ -29,7 +29,8 @@ switch ($endpoint) {
 function get_results($con, $postData)
 {
     $blog_id = $postData['id'];
-    $user_data = mysqli_query($con, "SELECT * FROM `blogs` WHERE  `id`='$blog_id'");
+    $blog_title = str_replace("-"," ",$blog_id);
+    $user_data = mysqli_query($con, "SELECT * FROM `blogs` WHERE  `title` LIKE '%$blog_title%'");
 
     $user_result = mysqli_num_rows($user_data);
 
