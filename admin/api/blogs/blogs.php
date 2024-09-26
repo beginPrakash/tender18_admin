@@ -53,8 +53,11 @@ function get_results($con)
             if (!empty($image)) {
                 $blog_image =  ADMIN_URL . 'uploads/images/' . $image;
             }
+            $url_title = str_replace(" ","-",$row['title']);
+            $url_title = rtrim($url_title, "-");
             $result['blogs'][$count]['blog_id'] = $row['id'];
             $result['blogs'][$count]['title'] = htmlspecialcode_generator($row['title']);
+            $result['blogs'][$count]['url_title'] = $url_title;
             $result['blogs'][$count]['description'] = htmlspecialcode_generator($row['description']);
             $result['blogs'][$count]['blog_image'] = htmlspecialcode_generator($blog_image);
             $count++;
