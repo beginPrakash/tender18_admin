@@ -3,7 +3,7 @@
 
 
 include "../includes/authentication.php";
-
+$pages = 'agency-content';
 ?>
 
 <?php include '../includes/header.php'; ?>

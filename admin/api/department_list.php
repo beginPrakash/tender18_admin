@@ -19,9 +19,9 @@ function get_results($con)
 {
     if(!empty($_GET['name'])){
         $dept_like = $_GET['name'];
-        $dept_data = mysqli_query($con, "SELECT * FROM `tenders_all` where department like '$dept_like%' Group By department");
+        $dept_data = mysqli_query($con, "SELECT * FROM `departments` where name like '$dept_like%' Group By name");
     }else{
-        $dept_data = mysqli_query($con, "SELECT * FROM `tenders_all` Group By department");
+        $dept_data = mysqli_query($con, "SELECT * FROM `departments` Group By name");
     }
     
     $dept_result = mysqli_num_rows($dept_data);
@@ -29,7 +29,7 @@ function get_results($con)
         $count = 1;
         while ($row = mysqli_fetch_assoc($dept_data)) {
             $result[$count]['tender_archieve_id'] = $row['id'];
-            $result[$count]['department'] = $row['department'];
+            $result[$count]['department'] = $row['name'];
             $count++;
         }
         $result = array_values($result);

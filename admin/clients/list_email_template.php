@@ -27,14 +27,14 @@
             font-size: 0.9em;
         }
         h6{
-            font-size: 16px;
+            font-size: 14px;
             font-family: DMSans;
             font-weight: 600;
             margin-bottom: 0;
             text-transform: capitalize;
         }
         h4 a {
-            font-size: 20px;
+            font-size: 16px;
             font-family: DMSans;
             font-weight: 700;
             color: #016492;
@@ -46,7 +46,7 @@
             text-transform: capitalize;
         }
         hr {
-            margin: 1rem 0;
+           
             color: inherit;
             opacity: .25;
         }
@@ -60,11 +60,12 @@
             height: unset;
             width: unset;
             color: #222;
-            padding: 8px;
+            padding: 4px;
             border: 1px solid #222;
             font-weight: 600;
             border-radius: 0;
             font-family: Arial, sans-serif;
+            font-size:10px;
         }
 
         strong{
@@ -96,6 +97,7 @@
             <p>Website: <a href="www.Tender18.com">www.Tender18.com</a></p>
             <p><b>Disclaimer:</b></p>
             <p>You are receiving this communication because you have subscribed to tender alerts from TENDER18 Infotech Private Limited. As part of our service, we send relevant government tender opportunities directly to your registered email. If you no longer wish to receive these notifications, you may opt out at any time by clicking unsubscribe or by replying to this email with "Unsubscribe" in the subject line.</p>
+            <p style="text-align:center">If you do not wish to receive this email please <a target="_blank" href="https://api.whatsapp.com/send?phone=917434061818&text=Unsubscribe%20from%20daily%20mail%20alert">unsubscribe</a>.</p>
         </div>
     </div>
 </body>

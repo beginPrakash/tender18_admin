@@ -3,7 +3,7 @@
 
 
 include "../includes/authentication.php";
-
+$pages = 'smtp_mgmt';
 ?>
 
 <?php include '../includes/header.php'; ?>

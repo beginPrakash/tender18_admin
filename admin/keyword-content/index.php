@@ -3,7 +3,7 @@
 
 
 include "../includes/authentication.php";
-
+$pages = 'keyword-content';
 ?>
 
 <?php include '../includes/header.php'; ?>

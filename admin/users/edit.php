@@ -32,6 +32,7 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
 ?>
 <?php
 if (isset($_POST['submit'])) {
+    //print_r($_POST);exit;
     $username = $_POST['username'];
     $email = $_POST['email'];
     $user_id = $_POST['user_id'];
@@ -176,7 +177,7 @@ if (!empty($_SESSION['error'])) {
                             </div>
                             <div class="row">
                                 <div class="col-lg-3">
-                                    <?php $testimonials_per = _get_user_perby_role($_GET['id'],'pages',$con); ?>
+                                    <?php $testimonials_per = _get_user_perby_role($_GET['id'],'testimonials',$con); ?>
                                     <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($testimonials_per == '1') ? 'checked' : '';?> name="user_permis['testimonials']">
                                     <label class="form-check-label">Testimonials</label>
                                 </div>
@@ -193,7 +194,7 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Clients</label>
                                     </div>
                                 <div class="col-lg-3">
-                                    <?php $menus_per = _get_user_perby_role($_GET['id'],'clients',$con); ?>
+                                    <?php $menus_per = _get_user_perby_role($_GET['id'],'menus',$con); ?>
                                     <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($menus_per == '1') ? 'checked' : '';?> name="user_permis['menus']">
                                     <label class="form-check-label">Menus</label>
                                 </div>
@@ -264,7 +265,39 @@ if (!empty($_SESSION['error'])) {
                                     <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($dept_per == '1') ? 'checked' : '';?> name="user_permis['departments']">
                                     <label class="form-check-label">Departments</label>
                                 </div>
+                                <div class="col-lg-3">
+                                <?php $keys_per = _get_user_perby_role($_GET['id'],'keywords',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($keys_per == '1') ? 'checked' : '';?> name="user_permis['keywords']">
+                                    <label class="form-check-label">Keywords</label>
+                                </div>
                             </div>
+                            <div class="row">
+                                
+                                <div class="col-lg-3">
+                                <?php $smtp_per = _get_user_perby_role($_GET['id'],'smtp_mgmt',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($smtp_per == '1') ? 'checked' : '';?> name="user_permis['smtp_mgmt']">
+                                    <label class="form-check-label">SMTP Management</label>
+                                </div>
+                                <div class="col-lg-3">
+                                <?php $ccon_per = _get_user_perby_role($_GET['id'],'city_content',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($ccon_per == '1') ? 'checked' : '';?> name="user_permis['city_content']">
+                                    <label class="form-check-label">City Content</label>
+                                </div>
+                            </div>
+                            <div class="row">   
+                                
+                                <div class="col-lg-3">
+                                <?php $agcon_per = _get_user_perby_role($_GET['id'],'agency_content',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($agcon_per == '1') ? 'checked' : '';?> name="user_permis['agency_content']">
+                                    <label class="form-check-label">Agency Content</label>
+                                </div>
+                                <div class="col-lg-3">
+                                <?php $kecon_per = _get_user_perby_role($_GET['id'],'keyword_content',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($kecon_per == '1') ? 'checked' : '';?> name="user_permis['keyword_content']">
+                                    <label class="form-check-label">Keyword Content</label>
+                                </div>
+                            </div>
+                           
                         </div>  
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">

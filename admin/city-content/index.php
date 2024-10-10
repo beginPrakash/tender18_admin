@@ -3,7 +3,7 @@
 
 
 include "../includes/authentication.php";
-
+$pages = 'city-content';
 ?>
 
 <?php include '../includes/header.php'; ?>

@@ -227,6 +227,30 @@ if (!empty($_SESSION['error'])) {
                                     <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['departments']">
                                     <label class="form-check-label">Departments</label>
                                 </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['keywords']">
+                                    <label class="form-check-label">Keywords</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['smtp_mgmt']">
+                                    <label class="form-check-label">SMTP Management</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['city_content']">
+                                    <label class="form-check-label">City Content</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['agency_content']">
+                                    <label class="form-check-label">Agency Content</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['keyword_content']">
+                                    <label class="form-check-label">Keyword Content</label>
+                                </div>
                             </div>
                         </div>    
                         <div class="col-xxl-12 col-md-12">
