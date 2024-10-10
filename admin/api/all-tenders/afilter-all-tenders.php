@@ -161,8 +161,8 @@ function get_results($con, $postData)
                             $condition_key .= " ( ";
                         }
                         if ($key > 0) {
-                            $condition_key .= " and title LIKE '%$keyword%' and title LIKE '%$value%'";
-                            $ucondition_key .= " and title LIKE '%$value%'";
+                            $condition_key .= " and title LIKE '%$value%'";
+                            $ucondition_key .= " and title LIKE '%$value%' and title NOT LIKE '%$value%'";
                         } else {
                             $condition_key .= "title LIKE '%$value%'";
                             $ucondition_key .= "title LIKE '%$value%'";
@@ -357,15 +357,16 @@ function get_results($con, $postData)
             $condition_department = "";
             $condition_department_val = "";
             foreach ($filter_department as $key => $value) {
+                $dep_name = str_replace(" Tenders", "",$value);
                 if ($cnt > 0) {
                     if ($key > 0) {
-                        $condition_department .= " or department LIKE '%$value%'";
+                        $condition_department .= " or department LIKE '%$dep_name%'";
                     } else {
-                        $condition_department .= " department LIKE '%$value%'";
+                        $condition_department .= " department LIKE '%$dep_name%'";
                         $condition_department_val = " and";
                     }
                 } else {
-                    $condition_department .= " department LIKE '%$value%'";
+                    $condition_department .= " department LIKE '%$dep_name%'";
                     $cnt++;
                 }
             }
@@ -460,6 +461,7 @@ function get_results($con, $postData)
         $tender_data = mysqli_query($con, "SELECT * FROM `tenders_all` $condition $condition_orderque LIMIT $offset, $limit");
        
     endif;
+    //echo"SELECT * FROM `tenders_all` $condition $condition_orderque LIMIT $offset, $limit";exit;
     //echo "(SELECT * FROM `tenders_all` $condition ) UNION ALL (SELECT * FROM `tenders_all` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit";exit;
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {

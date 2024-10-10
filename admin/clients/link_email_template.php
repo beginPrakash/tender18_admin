@@ -61,6 +61,7 @@
             <p>Website: <a href="www.Tender18.com">www.Tender18.com</a></p>
             <p><b>Disclaimer:</b></p>
             <p>You are receiving this communication because you have subscribed to tender alerts from TENDER18 Infotech Private Limited. As part of our service, we send relevant government tender opportunities directly to your registered email. If you no longer wish to receive these notifications, you may opt out at any time by clicking unsubscribe or by replying to this email with "Unsubscribe" in the subject line.</p>
+            <p style="text-align:center">If you do not wish to receive this email please <a target="_blank" href="https://api.whatsapp.com/send?phone=917434061818&text=Unsubscribe%20from%20daily%20mail%20alert">unsubscribe</a>.</p>
         </div>
     </div>
 </body>

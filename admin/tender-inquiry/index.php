@@ -101,7 +101,7 @@ if (!empty($_SESSION['error'])) {
                                     <td><?php echo $data['state']; ?></td>
                                     <td><?php echo (new DateTime($data['created_at']))->format('d-m-Y H:i:s'); ?></td>
                                     <td class="action_element">
-                                        <a href="<?php echo ADMIN_URL; ?>tender-inquiry?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
+                                        <a href="<?php echo ADMIN_URL; ?>tender-inquiry?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger delete_btn" data-url="<?php echo ADMIN_URL; ?>tender-inquiry?id=<?php echo $data['id']; ?>"></i></a>
                                     </td>
                                 </tr>
                             <?php $i++;
@@ -145,9 +145,9 @@ if (!empty($_SESSION['error'])) {
 <?php include '../includes/footer.php';  ?>
 
 <script>
-    $('.action_element a.delete').click(function(e) {
+    $(document).on('click','.delete_btn',function(e){
         e.preventDefault();
-        var url = $(this).attr('href');
+        var url = $(this).attr('data-url');
         $('.bs-example-modal-center a.btn.btn-danger').prop('href', url);
     });
 </script>

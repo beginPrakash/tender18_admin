@@ -17,6 +17,11 @@
     $blogs_per = _get_user_perby_role($_SESSION['user_id'],'blogs',$con);
     $states_per = _get_user_perby_role($_SESSION['user_id'],'states',$con);
     $departments_per = _get_user_perby_role($_SESSION['user_id'],'departments',$con);
+    $keywords_per = _get_user_perby_role($_SESSION['user_id'],'keywords',$con);
+    $smtp_mgmt_per = _get_user_perby_role($_SESSION['user_id'],'smtp_mgmt',$con);
+    $city_content_per = _get_user_perby_role($_SESSION['user_id'],'city_content',$con);
+    $agency_content_per = _get_user_perby_role($_SESSION['user_id'],'agency_content',$con);
+    $keyword_content_per = _get_user_perby_role($_SESSION['user_id'],'keyword_content',$con);
 ?>
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -88,7 +93,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if($_SESSION['role']=='admin') { ?>
+                <?php if($_SESSION['role']=='admin' || $keywords_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'keywords') {
                                                             echo 'active';
@@ -253,7 +258,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if($_SESSION['role']=='admin') { ?>
+                <?php if($_SESSION['role']=='admin' || $smtp_mgmt_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'smtp_mgmt') {
                                                             echo 'active';
@@ -262,6 +267,8 @@
                             <span data-key="t-dashboards">SMTP Management</span>
                         </a>
                     </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $city_content_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'city-content') {
                                                             echo 'active';
@@ -270,6 +277,8 @@
                             <span data-key="t-dashboards">City Content</span>
                         </a>
                     </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $agency_content_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'agency-content') {
                                                             echo 'active';
@@ -278,6 +287,8 @@
                             <span data-key="t-dashboards">Agency Content</span>
                         </a>
                     </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $keyword_content_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'keyword-content') {
                                                             echo 'active';
