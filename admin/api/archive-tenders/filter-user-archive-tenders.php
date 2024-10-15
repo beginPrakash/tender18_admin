@@ -1267,7 +1267,7 @@ function get_results($con, $postData)
 
     if(!empty($keyw)):
 
-        $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_archive` $condition $condition_filter ) UNION ALL (SELECT * FROM `tenders_archive` $condition_u $condition_filter) $condition_orderque LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "(SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition $condition_filter ) UNION ALL (SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition_u $condition_filter) $condition_orderque LIMIT $offset, $limit");
 
     else:
 
@@ -1319,13 +1319,13 @@ function get_results($con, $postData)
 
         if(!empty($keywords)):
 
-            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_archive` $condition $condition_filter $condition_orderque_key LIMIT $offset, $limit");
+            $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition $condition_filter $condition_orderque_key LIMIT $offset, $limit");
 
         
 
         else:
 
-            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_archive` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+            $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
 
         
 
