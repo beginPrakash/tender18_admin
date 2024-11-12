@@ -573,8 +573,8 @@ function get_results($con, $postData)
     }
 
     $limit = 10;
-    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_posts` $condition $condition_filter order by id desc "));
-    // $result['main']['sql'] = "SELECT * FROM `tenders_posts` $condition $condition_filter order by id desc ";
+    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_posts` $condition $condition_filter"));
+    // $result['main']['sql'] = "SELECT * FROM `tenders_posts` $condition $condition_filter";
     $total_query = $sql_query['total'];
     $total = ceil($total_query / $limit);
     $page = isset($postData['page_no']) ? abs((int) $postData['page_no']) : 1;

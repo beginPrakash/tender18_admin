@@ -323,8 +323,8 @@ function get_results($con, $postData)
         }
     }
     $limit = 10;
-    //echo "<pre>"; print_r("SELECT * FROM `tenders_live` $condition order by id desc "); die;
-     $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_live` $condition order by id desc "));
+    //echo "<pre>"; print_r("SELECT * FROM `tenders_live` $condition"); die;
+     $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_live` $condition"));
 //     $sql = "
 //     (
 //         SELECT *
@@ -346,7 +346,7 @@ function get_results($con, $postData)
 //             ELSE 3
 //         END
 // ";
-    $result['main']['sql'] = "SELECT * FROM `tenders_live` $condition order by title desc ";
+    $result['main']['sql'] = "SELECT * FROM `tenders_live` $condition";
     //$sql_query = mysqli_fetch_assoc(mysqli_query($con, $sql));
     //$result['main']['sql'] = $sql;
     $total_query = $sql_query['total'];
@@ -362,29 +362,34 @@ function get_results($con, $postData)
     $counter = 0;
     $cnt = 0;
     $g =1 ;
-    $filter_keyword = explode(" ", $keyw);
-
-    foreach ($filter_keyword as $keyword) {
-        $keyword_arr = explode(' ', $keyword);
-        $count = count($keyword_arr);
-        foreach ($keyword_arr as $key => $value) {
-            if ($counter == 0 && $key <= 0) {
-                $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
-            } 
-                $order_query .= " WHEN title LIKE '%$value%' THEN $g";
+    $filter_keywords = explode(" ", $keyw);
+    if(count($filter_keywords) > 0){
+        foreach ($filter_keywords as $keyword) {
+            if(!empty($keyword)){
+                $keyword_arr = explode(' ', $keyword);
+                $count = count($keyword_arr);
+                foreach ($keyword_arr as $key => $value) {
+                    if ($counter == 0 && $key <= 0) {
+                        $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
+                    } 
+                        $order_query .= " WHEN title LIKE '%$value%' THEN $g";
+                    
+                    $counter++;
+                    $cnt++;
+                    $g++;
+                }
+            }
             
-            $counter++;
-            $cnt++;
-            $g++;
         }
-        
     }
     if($order_key_val != ''){
         $condition_orderque .= " " . $order_key_val . "  " . $order_query;
     }
-    $keywords_arr = explode(' ', $keyw);
-    $k_count = count($keywords_arr);
-    $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+    if($keyw != ""){
+        $keywords_arr = explode(' ', $keyw);
+        $k_count = count($keywords_arr);
+        $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+    }
     if(!empty($keyw)):
         $s_condition = str_replace("WHERE","and",$condition);
         $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_live` $condition) UNION ALL (SELECT * FROM `tenders_live` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");

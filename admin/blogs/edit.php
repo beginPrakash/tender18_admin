@@ -34,12 +34,14 @@ if (isset($_POST['submit'])) {
         $hidden_blog_image = $_POST['hidden_blog_image'];
         $blog_id = $_POST['blog_id']; 
         $title = mysqli_real_escape_string($con, $_POST['title']);
-        $description = mysqli_real_escape_string($con, $_POST['description']);
+        $description = $_POST['description'];
         $file = $_FILES['blog_image'];
         $filename = $file['name'];
         $filepath = $file['tmp_name'];
         $fileerror = $file['error'];
 
+        $con_desc = preg_replace('/(<a\s+[^>]*)(\w+)="([^"]*)"/', '$1$2=$3', $description);
+        $con_desc =mysqli_real_escape_string($con, $con_desc);
         if (!empty($filename)) {
             if ($fileerror == 0) {
                 $string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -56,7 +58,7 @@ if (isset($_POST['submit'])) {
         } else {
             $filevalue = $hidden_blog_image;
         }  
-        $q = "UPDATE `blogs` SET title='$title', description='$description', blog_image='$filevalue' where id='$blog_id'";
+        $q = "UPDATE `blogs` SET title='$title', description='$con_desc', blog_image='$filevalue' where id='$blog_id'";
         // var_dump($q);
         $sql = mysqli_query($con, $q);
         
