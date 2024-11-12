@@ -151,8 +151,8 @@ if (!empty($_SESSION['error'])) {
                                 <td><?php echo $row['company_name']; ?></td>
                                 <td><?php echo $row['users_email']; ?></td>
                                 <td><?php echo $row['mobile_number']; ?></td>
-                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/new-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/new-tenders/" . $row['user_unique_id']); ?></td>
-                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/live-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/live-tenders/" . $row['user_unique_id']); ?></td>
+                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/new-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/new-tenders/?id=" . $row['user_unique_id']); ?></td>
+                                <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/live-tenders?id=" . $row['user_unique_id']; ?>"><?php echo HOME_URL . "user/live-tenders/?id=" . $row['user_unique_id']; ?></td>
                                 <td>
                                     <div class="dropdown d-inline-block">
                                         <button class="btn btn-subtle-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -204,6 +204,14 @@ if (!empty($_SESSION['error'])) {
 <?php include '../includes/footer.php';  ?>
 
 <script>
+
+    $('#example').DataTable({
+        pageLength: 35,
+        columnDefs: [
+            { orderable: false, targets: 0 } // Disable ordering on the first column (index 0)
+        ],
+        // Other options
+    });
     $('.remove-item-btn').click(function() {
         var url = $(this).parent().find('#delete_id').val();
         $("#delete_id_modal").attr('href', url);
@@ -255,6 +263,7 @@ if (!empty($_SESSION['error'])) {
             $('.row-check').prop('checked',false);
         }
     })
+    
 
     $(document).on('click', '.row-check', function() {
         var $row = $(this).closest('tr');

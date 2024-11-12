@@ -29,28 +29,28 @@ $postData = json_decode($rawData, true);
 $endpoint = isset($postData['endpoint']) ? $postData['endpoint'] : '';
 
 
+$result = get_results($con, $postData);
+// switch ($endpoint) {
 
-switch ($endpoint) {
+//     case 'getAFilterUserAllTendersData':
 
-    case 'getAFilterUserAllTendersData':
+//         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+//             $result = get_results($con, $postData);
 
-            $result = get_results($con, $postData);
+//         } else {
 
-        } else {
+//             $result = null;
 
-            $result = null;
+//         }
 
-        }
+//         break;
 
-        break;
+//     default:
 
-    default:
+//         $result = null;
 
-        $result = null;
-
-}
+// }
 
 
 
@@ -100,51 +100,17 @@ function get_results($con, $postData)
 
     $filter_type = $postData['type'];
 
-    $metaState = $postData['metaState'];
-
-    $metaCity = $postData['metaCity']; 
-
-    $metaAgency = $postData['metaAgency']; 
-
-    $metaAgencyStr = str_replace('-', ' ', $metaAgency);
-
-    // $formatted = strrchr($metaAgencyStrrepl,' ');
-
-    // $withoutLast= preg_replace('/\W\w+\s*(\W*)$/', '$1', $metaAgencyStrrepl);
-
-    
-
-    // $metaAgencyStr = $withoutLast.' -'. strtoupper($formatted);
-
-    $metaDepartment = $postData['metaDepartment'];
-
-    $metaKeyword = $postData['metaKeyword'];
-
     $keyw = $postData['keyword'];
 
     $condition_filter = "";
 
     $condition = "";
 
+    $condition_u = "";
+
     $cnt = 0;
 
-   
-
-    $meta_arr = [];
-
-    $deptmeta_arr = [];
-
-    $citymeta_arr = [];
-
-    $agencymeta_arr = [];
-
-    $agmeta_arr=[];
-
-    $keymeta_arr=[];
-
-
-
-    if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type) || !empty($start_date)) {
+  if (!empty($filter_ref_no) || !empty($filter_keyword) || !empty($filter_state) || !empty($filter_city) || !empty($filter_agency) || !empty($filter_tender_id) || !empty($filter_due_date) || !empty($filter_tender_value) || !empty($filter_tender_value_to) || !empty($filter_department) || !empty($filter_type) || !empty($start_date)) {
 
         //echo $start_date;
 
@@ -161,123 +127,6 @@ function get_results($con, $postData)
         $cnt++;
 
     }
-
-
-
-    if(!empty($metaState)){
-
-        $state_data = mysqli_query($con, "SELECT `name`,`title`,`description`,`keywords`,`h1`,`content` FROM `states` where name LIKE '%$metaState%'");
-
-        $state_result = mysqli_num_rows($state_data);
-
-        if ($state_result == 1) {
-
-            while ($row = mysqli_fetch_assoc($state_data)) {
-
-                $meta_arr =  $row;
-
-            }
-
-        }
-
-    }
-
-
-
-    if(!empty($metaAgencyStr)){
-
-        $state_data = mysqli_query($con, "SELECT `agency_name` FROM `tender_agencies` where agency_name LIKE '%$metaAgencyStr%' order by `id` desc limit 1");
-
-        $state_result = mysqli_num_rows($state_data);
-
-        if ($state_result == 1) {
-
-            while ($row = mysqli_fetch_assoc($state_data)) {
-
-                $agencymeta_arr =  $row;
-
-            }
-
-        }
-
-
-
-        $ameta_data = mysqli_query($con, "SELECT * FROM `agency_meta_content` where id = 1 ");
-
-        $ameta_result = mysqli_num_rows($ameta_data);
-
-        if ($ameta_result == 1) {
-
-            while ($row = mysqli_fetch_assoc($ameta_data)) {
-
-                $agmeta_arr =  $row;
-
-            }
-
-        }
-
-    }
-
-
-
-    if(!empty($metaCity)){
-
-        $city_data = mysqli_query($con, "SELECT * FROM `city_meta_content` where id = 1 ");
-
-        $city_result = mysqli_num_rows($city_data);
-
-        if ($city_result == 1) {
-
-            while ($row = mysqli_fetch_assoc($city_data)) {
-
-                $citymeta_arr =  $row;
-
-            }
-
-        }
-
-    }
-
-
-
-    if(!empty($metaKeyword)){
-
-        $keyw_data = mysqli_query($con, "SELECT * FROM `keyword_meta_content` where id = 1 ");
-
-        $keyw_result = mysqli_num_rows($keyw_data);
-
-        if ($keyw_result == 1) {
-
-            while ($row = mysqli_fetch_assoc($keyw_data)) {
-
-                $keymeta_arr =  $row;
-
-            }
-
-        }
-
-    }
-
-
-
-    if(!empty($metaDepartment)){
-
-        $dept_data = mysqli_query($con, "SELECT `name`,`title`,`description`,`keywords`,`h1`,`content` FROM `departments` where name LIKE '%$metaDepartment%'");
-
-        $dept_result = mysqli_num_rows($dept_data);
-
-        if ($dept_result == 1) {
-
-            while ($row = mysqli_fetch_assoc($dept_data)) {
-
-                $deptmeta_arr =  $row;
-
-            }
-
-        }
-
-    }
-
 
 
     if (!empty($filter_keyword)) {
@@ -1334,9 +1183,9 @@ function get_results($con, $postData)
 
     $limit = 10;
 
-    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_all` $condition $condition_filter order by id desc "));
+    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_all` $condition $condition_filter"));
 
-    // $result['main']['sql'] = "SELECT * FROM `tenders_all` $condition $condition_filter order by id desc ";
+    // $result['main']['sql'] = "SELECT * FROM `tenders_all` $condition $condition_filter";
 
     $total_query = $sql_query['total'];
 
@@ -1789,196 +1638,6 @@ function get_results($con, $postData)
         $result['links'] = [];
 
     }
-
-
-
-    if(!empty($meta_arr)){
-
-        $result['meta']['title'] = $meta_arr['title'];
-
-        $result['meta']['description'] = $meta_arr['description'];
-
-        $result['meta']['keywords'] = $meta_arr['keywords'];
-
-        $result['meta']['h1'] = $meta_arr['h1'];
-
-        $result['meta']['content'] = $meta_arr['content'];
-
-    }else{
-
-        $result['meta']['title'] = '';
-
-        $result['meta']['description'] = '';
-
-        $result['meta']['keywords'] = '';
-
-        $result['meta']['h1'] = '';
-
-        $result['meta']['content'] = '';
-
-    }
-
-
-
-    if(!empty($agmeta_arr) && !empty($agencymeta_arr)){
-
-        $ag_name = $agencymeta_arr['agency_name'] ?? '';
-
-        $short_form = trim(substr($ag_name, strpos($ag_name, "- ") + 1));
-
-        $title = str_replace("(ag_name)",$ag_name,$agmeta_arr['title']);
-
-        $final_title = str_replace("(short_form)",$short_form,$title);
-
-        $description = str_replace("(ag_name)",$ag_name,$agmeta_arr['description']);
-
-        $final_description = str_replace("(short_form)",$short_form,$description);
-
-        $keywords = str_replace("(ag_name)",$ag_name,$agmeta_arr['keywords']);
-
-        $h1 = str_replace("(ag_name)",$ag_name,$agmeta_arr['h1']);
-
-        $h1_final = str_replace("(short_form)",$short_form,$h1);
-
-        $content = str_replace("(ag_name)",$ag_name,$agmeta_arr['content']);
-
-        $final_content = str_replace("(short_form)",$short_form,$content);
-
-        $result['agency_meta']['title'] = $final_title;
-
-        $result['agency_meta']['description'] = $final_description;
-
-        $result['agency_meta']['keywords'] = $keywords;
-
-        $result['agency_meta']['h1'] = $h1_final;
-
-        $result['agency_meta']['content'] = $final_content;
-
-    }else{
-
-        $result['agency_meta']['title'] = '';
-
-        $result['agency_meta']['description'] = '';
-
-        $result['agency_meta']['keywords'] = '';
-
-        $result['agency_meta']['h1'] = '';
-
-        $result['agency_meta']['content'] = '';
-
-    }
-
-    if(!empty($deptmeta_arr)){
-
-        $result['dept_meta']['title'] = $deptmeta_arr['title'];
-
-        $result['dept_meta']['description'] = $deptmeta_arr['description'];
-
-        $result['dept_meta']['keywords'] = $deptmeta_arr['keywords'];
-
-        $result['dept_meta']['h1'] = $deptmeta_arr['h1'];
-
-        $result['dept_meta']['content'] = $deptmeta_arr['content'];
-
-    }else{
-
-        $result['dept_meta']['title'] = '';
-
-        $result['dept_meta']['description'] = '';
-
-        $result['dept_meta']['keywords'] = '';
-
-        $result['dept_meta']['h1'] = '';
-
-        $result['dept_meta']['content'] = '';
-
-    }
-
-
-
-    if(!empty($citymeta_arr)){
-
-        $title = str_replace("(City)",$metaCity,$citymeta_arr['title']);
-
-        $final_title = str_replace("(Brand name)",'Tender 18',$title);
-
-        $description = str_replace("(City)",$metaCity,$citymeta_arr['description']);
-
-        $final_description = str_replace("(Brand name)",'Tender 18',$description);
-
-        $keywords = str_replace("(City)",$metaCity,$citymeta_arr['keywords']);
-
-        $h1 = str_replace("(City)",$metaCity,$citymeta_arr['h1']);
-
-        $content = str_replace("(City)",$metaCity,$citymeta_arr['content']);
-
-        $result['city_meta']['title'] = $final_title;
-
-        $result['city_meta']['description'] = $final_description;
-
-        $result['city_meta']['keywords'] = $keywords;
-
-        $result['city_meta']['h1'] = $h1;
-
-        $result['city_meta']['content'] = $content;
-
-    }else{
-
-        $result['city_meta']['title'] = '';
-
-        $result['city_meta']['description'] = '';
-
-        $result['city_meta']['keywords'] = '';
-
-        $result['city_meta']['h1'] = '';
-
-        $result['city_meta']['content'] = '';
-
-    }
-
-
-
-    if(!empty($keymeta_arr)){
-
-        $title = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['title']);
-
-        $final_title = str_replace("(Brand name)",'Tender 18',$title);
-
-        $description = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['description']);
-
-        $final_description = str_replace("(Brand name)",'Tender 18',$description);
-
-        $keywords = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['keywords']);
-
-        $h1 = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['h1']);
-
-        $content = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['content']);
-
-        $result['keyword_meta']['title'] = $final_title;
-
-        $result['keyword_meta']['description'] = $final_description;
-
-        $result['keyword_meta']['keywords'] = $keywords;
-
-        $result['keyword_meta']['h1'] = $h1;
-
-        $result['keyword_meta']['content'] = $content;
-
-    }else{
-
-        $result['keyword_meta']['title'] = '';
-
-        $result['keyword_meta']['description'] = '';
-
-        $result['keyword_meta']['keywords'] = '';
-
-        $result['keyword_meta']['h1'] = '';
-
-        $result['keyword_meta']['content'] = '';
-
-    }
-
-    
 
 
 

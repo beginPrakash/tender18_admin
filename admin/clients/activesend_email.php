@@ -11,7 +11,7 @@ function highlightSearchTerm($text, $searchTerm)
             // $highlightedTerm = "<b>$searchTerm</b>";
             // return str_ireplace($searchTerm, $highlightedTerm, $text);
     
-            $highlightMarkup = '<strong>';
+            $highlightMarkup = '<strong style=color:#cb192d>';
             $closingHighlightMarkup = '</strong>&nbsp;';
             $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
             return $highlightedText;
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(!empty($ids)):
             $idArray = explode(',', $ids);
         endif;
-        $usersData = mysqli_query($con, "SELECT `mail_type`,`email_ids`,`company_name`,`user_unique_id`,`keywords` FROM `users` WHERE user_id IN ($ids)");
+        $usersData = mysqli_query($con, "SELECT `mail_type`,`email_ids`,`company_name`,`user_unique_id`,`words`,`keywords`,`filter_city`,`filter_state`,`filter_tender_value`,`filter_agency`,`filter_department`,`filter_type` FROM `users` WHERE user_id IN ($ids)");
         $usersResult = mysqli_num_rows($usersData);
         $company_name = "";
         if ($usersResult > 0) {
@@ -103,17 +103,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         // print_r($mail);exit;
                             // Send the email
                             $mail->send();
+                            sleep(1);
                             $mcount++;
                             //echo 'Email sent successfully';
                         } catch (Exception $e) {
                             //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
                         }
                     elseif($mail_type == 'list'):
-
+                        $condition_new = "";
+                        $condition_city = "";
                         if (!empty($city)) {
                             $city = explode(",", $city);
                             if (!empty($city)) {
-                                $condition_city = "";
+                                
                                 foreach ($city as $key => $value) {
                                     if ($key > 0) {
                                         $condition_city .= " or city='$value'";
@@ -124,11 +126,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $condition_new .= " and (" . $condition_city . " )";
                             }
                         }
-                
+                        $condition_state = "";
                         if (!empty($state)) {
                             $state = explode(",", $state);
                             if (!empty($state)) {
-                                $condition_state = "";
+                                
                                 foreach ($state as $key => $value) {
                                     if ($key > 0) {
                                         $condition_state .= " or state='$value'";
@@ -143,11 +145,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         if (!empty($tenderValue)) {
                             $condition_new .= " and tender_value between 0 and $tenderValue";
                         }
-                
+                        $condition_agency = "";
                         if (!empty($agency)) {
                             $agency = explode(",", $agency);
                             if (!empty($agency)) {
-                                $condition_agency = "";
+                                
                                 foreach ($agency as $key => $value) {
                                     if ($key > 0) {
                                         $condition_agency .= " or agency_type LIKE '%$value%'";
@@ -158,11 +160,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $condition_new .= " and (" . $condition_agency . " )";
                             }
                         }
-                
+                        $condition_department = "";
                         if (!empty($department)) {
                             $department = explode(",", $department);
                             if (!empty($department)) {
-                                $condition_department = "";
+                                
                                 foreach ($department as $key => $value) {
                                     if ($key > 0) {
                                         $condition_department .= " or department LIKE '%$value%'";
@@ -173,11 +175,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $condition_new .= " and (" . $condition_department . " )";
                             }
                         }
-                
+                        $condition_type = "";
                         if (!empty($type)) {
                             $type = explode(",", $type);
                             if (!empty($type)) {
-                                $condition_type = "";
+                                
                                 foreach ($type as $key => $value) {
                                     if ($key > 0) {
                                         $condition_type .= " or tender_type LIKE '%$value%'";
@@ -328,6 +330,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $kcounter = 0;
                         $ks=0;
                         $keyword_key_val = '';
+                        $condition_orderque_key = '';
                         if(!empty($keywords)):
                         foreach ($keywords as $key => $value) {
                                     if ($kcounter == 0 && $key <= 0) {
@@ -414,31 +417,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <tr style="background-color:#016492;color:#fff !important">
                                         <!-- Left Column -->
                                         <td style="width:50%; padding: 10px;">
-                                        <h6 style="margin-top: 0;">T18 Ref No : <span>'.$row['ref_no'].'</span></h6>
+                                        <h6 style="margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">T18 Ref No : <span style="font-weight: 400;text-transform: capitalize;">'.$row['ref_no'].'</span></h6>
                                         </td>
                                         <!-- Right Column -->
                                         <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:right;margin-top: 0;">Location : <span>'.$row['city'].', '.$row['state'].'</span></h6>
+                                        <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Location : <span style="font-weight: 400;text-transform: capitalize;">'.$row['city'].', '.$row['state'].'</span></h6>
                                         </td>
                                     </tr>
                                 </table>';
                                 $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
                                     <tr>
                                         <td style="padding: 10px;">
-                                        <h4 style="margin-top: 0;margin-bottom: 0;"><a target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;">'.htmlspecialcode_generator($highlightedResult).'</a></h4>
+                                        <h4 style="margin-top: 0;margin-bottom: 0;"><a target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;font-size: 16px;font-family: DMSans;font-weight: 700;color: #016492;margin-bottom: 0;-webkit-line-clamp: 1;-webkit-box-orient: vertical;display: -webkit-box;overflow: hidden;text-transform: capitalize;">'.htmlspecialcode_generator($highlightedResult).'</a></h4>
                                         </td>
                                     </tr>
                                 </table>
-                                <hr style="margin-top:-10px">';
+                                <hr style="margin-top:-10px;color: inherit;opacity: .25;">';
                                 $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
                                     <tr>
                                         <!-- Left Column -->
                                         <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:left;margin-top: 0;">Agency / Dept : <span style="color:#777">'.$row['agency_type'].'</span></h6>
+                                        <h6 style="text-align:left;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Agency / Dept : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.$row['agency_type'].'</span></h6>
                                         </td>
                                         <!-- Right Column -->
                                         <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:right;margin-top: 0;">Tender Value : <span style="color:#777">'.$row['tender_value'].'</span></h6>
+                                        <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Tender Value : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.$row['tender_value'].'</span></h6>
                                         </td>
                                     </tr>
                                 </table>';
@@ -446,11 +449,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <tr>
                                         <!-- Left Column -->
                                         <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:left;margin-top: 0;">Due Date : <span style="color:#777">'.date('M d, Y',strtotime($row['due_date'])).'</span></h6>
+                                        <h6 style="text-align:left;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Due Date : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.date('M d, Y',strtotime($row['due_date'])).'</span></h6>
                                         </td>
                                         <!-- Right Column -->
                                         <td style="width:50%; padding: 10px;">
-                                        <p style="text-align:right;margin-top: 0;"><a class="btn" target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;">View Documents</a></p>
+                                        <p style="text-align:right;margin-top: 0;"><a class="btn" target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;height: unset;width: unset;color: #222;padding: 4px;border: 1px solid #222;font-weight: 600;border-radius: 0;font-family: Arial, sans-serif;font-size:10px;">View Documents</a></p>
                                         </td>
                                     </tr>
                                 </table>';
@@ -458,8 +461,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 //print_r($row);exit;
                             }
                         }
-        
-                        $tender_query = 
+
                         $template = file_get_contents('../clients/list_email_template.php');
                     
                         $template = str_replace('{{company_name}}', $company_name, $template);
@@ -497,6 +499,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             // Send the email
                             if ($tender_result > 0) {
                                 $mail->send();
+                                sleep(1);
                             }
                             $mcount++;
                             //echo 'Email sent successfully';

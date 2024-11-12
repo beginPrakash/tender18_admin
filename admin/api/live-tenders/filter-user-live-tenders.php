@@ -1147,9 +1147,9 @@ function get_results($con, $postData)
 
     $limit = 10;
 
-    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_live` $condition $condition_filter order by id desc "));
+    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_live` $condition $condition_filter"));
 
-    // $result['main']['sql'] = "SELECT * FROM `tenders_live` $condition $condition_filter order by id desc ";
+    // $result['main']['sql'] = "SELECT * FROM `tenders_live` $condition $condition_filter";
 
     $total_query = $sql_query['total'];
 
@@ -1180,35 +1180,36 @@ function get_results($con, $postData)
     $filter_keywords = explode(" ", $keyw);
 
 
+    if(count($filter_keywords) > 0){
+        foreach ($filter_keywords as $keyword) {
+            if(!empty($keyword)){
+                $keyword_arr = explode(' ', $keyword);
 
-    foreach ($filter_keywords as $keyword) {
+                $count = count($keyword_arr);
 
-        $keyword_arr = explode(' ', $keyword);
+                foreach ($keyword_arr as $key => $value) {
 
-        $count = count($keyword_arr);
+                    if ($counter == 0 && $key <= 0) {
 
-        foreach ($keyword_arr as $key => $value) {
+                        $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
 
-            if ($counter == 0 && $key <= 0) {
+                    } 
 
-                $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
+                        $order_query .= " WHEN title LIKE '%$value%' THEN $g";
 
-            } 
+                    
 
-                $order_query .= " WHEN title LIKE '%$value%' THEN $g";
+                    $counter++;
 
-            
+                    $cnt++;
 
-            $counter++;
+                    $g++;
 
-            $cnt++;
+                }
 
-            $g++;
+            }    
 
         }
-
-        
-
     }
 
     if($order_key_val != ''){
@@ -1216,12 +1217,13 @@ function get_results($con, $postData)
         $condition_orderque .= " " . $order_key_val . "  " . $order_query;
 
     }
+    if($keyw != ""){
+        $keywords_arr = explode(' ', $keyw);
 
-    $keywords_arr = explode(' ', $keyw);
+        $k_count = count($keywords_arr);
 
-    $k_count = count($keywords_arr);
-
-    $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+        $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
+    }
 
     if(!empty($keyw)):
 

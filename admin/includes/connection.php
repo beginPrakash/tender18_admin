@@ -10,7 +10,7 @@ if ($_SERVER['HTTP_HOST'] == 'localhost') {
 	$server = 'localhost';
 	$user = 'root';
 	$password = '';
-	$db = 'clickthe_tender18';
+	$db = 'tender_live';
 } else {
 	define('HOME_URL', 'https://tender18.com/');
 	define('INDEX_URL', 'https://tender18.com/');
@@ -24,7 +24,6 @@ if ($_SERVER['HTTP_HOST'] == 'localhost') {
 
 
 $con = mysqli_connect($server, $user, $password, $db);
-
 date_default_timezone_set("Asia/Kolkata");
 
 

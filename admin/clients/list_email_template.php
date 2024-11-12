@@ -3,85 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            line-height: 1.6;
-        }
-        .container {
-            width: 80%;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-           
-        }
-        .header {
-            padding: 10px 0;
-            text-align: left;
-        }
-        .content {
-            margin: 20px 0;
-        }
-        .footer {
-            text-align: center;
-            font-size: 0.9em;
-        }
-        h6{
-            font-size: 14px;
-            font-family: DMSans;
-            font-weight: 600;
-            margin-bottom: 0;
-            text-transform: capitalize;
-        }
-        h4 a {
-            font-size: 16px;
-            font-family: DMSans;
-            font-weight: 700;
-            color: #016492;
-            margin-bottom: 0;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
-            display: -webkit-box;
-            overflow: hidden;
-            text-transform: capitalize;
-        }
-        hr {
-           
-            color: inherit;
-            opacity: .25;
-        }
-
-        h6 span {
-            font-weight: 400;
-            text-transform: capitalize;
-        }
-
-        .btn {
-            height: unset;
-            width: unset;
-            color: #222;
-            padding: 4px;
-            border: 1px solid #222;
-            font-weight: 600;
-            border-radius: 0;
-            font-family: Arial, sans-serif;
-            font-size:10px;
-        }
-
-        strong{
-            color:#cb192d;
-        }
-
-    
-    </style>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
+<body style="font-family: Arial, sans-serif;line-height: 1.6;">
+    <div class="container" style="width: 80%;margin: 0 auto;padding: 20px;background-color: #f4f4f4;">
+        <div class="header" style="padding: 10px 0;text-align: left;">
             <a href="{{HOME_URL}}"><img src="{{ADMIN_URL}}/assets/images/mail_logo.jpg" width="100px"></a>
         </div>
       
-        <div class="content">
+        <div class="content" style="margin: 20px 0;">
             <p><b>Dear M/s. {{company_name}}</b></p>
             <p>Greetings from <a href="www.Tender18.com">www.Tender18.com</a></p>
             <p>We found following New Tenders related to your Product & Services.</p>

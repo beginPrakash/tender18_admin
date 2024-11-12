@@ -340,8 +340,8 @@ function get_results($con, $postData)
         }
     }
     $limit = 10;
-    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_archive` $condition order by id desc "));
-    $result['main']['sql'] = "SELECT * FROM `tenders_archive` $condition order by id desc ";
+    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_archive` $condition"));
+    $result['main']['sql'] = "SELECT * FROM `tenders_archive` $condition";
     $total_query = $sql_query['total'];
     $total = ceil($total_query / $limit);
     $page = isset($postData['page_no']) ? abs((int) $postData['page_no']) : 1;
@@ -355,29 +355,34 @@ function get_results($con, $postData)
     $counter = 0;
     $cnt = 0;
     $g =1 ;
-    $filter_keyword = explode(" ", $keyw);
-
-    foreach ($filter_keyword as $keyword) {
-        $keyword_arr = explode(' ', $keyword);
-        $count = count($keyword_arr);
-        foreach ($keyword_arr as $key => $value) {
-            if ($counter == 0 && $key <= 0) {
-                $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
-            } 
-                $order_query .= " WHEN title LIKE '%$value%' THEN $g";
+    $filter_keywords = explode(" ", $keyw);
+    if(count($filter_keywords) > 0){
+        foreach ($filter_keywords as $keyword) {
+            if(!empty($keyword)){
+                $keyword_arr = explode(' ', $keyword);
+                $count = count($keyword_arr);
+                foreach ($keyword_arr as $key => $value) {
+                    if ($counter == 0 && $key <= 0) {
+                        $order_key_val .= " ORDER BY CASE WHEN title LIKE '%$keyw%' THEN 0";
+                    } 
+                        $order_query .= " WHEN title LIKE '%$value%' THEN $g";
+                    
+                    $counter++;
+                    $cnt++;
+                    $g++;
+                }
+            }
             
-            $counter++;
-            $cnt++;
-            $g++;
         }
-        
     }
     if($order_key_val != ''){
         $condition_orderque .= " " . $order_key_val . "  " . $order_query;
     }
-    $keywords_arr = explode(' ', $keyw);
-    $k_count = count($keywords_arr);
-    $condition_orderque .= " ELSE " . $k_count . " END, title DESC";
+    if($keyw != ""){
+        $keywords_arr = explode(' ', $keyw);
+        $k_count = count($keywords_arr);
+        $condition_orderque .= " ELSE " . $k_count . " END, title DESC";
+    }
     if(!empty($keyw)):
         $s_condition = str_replace("WHERE","and",$condition);
         $tender_data = mysqli_query($con, "(SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition) UNION ALL (SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");

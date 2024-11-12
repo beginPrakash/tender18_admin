@@ -25,7 +25,7 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
 <?php
 if (isset($_POST['submit'])) {
     $title = mysqli_real_escape_string($con, $_POST['title']);
-    $description = mysqli_real_escape_string($con, $_POST['description']);
+    $description = $_POST['description'];
     $file = $_FILES['blog_image'];
     $filename = $file['name'];
     $filepath = $file['tmp_name'];
@@ -42,13 +42,16 @@ if (isset($_POST['submit'])) {
         }
     }
 
+    $con_desc = preg_replace('/(<a\s+[^>]*)(\w+)="([^"]*)"/', '$1$2=$3', $description);
+    $con_desc =mysqli_real_escape_string($con, $con_desc);
+
     if (!empty($filename)) {
         $filevalue =  $newfilename;
     } else {
         $filevalue = '';
     }
     $created_by = $_SESSION['user_id']; 
-        $q = "INSERT INTO blogs(`title`, `description`, `blog_image`, `created_by`) VALUES ('$title', '$description', '$filevalue',$created_by)";
+        $q = "INSERT INTO blogs(`title`, `description`, `blog_image`, `created_by`) VALUES ('$title', '$con_desc', '$filevalue',$created_by)";
 
         $sql = mysqli_query($con, $q);
 
