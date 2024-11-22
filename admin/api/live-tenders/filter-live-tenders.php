@@ -394,7 +394,7 @@ function get_results($con, $postData)
         $s_condition = str_replace("WHERE","and",$condition);
         $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_live` $condition) UNION ALL (SELECT * FROM `tenders_live` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");
     else:
-        $tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` $condition $condition_orderque LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` $condition $condition_orderque order by publish_date desc LIMIT $offset, $limit");
     endif;
     //echo "(SELECT * FROM `tenders_live` $condition $condition_filter) UNION ALL (SELECT * FROM `tenders_live` $condition_u) $condition_orderque LIMIT $offset, $limit";exit;
     $tender_result = mysqli_num_rows($tender_data);
