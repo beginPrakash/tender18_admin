@@ -1285,7 +1285,7 @@ function get_results($con, $postData)
 
         else:
 
-            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` $condition $condition_filter $condition_orderque order by publish_date desc LIMIT $offset, $limit");
 
         
 

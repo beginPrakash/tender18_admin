@@ -1333,7 +1333,7 @@ function get_results($con, $postData)
 
         else:
 
-            $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+            $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque order by publish_date desc LIMIT $offset, $limit");
 
         
 

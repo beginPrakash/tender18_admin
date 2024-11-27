@@ -12,7 +12,7 @@ function highlightSearchTerm($text, $searchTerm)
             // return str_ireplace($searchTerm, $highlightedTerm, $text);
     
             $highlightMarkup = '<strong style=color:#cb192d>';
-            $closingHighlightMarkup = '</strong>&nbsp;';
+            $closingHighlightMarkup = '</strong>';
             $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
             return $highlightedText;
         }
@@ -43,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if(!empty($ids)):
             $idArray = explode(',', $ids);
         endif;
-        $usersData = mysqli_query($con, "SELECT `mail_type`,`email_ids`,`company_name`,`user_unique_id`,`words`,`keywords`,`filter_city`,`filter_state`,`filter_tender_value`,`filter_agency`,`filter_department`,`filter_type` FROM `users` WHERE user_id IN ($ids)");
+        $usersData = mysqli_query($con, "SELECT `mail_type`,`email_ids`,`company_name`,`user_unique_id`,`not_used_keywords`,`words`,`keywords`,`filter_city`,`filter_state`,`filter_tender_value`,`filter_agency`,`filter_department`,`filter_type` FROM `users` WHERE user_id IN ($ids)");
         $usersResult = mysqli_num_rows($usersData);
         $company_name = "";
         if ($usersResult > 0) {
@@ -59,6 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $department = $row['filter_department'];
                     $type = $row['filter_type'];
                     $keywords = $row['keywords'];
+                    $not_used_keywords = $row['not_used_keywords'];
                     $words = $row['words'];
                     $exp_uemail_ids = explode(',',$uemail_ids);
                     $user_unique_id= $row['user_unique_id'];
