@@ -63,88 +63,103 @@ function get_results($con, $postData)
     }
 
     if (!empty($filter_keyword)) {
+        $filter_keyword = trim($filter_keyword);
+        $boolean_mode_keyword = "+" . str_replace(" ", " +", $filter_keyword); // Convert to Boolean Mode format
+        $condition_key = "";
+        $ucondition_key = "";
+        
+        // Build the MATCH AGAINST condition
+        $condition_key = "MATCH(title, description) AGAINST('$boolean_mode_keyword' IN BOOLEAN MODE)";
+        $ucondition_key = "MATCH(title) AGAINST('$boolean_mode_keyword' IN BOOLEAN MODE)";
+        
+        // Final WHERE clauses
+        $condition .= " $condition_key and";
         $filter_keyword = explode(",", $filter_keyword);
-        if (!empty($filter_keyword)) {
-            $condition_key = "";
-            $condition_key_val = "";
-            $ucondition_key = "";
-            $ucondition_key_val = "";
-            $notq = "";
-            $counter = 0;
-            if ($cnt > 0) {
-                $condition_key_val = "and";
-            }
-            foreach ($filter_keyword as $keyword) {
-                $keyword_arr = explode(' ', $keyword);
-                $count = count($keyword_arr);
-                foreach ($keyword_arr as $key => $value) {
-                    if ($count > 1) {
-                        if ($counter > 0 && $key <= 0) {
-                            $condition_key .= " or ";
-                        }
-                        if ($key == 0) {
-                            $condition_key .= " ( ";
-                        }
-                        if ($key > 0) {
-                            $condition_key .= " and title LIKE '%$value%'";
-                            $ucondition_key .= " and title LIKE '%$value%' and title NOT LIKE '%$value%'";
-                        } else {
-                            $condition_key .= "title LIKE '%$value%'";
-                            $ucondition_key .= "title LIKE '%$value%'";
-                        }
-                        if ($key == ($count - 1)) {
-                            $condition_key .= " ) ";
-                        }
-                    } else {
-                        if ($counter > 0) {
-                            $condition_key .= " or ";
-                            $ucondition_key .= " or ";
-                        }
-                        $condition_key .= "( title LIKE '%$value%' )";
-                        $ucondition_key .= "( title LIKE '%$value%' )";
-                    }
-                    $counter++;
-                    $cnt++;
-                }
-            }
-
-            $counter = 0;
-            if ($cnt > 0) {
-                $condition_key .= " or ";
-            }
-            foreach ($filter_keyword as $keyword) {
-                $keyword_arr = explode(' ', $keyword);
-                $count = count($keyword_arr);
-                foreach ($keyword_arr as $key => $value) {
-                    if ($count > 1) {
-                        if ($counter > 0 && $key <= 0) {
-                            $condition_key .= " or ";
-                        }
-                        if ($key == 0) {
-                            $condition_key .= " ( ";
-                        }
-                        if ($key > 0) {
-                            $condition_key .= " and description LIKE '%$value%'";
-                        } else {
-                            $condition_key .= "description LIKE '%$value%'";
-                        }
-                        if ($key == ($count - 1)) {
-                            $condition_key .= " ) ";
-                        }
-                    } else {
-                        if ($counter > 0) {
-                            $condition_key .= " or ";
-                        }
-                        $condition_key .= "( description LIKE '%$value%' )";
-                    }
-                    $counter++;
-                    $cnt++;
-                }
-            }
-            $condition .= " " . $condition_key_val . " (" . $condition_key . " )";
-            $condition_u .= " WHERE (" . $ucondition_key . " ) AND title NOT LIKE '%$keyw%'";
-        }
     }
+
+    // if (!empty($filter_keyword)) {
+    //     $filter_keyword = explode(",", $filter_keyword);
+    //     if (!empty($filter_keyword)) {
+    //         $condition_key = "";
+    //         $condition_key_val = "";
+    //         $ucondition_key = "";
+    //         $ucondition_key_val = "";
+    //         $notq = "";
+    //         $counter = 0;
+    //         if ($cnt > 0) {
+    //             $condition_key_val = "and";
+    //         }
+    //         foreach ($filter_keyword as $keyword) {
+    //             $keyword_arr = explode(' ', $keyword);
+    //             $count = count($keyword_arr);
+    //             foreach ($keyword_arr as $key => $value) {
+    //                 if ($count > 1) {
+    //                     if ($counter > 0 && $key <= 0) {
+    //                         $condition_key .= " or ";
+    //                     }
+    //                     if ($key == 0) {
+    //                         $condition_key .= " ( ";
+    //                     }
+    //                     if ($key > 0) {
+    //                         $condition_key .= " and title LIKE '%$value%'";
+    //                         $ucondition_key .= " and title LIKE '%$value%' and title NOT LIKE '%$value%'";
+    //                     } else {
+    //                         $condition_key .= "title LIKE '%$value%'";
+    //                         $ucondition_key .= "title LIKE '%$value%'";
+    //                     }
+    //                     if ($key == ($count - 1)) {
+    //                         $condition_key .= " ) ";
+    //                     }
+    //                 } else {
+    //                     if ($counter > 0) {
+    //                         $condition_key .= " or ";
+    //                         $ucondition_key .= " or ";
+    //                     }
+    //                     $condition_key .= "( title LIKE '%$value%' )";
+    //                     $ucondition_key .= "( title LIKE '%$value%' )";
+    //                 }
+    //                 $counter++;
+    //                 $cnt++;
+    //             }
+    //         }
+
+    //         $counter = 0;
+    //         if ($cnt > 0) {
+    //             $condition_key .= " or ";
+    //         }
+    //         foreach ($filter_keyword as $keyword) {
+    //             $keyword_arr = explode(' ', $keyword);
+    //             $count = count($keyword_arr);
+    //             foreach ($keyword_arr as $key => $value) {
+    //                 if ($count > 1) {
+    //                     if ($counter > 0 && $key <= 0) {
+    //                         $condition_key .= " or ";
+    //                     }
+    //                     if ($key == 0) {
+    //                         $condition_key .= " ( ";
+    //                     }
+    //                     if ($key > 0) {
+    //                         $condition_key .= " and description LIKE '%$value%'";
+    //                     } else {
+    //                         $condition_key .= "description LIKE '%$value%'";
+    //                     }
+    //                     if ($key == ($count - 1)) {
+    //                         $condition_key .= " ) ";
+    //                     }
+    //                 } else {
+    //                     if ($counter > 0) {
+    //                         $condition_key .= " or ";
+    //                     }
+    //                     $condition_key .= "( description LIKE '%$value%' )";
+    //                 }
+    //                 $counter++;
+    //                 $cnt++;
+    //             }
+    //         }
+    //         $condition .= " " . $condition_key_val . " (" . $condition_key . " )";
+    //         $condition_u .= " WHERE (" . $ucondition_key . " ) AND title NOT LIKE '%$keyw%'";
+    //     }
+    // }
 
     if (!empty($filter_state)) {
         $filter_state = explode(",", $filter_state);
@@ -385,7 +400,7 @@ function get_results($con, $postData)
     
     if(!empty($keyw)):
         $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_orderque LIMIT $offset, $limit");
-        
+       
         // $s_condition = str_replace("WHERE","and",$condition);
         // $tender_data = mysqli_query($con, "(SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition ) UNION ALL (SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");
     else:
