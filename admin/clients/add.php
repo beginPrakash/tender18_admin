@@ -331,18 +331,25 @@ if (!empty($_SESSION['error'])) {
                                 <label for="state" class="form-label">State : <span class="text-danger">*</span></label>
                                 <select id="state" name="state" class="form-select">
                                     <option value="">Select State</option>
+                                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
                                     <option value="Andhra Pradesh">Andhra Pradesh</option>
                                     <option value="Arunachal Pradesh">Arunachal Pradesh</option>
                                     <option value="Assam">Assam</option>
                                     <option value="Bihar">Bihar</option>
+                                    <option value="Chandigarh">Chandigarh</option>
                                     <option value="Chhattisgarh">Chhattisgarh</option>
+                                    <option value="Dadra And Nagar Haveli">Dadra And Nagar Haveli</option>
+                                    <option value="Delhi">Delhi</option>
                                     <option value="Goa">Goa</option>
                                     <option value="Gujarat">Gujarat</option>
                                     <option value="Haryana">Haryana</option>
                                     <option value="Himachal Pradesh">Himachal Pradesh</option>
+                                    <option value="Jammu & Kashmir">Jammu & Kashmir</option>
                                     <option value="Jharkhand">Jharkhand</option>
                                     <option value="Karnataka">Karnataka</option>
                                     <option value="Kerala">Kerala</option>
+                                    <option value="Ladakh">Ladakh</option>
+                                    <option value="Lakshadweep">Lakshadweep</option>
                                     <option value="Madhya Pradesh">Madhya Pradesh</option>
                                     <option value="Maharashtra">Maharashtra</option>
                                     <option value="Manipur">Manipur</option>
@@ -350,6 +357,7 @@ if (!empty($_SESSION['error'])) {
                                     <option value="Mizoram">Mizoram</option>
                                     <option value="Nagaland">Nagaland</option>
                                     <option value="Odisha">Odisha</option>
+                                    <option value="Puducherry">Puducherry</option>
                                     <option value="Punjab">Punjab</option>
                                     <option value="Rajasthan">Rajasthan</option>
                                     <option value="Sikkim">Sikkim</option>

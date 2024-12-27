@@ -5,7 +5,7 @@ include "../includes/connection.php";
 
 if (empty($_GET['token'])) {
     echo "<script>
-            window.location.href='../forgot_password';
+            window.location.href='../forgot_password/index.php';
         </script>";
 }
 
@@ -154,7 +154,7 @@ if (isset($_POST['change_pass'])) {
                                                                         setTimeout(function(){
                                                                             //window.location.reload();
                                                                             document.querySelector('.msg_box').remove();
-                                                                            window.location.href='../login/';
+                                                                            window.location.href='../login/index.php';
                                                                         }, 3000);
                                                                     
                                                                 </script>";

@@ -24,7 +24,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/feedback-inquiry';
+                        window.location.href='" . ADMIN_URL . "/feedback-inquiry/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -39,7 +39,7 @@ if (!empty($_SESSION['error'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/feedback-inquiry';
+                        window.location.href='" . ADMIN_URL . "/feedback-inquiry/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -99,7 +99,7 @@ if (!empty($_SESSION['error'])) {
                                     <td><?php echo $data['description']; ?></td>
                                     <td><?php echo (new DateTime($data['created_at']))->format('d-m-Y H:i:s'); ?></td>
                                     <td class="action_element">
-                                        <a href="<?php echo ADMIN_URL; ?>feedback-inquiry?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger delete_btn" data-url="<?php echo ADMIN_URL; ?>feedback-inquiry?id=<?php echo $data['id']; ?>"></i></a>
+                                        <a href="<?php echo ADMIN_URL; ?>feedback-inquiry/index.php?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger delete_btn" data-url="<?php echo ADMIN_URL; ?>feedback-inquiry/index.php?id=<?php echo $data['id']; ?>"></i></a>
                                     </td>
                                 </tr>
                             <?php $i++;

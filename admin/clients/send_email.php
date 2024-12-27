@@ -521,11 +521,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             if($mcount > 0){
                 echo "<script>
-                window.location.href='" . ADMIN_URL . "clients?st=1';
+                window.location.href='" . ADMIN_URL . "clients/index.php?st=1';
                 </script>";
             }else{
                 echo "<script>
-            window.location.href='" . ADMIN_URL . "clients?st=0';
+            window.location.href='" . ADMIN_URL . "clients/index.php?st=0';
             </script>";
             }
         }

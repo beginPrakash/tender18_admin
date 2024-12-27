@@ -109,7 +109,7 @@ if (isset($_POST['submit_excel'])) {
                             success: function (response) {
                                 // console.log(response);
                                 $(".ajax_running").text("Uploaded successfully");
-                                setTimeout(function(){ window.location.href="' . ADMIN_URL . '/tenders"; }, 2000);
+                                setTimeout(function(){ window.location.href="' . ADMIN_URL . '/tenders/index.php"; }, 2000);
                             }
                         });
                     });
@@ -139,7 +139,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/tenders';
+                        window.location.href='" . ADMIN_URL . "/tenders/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -154,7 +154,7 @@ if (!empty($_SESSION['error'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/tenders';
+                        window.location.href='" . ADMIN_URL . "/tenders/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -218,17 +218,17 @@ if (!empty($_SESSION['error'])) {
             <div class="card-header">
                 <div class="row mb-4">
                     <div class="col col-2 float-end">
-                        <a href="<?php echo ADMIN_URL; ?>agencies">
+                        <a href="<?php echo ADMIN_URL; ?>agencies/index.php">
                             <h5 class="card-title btn w-100 bg-primary text-white">Add Agencies</h5>
                         </a>
                     </div>
                     <div class="col col-2 float-end">
-                        <a href="<?php echo ADMIN_URL; ?>zipcodes">
+                        <a href="<?php echo ADMIN_URL; ?>zipcodes/index.php">
                             <h5 class="card-title btn w-100 bg-primary text-white">Add Zipcodes</h5>
                         </a>
                     </div>
                     <div class="col col-2 float-end">
-                        <a href="<?php echo ADMIN_URL; ?>tenders?move=true" class="move" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center-01">
+                        <a href="<?php echo ADMIN_URL; ?>tenders/index.php?move=true" class="move" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center-01">
                             <h5 class="card-title btn w-100 bg-primary text-white">Move to Live Tenders</h5>
                         </a>
                     </div>
@@ -370,7 +370,7 @@ if (!empty($_SESSION['error'])) {
                                     <td class="action_element">
                                         <div class="d-flex align-items-center">
                                             <a href="<?php echo ADMIN_URL; ?>tenders/edit-tender.php?id=<?php echo $data['id']; ?>"><i style="font-size: 20px;" class="ri-pencil-fill text-success"></i></a> &nbsp | &nbsp
-                                            <a href="<?php echo ADMIN_URL; ?>tenders?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
+                                            <a href="<?php echo ADMIN_URL; ?>tenders/index.php?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -445,15 +445,15 @@ if (!empty($_SESSION['error'])) {
                             $data = '<div class="dataTables_paginate paging_simple_numbers">';
                             $data .= '<ul class="pagination">';
                             if ($page > 1) {
-                                $data .= '<li class="paginate_button page-item previous"><a class="page-link" href="' . ADMIN_URL . 'tenders' . '?page_no=' . ($page - 1) . '">Previous</a></li>';
+                                $data .= '<li class="paginate_button page-item previous"><a class="page-link" href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=' . ($page - 1) . '">Previous</a></li>';
                             }
                             // display the "previous" link
                             if ($page == 2) {
-                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders' . '?page_no=1" class="page-link">' . ($page - 1) . '</a></li>';
+                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=1" class="page-link">' . ($page - 1) . '</a></li>';
                             }
                             // display the first page link
                             if ($page > 2) {
-                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders' . '?page_no=1" class="page-link">1</a></li>';
+                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=1" class="page-link">1</a></li>';
                                 // add an ellipsis to indicate skipped pages
                                 if ($page > 3) {
                                     $data .= '<li class="paginate_button page-item"><a class="ellipsis page-link" style="pointer-events: none;">...</a></li>';
@@ -461,13 +461,13 @@ if (!empty($_SESSION['error'])) {
                             }
                             // display up to 3 pages before the current page
                             for ($i = max(2, $page - 2); $i < $page; $i++) {
-                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders' . '?page_no=' . $i . '" class="page-link">' . $i . '</a></li>';
+                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=' . $i . '" class="page-link">' . $i . '</a></li>';
                             }
                             // display the current page number
                             $data .= '<li class="paginate_button page-item active"><a class="page-link" style="pointer-events: none;">' . $page . '</a></li>';
                             // display up to 3 pages after the current page
                             for ($i = $page + 1; $i <= min($total - 1, $page + 2); $i++) {
-                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders' . '?page_no=' . $i . '" class="page-link">' . $i . '</a></li>';
+                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=' . $i . '" class="page-link">' . $i . '</a></li>';
                             }
                             // display the last page link
                             if ($page < $total - 1) {
@@ -475,15 +475,15 @@ if (!empty($_SESSION['error'])) {
                                 if ($page < $total - 2) {
                                     $data .= '<li class="paginate_button page-item"><a class="ellipsis page-link" style="pointer-events: none;">...</a></li>';
                                 }
-                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders' . '?page_no=' . $total . '" class="page-link">' . $total . '</a></li>';
+                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=' . $total . '" class="page-link">' . $total . '</a></li>';
                             }
                             // display the "next" link
                             if ($page == $total - 1) {
-                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders' . '?page_no=' . ($page + 1) . '" class="page-link">' . ($total) . '</a></li>';
+                                $data .= '<li class="paginate_button page-item"><a href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=' . ($page + 1) . '" class="page-link">' . ($total) . '</a></li>';
                             }
                             // display the "next" link
                             if ($page < $total) {
-                                $data .= '<li class="paginate_button page-item next"><a class="page-link" href="' . ADMIN_URL . 'tenders' . '?page_no=' . ($page + 1) . '">Next</i></a></li>';
+                                $data .= '<li class="paginate_button page-item next"><a class="page-link" href="' . ADMIN_URL . 'tenders/index.php' . '?page_no=' . ($page + 1) . '">Next</i></a></li>';
                             }
                             $data .= '</ul></div>';
                             echo $data;

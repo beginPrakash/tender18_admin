@@ -104,11 +104,11 @@
                 <!-- <a class="dropdown-item fs-sm" href="pages-profile.html"><i class="bi bi-person-circle text-muted align-middle me-1"></i>
                   <span class="align-middle">Profile</span></a> -->
                 <div class="dropdown-divider"></div>
-                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>settings"><i class="bi bi-gear text-muted align-middle me-1"></i>
+                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>settings/index.php"><i class="bi bi-gear text-muted align-middle me-1"></i>
                   <span class="align-middle">Settings</span></a>
-                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>admin-change-password"><i class="bi bi-gear text-muted align-middle me-1"></i>
+                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>admin-change-password/index.php"><i class="bi bi-gear text-muted align-middle me-1"></i>
                   <span class="align-middle">Change Password</span></a>
-                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>logout"><i class="bi bi-box-arrow-right text-muted align-middle me-1"></i>
+                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>logout/index.php"><i class="bi bi-box-arrow-right text-muted align-middle me-1"></i>
                   <span class="align-middle" data-key="t-logout">Logout</span></a>
               </div>
             </div>

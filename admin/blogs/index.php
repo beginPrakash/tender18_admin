@@ -20,7 +20,7 @@ if (isset($_GET['id'])) {
     if (!empty($_GET['id'])) {
         mysqli_query($con, "DELETE FROM `blogs` where id={$_GET['id']}");
         echo "<script>
-            window.location.href='" . ADMIN_URL . "blogs';
+            window.location.href='" . ADMIN_URL . "blogs/index.php';
             </script>";
     }
 }
@@ -88,7 +88,7 @@ if (isset($_GET['id'])) {
                                                     Edit</a>
                                             </li>
                                             <li>
-                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>blogs?id='<?php echo $row['id']; ?>'" id="delete_id">
+                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>blogs/index.php?id='<?php echo $row['id']; ?>'" id="delete_id">
                                                 <a class="dropdown-item remove-item-btn" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
                                                     <i class=" ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                     Delete

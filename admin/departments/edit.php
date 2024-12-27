@@ -24,7 +24,7 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
 if (isset($_GET['id']) && isset($_GET['unique_code'])) {
     if (empty($_GET['id'])) {
         echo "<script>
-            window.location.href='" . ADMIN_URL . "departments';
+            window.location.href='" . ADMIN_URL . "departments/index.php';
             </script>";
     }
 }
@@ -60,7 +60,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                         window.location.href='" . ADMIN_URL . "/departments';
+                         window.location.href='" . ADMIN_URL . "/departments/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
