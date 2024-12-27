@@ -50,7 +50,7 @@ if (isset($_POST['submit_excel'])) {
                             success: function (response) {
                                 // console.log(response);
                                 $(".ajax_running").text("Uploaded successfully");
-                                setTimeout(function(){ window.location.href="' . ADMIN_URL . '/agencies"; }, 2000);
+                                setTimeout(function(){ window.location.href="' . ADMIN_URL . '/agencies/index.php"; }, 2000);
                             }
                         });
                     });
@@ -84,7 +84,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/agencies';
+                        window.location.href='" . ADMIN_URL . "/agencies/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -99,7 +99,7 @@ if (!empty($_SESSION['error'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/agencies';
+                        window.location.href='" . ADMIN_URL . "/agencies/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -243,7 +243,7 @@ if (!empty($_SESSION['error'])) {
                                     <td><?php echo $data['agency_name']; ?></td>
                                     <td class="action_element">
                                         <a href="<?php echo ADMIN_URL; ?>agencies/edit-agency.php?id=<?php echo $data['id']; ?>"><i style="font-size: 20px;" class="ri-pencil-fill text-success"></i></a> &nbsp | &nbsp
-                                        <a href="<?php echo ADMIN_URL; ?>agencies?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
+                                        <a href="<?php echo ADMIN_URL; ?>agencies/index.php?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
                                     </td>
                                 </tr>
                             <?php $i++;

@@ -349,6 +349,9 @@ if (!empty($_SESSION['error'])) {
                                 <label for="state" class="form-label">State : <span class="text-danger">*</span></label>
                                 <select id="state" name="state" class="form-select">
                                     <option value="">Select State</option>
+                                    <option value="Andaman and Nicobar Islands" <?php if ($fetch_users['state'] == "Andaman and Nicobar Islands") {
+                                                                        echo "selected";
+                                                                    } ?>>Andaman and Nicobar Islands</option>
                                     <option value="Andhra Pradesh" <?php if ($fetch_users['state'] == "Andhra Pradesh") {
                                                                         echo "selected";
                                                                     } ?>>Andhra Pradesh</option>
@@ -361,9 +364,18 @@ if (!empty($_SESSION['error'])) {
                                     <option value="Bihar" <?php if ($fetch_users['state'] == "Bihar") {
                                                                 echo "selected";
                                                             } ?>>Bihar</option>
+                                    <option value="Chandigarh" <?php if ($fetch_users['state'] == "Chandigarh") {
+                                                                        echo "selected";
+                                                                    } ?>>Chandigarh</option>                        
                                     <option value="Chhattisgarh" <?php if ($fetch_users['state'] == "Chhattisgarh") {
                                                                         echo "selected";
                                                                     } ?>>Chhattisgarh</option>
+                                    <option value="Dadra And Nagar Haveli" <?php if ($fetch_users['state'] == "Dadra And Nagar Haveli") {
+                                                                        echo "selected";
+                                                                    } ?>>Dadra And Nagar Haveli</option>
+                                    <option value="Delhi" <?php if ($fetch_users['state'] == "Delhi") {
+                                                                        echo "selected";
+                                                                    } ?>>Delhi</option>
                                     <option value="Goa" <?php if ($fetch_users['state'] == "Goa") {
                                                             echo "selected";
                                                         } ?>>Goa</option>
@@ -376,6 +388,9 @@ if (!empty($_SESSION['error'])) {
                                     <option value="Himachal Pradesh" <?php if ($fetch_users['state'] == "Himachal Pradesh") {
                                                                             echo "selected";
                                                                         } ?>>Himachal Pradesh</option>
+                                    <option value="Jammu & Kashmir" <?php if ($fetch_users['state'] == "Jammu & Kashmir") {
+                                                                        echo "selected";
+                                                                    } ?>>Jammu & Kashmir</option>
                                     <option value="Jharkhand" <?php if ($fetch_users['state'] == "Jharkhand") {
                                                                     echo "selected";
                                                                 } ?>>Jharkhand</option>
@@ -385,6 +400,12 @@ if (!empty($_SESSION['error'])) {
                                     <option value="Kerala" <?php if ($fetch_users['state'] == "Kerala") {
                                                                 echo "selected";
                                                             } ?>>Kerala</option>
+                                    <option value="Ladakh" <?php if ($fetch_users['state'] == "Ladakh") {
+                                                                        echo "selected";
+                                                                    } ?>>Ladakh</option>
+                                    <option value="Lakshadweep" <?php if ($fetch_users['state'] == "Lakshadweep") {
+                                                                        echo "selected";
+                                                                    } ?>>Lakshadweep</option>
                                     <option value="Madhya Pradesh" <?php if ($fetch_users['state'] == "Madhya Pradesh") {
                                                                         echo "selected";
                                                                     } ?>>Madhya Pradesh</option>
@@ -406,6 +427,9 @@ if (!empty($_SESSION['error'])) {
                                     <option value="Odisha" <?php if ($fetch_users['state'] == "Odisha") {
                                                                 echo "selected";
                                                             } ?>>Odisha</option>
+                                    <option value="Puducherry" <?php if ($fetch_users['state'] == "Puducherry") {
+                                                                        echo "selected";
+                                                                    } ?>>Puducherry</option>
                                     <option value="Punjab" <?php if ($fetch_users['state'] == "Punjab") {
                                                                 echo "selected";
                                                             } ?>>Punjab</option>

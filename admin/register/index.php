@@ -85,7 +85,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/users';
+                        window.location.href='" . ADMIN_URL . "/users/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  

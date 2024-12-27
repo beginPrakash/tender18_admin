@@ -65,7 +65,7 @@ if (!empty($_SESSION['success'])) {
 
                      setTimeout(function(){
 
-                        window.location.href='" . ADMIN_URL . "/keyword-content';
+                        window.location.href='" . ADMIN_URL . "/keyword-content/index.php';
 
                          document.querySelector('.msg_box').remove();
 
@@ -95,7 +95,7 @@ if (!empty($_SESSION['error'])) {
 
                      setTimeout(function(){
 
-                        window.location.href='" . ADMIN_URL . "/keyword-content';
+                        window.location.href='" . ADMIN_URL . "/keyword-content/index.php';
 
                          document.querySelector('.msg_box').remove();
 

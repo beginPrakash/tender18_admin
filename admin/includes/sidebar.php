@@ -67,7 +67,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'pages') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/pages">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/pages/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Pages</span>
                         </a>
@@ -77,7 +77,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'testimonials') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/testimonials">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/testimonials/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Testimonials</span>
                         </a>
@@ -87,7 +87,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'users') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/users">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/users/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Users</span>
                         </a>
@@ -97,7 +97,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'keywords') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/keywords">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/keywords/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Keywords</span>
                         </a>
@@ -107,7 +107,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'clients') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/clients">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/clients/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Clients</span>
                         </a>
@@ -117,7 +117,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'blogs') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/blogs">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/blogs/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Blogs</span>
                         </a>
@@ -127,7 +127,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'states') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/states">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/states/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">States</span>
                         </a>
@@ -137,7 +137,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'departments') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/departments">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/departments/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Departments</span>
                         </a>
@@ -147,7 +147,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'menus') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/menus">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/menus/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Menus</span>
                         </a>
@@ -174,7 +174,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'tenders' || $pages == 'zipcodes' || $pages == 'agencies') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/tenders">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/tenders/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Tenders</span>
                         </a>
@@ -184,7 +184,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'live-tenders') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>live-tenders">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>live-tenders/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Live Tenders</span>
                         </a>
@@ -194,7 +194,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'archive-tenders') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>archive-tenders">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>archive-tenders/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Archive Tenders</span>
                         </a>
@@ -212,7 +212,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'free-quote') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/free-quote">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/free-quote/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Get A Free Quote Form</span>
                         </a>
@@ -222,7 +222,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'tender-inquiry') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/tender-inquiry">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/tender-inquiry/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Tender Inquiry</span>
                         </a>
@@ -232,7 +232,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'feedback-inquiry') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/feedback-inquiry">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/feedback-inquiry/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Feedback Inquiry</span>
                         </a>
@@ -242,7 +242,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'complain-inquiry') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/complain-inquiry">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/complain-inquiry/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Complain Inquiry</span>
                         </a>
@@ -252,7 +252,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'registration-form') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/registration-form">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/registration-form/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Registration Form</span>
                         </a>
@@ -262,7 +262,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'smtp_mgmt') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/smtp_mgmt">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/smtp_mgmt/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">SMTP Management</span>
                         </a>
@@ -272,7 +272,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'city-content') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/city-content">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/city-content/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">City Content</span>
                         </a>
@@ -282,7 +282,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'agency-content') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/agency-content">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/agency-content/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Agency Content</span>
                         </a>
@@ -292,7 +292,7 @@
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'keyword-content') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/keyword-content">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/keyword-content/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Keyword Content</span>
                         </a>

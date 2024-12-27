@@ -20,7 +20,7 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
     if (!empty($_GET['id']) && !empty($_GET['unique_code'])) {
         mysqli_query($con, "DELETE FROM `users` where user_id={$_GET['id']} AND user_unique_id={$_GET['unique_code']}");
         echo "<script>
-            window.location.href='" . ADMIN_URL . "users';
+            window.location.href='" . ADMIN_URL . "users/index.php';
             </script>";
     }
 }
@@ -68,7 +68,7 @@ if (isset($_GET['role'])) {
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>register">
+                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>register/index.php">
                     <h5 class="card-title float-end btn bg-success text-white">Register New Users</h5>
                 </a>
                 <!-- <h5 class="card-title mb-0">Basic Datatables</h5> -->
@@ -111,7 +111,7 @@ if (isset($_GET['role'])) {
                                                     Edit</a>
                                             </li>
                                             <li>
-                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>users?id='<?php echo $row['user_id']; ?>'&unique_code='<?php echo $row['user_unique_id']; ?>'" id="delete_id">
+                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>users/index.php?id='<?php echo $row['user_id']; ?>'&unique_code='<?php echo $row['user_unique_id']; ?>'" id="delete_id">
                                                 <a class="dropdown-item remove-item-btn" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
                                                     <i class=" ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                     Delete
@@ -158,8 +158,8 @@ if (isset($_GET['role'])) {
     $('#user_role').change(function() {
         var user_role = $(this).val();
         if (user_role)
-            window.location.href = '<?php echo ADMIN_URL; ?>users?role=' + user_role;
+            window.location.href = '<?php echo ADMIN_URL; ?>users/index.php?role=' + user_role;
         else
-            window.location.href = '<?php echo ADMIN_URL; ?>users';
+            window.location.href = '<?php echo ADMIN_URL; ?>users/index.php';
     });
 </script>

@@ -21,7 +21,7 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
     if (!empty($_GET['id']) && !empty($_GET['unique_code'])) {
         mysqli_query($con, "DELETE FROM `users` where user_id={$_GET['id']} AND user_unique_id={$_GET['unique_code']}");
         echo "<script>
-            window.location.href='" . ADMIN_URL . "clients';
+            window.location.href='" . ADMIN_URL . "clients/index.php';
             </script>";
     }
 }
@@ -42,7 +42,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/clients';
+                        window.location.href='" . ADMIN_URL . "/clients/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -164,7 +164,7 @@ if (!empty($_SESSION['error'])) {
                                                     Edit</a>
                                             </li>
                                             <li>
-                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>clients?id='<?php echo $row['user_id']; ?>'&unique_code='<?php echo $row['user_unique_id']; ?>'" id="delete_id">
+                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>clients/index.php?id='<?php echo $row['user_id']; ?>'&unique_code='<?php echo $row['user_unique_id']; ?>'" id="delete_id">
                                                 <a class="dropdown-item remove-item-btn" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
                                                     <i class=" ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                     Delete
