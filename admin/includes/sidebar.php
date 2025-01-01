@@ -270,31 +270,11 @@
                 <?php } ?>
                 <?php if($_SESSION['role']=='admin' || $city_content_per == 1) { ?>
                     <li class="nav-item active">
-                        <a class="nav-link menu-link <?php if ($pages == 'city-content') {
+                        <a class="nav-link menu-link <?php if ($pages == 'meta-content') {
                                                             echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/city-content/index.php">
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/meta-content/index.php">
                             <i class="ti ti-brand-google-home"></i>
-                            <span data-key="t-dashboards">City Content</span>
-                        </a>
-                    </li>
-                <?php } ?>
-                <?php if($_SESSION['role']=='admin' || $agency_content_per == 1) { ?>
-                    <li class="nav-item active">
-                        <a class="nav-link menu-link <?php if ($pages == 'agency-content') {
-                                                            echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/agency-content/index.php">
-                            <i class="ti ti-brand-google-home"></i>
-                            <span data-key="t-dashboards">Agency Content</span>
-                        </a>
-                    </li>
-                <?php } ?>
-                <?php if($_SESSION['role']=='admin' || $keyword_content_per == 1) { ?>
-                    <li class="nav-item active">
-                        <a class="nav-link menu-link <?php if ($pages == 'keyword-content') {
-                                                            echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/keyword-content/index.php">
-                            <i class="ti ti-brand-google-home"></i>
-                            <span data-key="t-dashboards">Keyword Content</span>
+                            <span data-key="t-dashboards">Meta Content</span>
                         </a>
                     </li>
                 <?php } ?>

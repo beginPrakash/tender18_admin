@@ -3,7 +3,7 @@
 
 
 include "../includes/authentication.php";
-$pages = 'city-content';
+$pages = 'agency-content';
 ?>
 
 <?php include '../includes/header.php'; ?>
@@ -24,8 +24,8 @@ if (isset($_POST['btnInsert'])) {
     $keywords = mysqli_real_escape_string($con, $_POST['keywords']);
     $h1 = mysqli_real_escape_string($con, $_POST['h1']);
 
-    $q1 = "UPDATE `city_meta_content` SET `title`='$title', `description`='$description', `keywords`='$keywords', `h1`='$h1', `content`='$content' WHERE `id`=1";
-    //echo "UPDATE `city_meta_content` SET `title`='$title', `description`='$description', `keywords`='$keywords', `h1`='$h1', `content`='$content' WHERE `id`=1";exit;
+    $q1 = "UPDATE `agency_meta_content` SET `title`='$title', `description`='$description', `keywords`='$keywords', `h1`='$h1', `content`='$content' WHERE `id`=1";
+    //echo "UPDATE `agency_meta_content` SET `title`='$title', `description`='$description', `keywords`='$keywords', `h1`='$h1', `content`='$content' WHERE `id`=1";exit;
 
     $sql1 = mysqli_query($con, $q1);
 
@@ -65,7 +65,7 @@ if (!empty($_SESSION['success'])) {
 
                      setTimeout(function(){
 
-                        window.location.href='" . ADMIN_URL . "/city-content/index.php';
+                        window.location.href='" . ADMIN_URL . "/meta-content/agency-content.php';
 
                          document.querySelector('.msg_box').remove();
 
@@ -95,7 +95,7 @@ if (!empty($_SESSION['error'])) {
 
                      setTimeout(function(){
 
-                        window.location.href='" . ADMIN_URL . "/city-content/index.php';
+                        window.location.href='" . ADMIN_URL . "/meta-content/agency-content.php';
 
                          document.querySelector('.msg_box').remove();
 
@@ -117,7 +117,7 @@ if (!empty($_SESSION['error'])) {
 
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
 
-            <h4 class="mb-sm-0">City Meta Content</h4>
+            <h4 class="mb-sm-0">Agency Meta Content</h4>
 
         </div>
 
@@ -138,7 +138,7 @@ $h1 = "";
 $keywords = "";
 
 
-$header_data = mysqli_query($con, "SELECT * FROM `city_meta_content`");
+$header_data = mysqli_query($con, "SELECT * FROM `agency_meta_content`");
 
 $header_result = mysqli_num_rows($header_data);
 
@@ -165,11 +165,11 @@ if ($header_result == 1) {
 
         <div class="card">
 
-            <form action="" method="post" id="city_content_form">
+            <form action="" method="post" id="agency_content_form">
 
                 <div class="card-header">
 
-                    <h4 class="card-title mb-0">City Meta Content</h4>
+                    <h4 class="card-title mb-0">Agency Meta Content</h4>
 
                 </div>
 
@@ -242,7 +242,7 @@ if ($header_result == 1) {
 <?php include "../includes/footer.php" ?>
 <script>
     $(document).ready(function() {
-        $('#city_content_form').validate({
+        $('#agency_content_form').validate({
             rules: {
                 'title': "required",
                 'description': "required",
@@ -260,7 +260,7 @@ if ($header_result == 1) {
             console.error(c);
         });
 
-        $('#city_content_form').submit(function(event) {
+        $('#agency_content_form').submit(function(event) {
             $('.ckeditor-classic-total').each(function(i, obj) {
                 var data = $(this).parent().find(".ck-editor .ck-editor__main .ck-editor__editable").html();
                 if (data != "")

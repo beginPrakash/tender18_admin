@@ -128,7 +128,7 @@ if (isset($_GET['id'])) {
 <?php include '../includes/footer.php';  ?>
 
 <script>
-    $('.remove-item-btn').click(function() {
+    $(document).on('click','.remove-item-btn',function() {
         var url = $(this).parent().find('#delete_id').val();
         $("#delete_id_modal").attr('href', url);
     });

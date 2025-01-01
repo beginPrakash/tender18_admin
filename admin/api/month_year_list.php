@@ -18,7 +18,7 @@ $result = get_results($con);
 function get_results($con)
 {
     $start    = '2022-01-01';
-    $end      = date('Y-m-d');
+    $end      = date('Y-m-d',strtotime('+1 year'));
     $getRangeYear   = range(gmdate('Y', strtotime($start)), gmdate('Y', strtotime($end)));
     $month = date('n');
     $cyear = date('Y');
