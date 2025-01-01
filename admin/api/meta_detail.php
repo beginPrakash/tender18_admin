@@ -61,7 +61,21 @@ function get_results($con, $postData)
             }
         }
 
-        $ameta_data = mysqli_query($con, "SELECT * FROM `agency_meta_content` where id = 1 ");
+        $select = mysqli_query($con, "SELECT * FROM `tender_agencies` WHERE  `agency_name`='{$metaAgencyStr}' order by `id` asc limit 1");
+        $result_data = mysqli_num_rows($select);
+        $pass = mysqli_fetch_assoc($select);
+        
+        if ($result_data == 1) {
+            $select1 = mysqli_query($con, "SELECT * FROM `agency_meta_content_individual` WHERE  `agency_id`='{$pass['id']}'");
+            $result_data1 = mysqli_num_rows($select1);
+            $pass1 = mysqli_fetch_assoc($select1);
+            if($result_data1 == 1){
+                $ameta_data = mysqli_query($con, "SELECT * FROM `agency_meta_content_individual` where agency_id = {$pass['id']} ");
+            }else{
+                $ameta_data = mysqli_query($con, "SELECT * FROM `agency_meta_content` where id = 1");
+            }
+        }
+
         $ameta_result = mysqli_num_rows($ameta_data);
         if ($ameta_result == 1) {
             while ($row = mysqli_fetch_assoc($ameta_data)) {
@@ -71,7 +85,22 @@ function get_results($con, $postData)
     }
 
     if(!empty($metaCity)){
-        $city_data = mysqli_query($con, "SELECT * FROM `city_meta_content` where id = 1 ");
+        $select = mysqli_query($con, "SELECT * FROM `tender_zipcodes` WHERE  `city`='{$metaCity}' order by city asc limit 1");
+        $result_data = mysqli_num_rows($select);
+        $pass = mysqli_fetch_assoc($select);
+        if ($result_data == 1) {
+            $select1 = mysqli_query($con, "SELECT * FROM `city_meta_content_individual` WHERE  `city_id`='{$pass['id']}'");
+            $result_data1 = mysqli_num_rows($select1);
+            $pass1 = mysqli_fetch_assoc($select1);
+            if($result_data1 == 1){
+                
+                $city_data = mysqli_query($con, "SELECT * FROM `city_meta_content_individual` where city_id = {$pass['id']} ");
+            
+            }else{
+                $city_data = mysqli_query($con, "SELECT * FROM `city_meta_content` where id = 1 ");
+            }
+        }
+        
         $city_result = mysqli_num_rows($city_data);
         if ($city_result == 1) {
             while ($row = mysqli_fetch_assoc($city_data)) {
@@ -81,7 +110,21 @@ function get_results($con, $postData)
     }
 
     if(!empty($metaKeyword)){
-        $keyw_data = mysqli_query($con, "SELECT * FROM `keyword_meta_content` where id = 1 ");
+        $select = mysqli_query($con, "SELECT * FROM `keywords` WHERE  `name`='{$metaKeyword}' limit 1");
+        $result_data = mysqli_num_rows($select);
+        $pass = mysqli_fetch_assoc($select);
+        if ($result_data == 1) {
+            $select1 = mysqli_query($con, "SELECT * FROM `keyword_meta_content_individual` WHERE  `keyword_id`='{$pass['id']}'");
+            $result_data1 = mysqli_num_rows($select1);
+            $pass1 = mysqli_fetch_assoc($select1);
+            if($result_data1 == 1){
+                
+                $keyw_data = mysqli_query($con, "SELECT * FROM `keyword_meta_content_individual` where keyword_id = {$pass['id']} ");
+            
+            }else{
+                $keyw_data = mysqli_query($con, "SELECT * FROM `keyword_meta_content` where id = 1 ");
+            }
+        }
         $keyw_result = mysqli_num_rows($keyw_data);
         if ($keyw_result == 1) {
             while ($row = mysqli_fetch_assoc($keyw_data)) {

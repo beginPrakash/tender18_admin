@@ -65,7 +65,7 @@ if (!empty($_SESSION['success'])) {
 
                      setTimeout(function(){
 
-                        window.location.href='" . ADMIN_URL . "/agency-content/index.php';
+                        window.location.href='" . ADMIN_URL . "/meta-content/agency-content.php';
 
                          document.querySelector('.msg_box').remove();
 
@@ -95,7 +95,7 @@ if (!empty($_SESSION['error'])) {
 
                      setTimeout(function(){
 
-                        window.location.href='" . ADMIN_URL . "/agency-content/index.php';
+                        window.location.href='" . ADMIN_URL . "/meta-content/agency-content.php';
 
                          document.querySelector('.msg_box').remove();
 

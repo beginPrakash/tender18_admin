@@ -192,6 +192,33 @@ function get_results($con)
 
     }
 
+    $meta_arr = [];
+
+    $meta_data = mysqli_query($con, "SELECT `title`,`description`,`keywords`,`h1`,`content` FROM `archieve_tenders_meta_content` where id=1 ");
+    $meta_result = mysqli_num_rows($meta_data);
+    if ($meta_result == 1) {
+        while ($row = mysqli_fetch_assoc($meta_data)) {
+            $meta_arr =  $row;
+        }
+    }
+
+
+
+    if(!empty($meta_arr)){
+        $result['meta']['title'] = $meta_arr['title'];
+        $result['meta']['description'] = $meta_arr['description'];
+        $result['meta']['keywords'] = $meta_arr['keywords'];
+        $result['meta']['h1'] = $meta_arr['h1'];
+        $result['meta']['content'] = $meta_arr['content'];
+    }else{
+        $result['meta']['title'] = '';
+        $result['meta']['description'] = '';
+        $result['meta']['keywords'] = '';
+        $result['meta']['h1'] = '';
+        $result['meta']['content'] = '';
+        $result['meta']['label'] = '';
+    }
+
     if ($total > 1) {
 
         if ($page == 2) {
