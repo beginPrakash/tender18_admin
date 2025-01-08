@@ -22,6 +22,7 @@
     $city_content_per = _get_user_perby_role($_SESSION['user_id'],'city_content',$con);
     $agency_content_per = _get_user_perby_role($_SESSION['user_id'],'agency_content',$con);
     $keyword_content_per = _get_user_perby_role($_SESSION['user_id'],'keyword_content',$con);
+    $meta_content_per = _get_user_perby_role($_SESSION['user_id'],'meta_content',$con);
 ?>
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -268,7 +269,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if($_SESSION['role']=='admin' || $city_content_per == 1) { ?>
+                <?php if($_SESSION['role']=='admin' || $meta_content_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'meta-content') {
                                                             echo 'active';

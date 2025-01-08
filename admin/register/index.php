@@ -238,20 +238,11 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">SMTP Management</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['city_content']">
-                                    <label class="form-check-label">City Content</label>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['meta_content']">
+                                    <label class="form-check-label">Meta Content</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['agency_content']">
-                                    <label class="form-check-label">Agency Content</label>
-                                </div>
-                                <div class="col-lg-3">
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['keyword_content']">
-                                    <label class="form-check-label">Keyword Content</label>
-                                </div>
-                            </div>
+                            
                         </div>    
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">

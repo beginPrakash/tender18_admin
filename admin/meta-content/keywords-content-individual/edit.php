@@ -8,14 +8,8 @@ include "../../includes/authentication.php";
 
 ?>
 <?php
-$keyword_content_individual_per = _get_user_perby_role($_SESSION['user_id'],'keyword_content_individual',$con);
 
 if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
-    // echo "not admin ------>" . $_SESSION['role'];
-    echo "<script>
-            window.location.href='../index.php';
-            </script>";
-}elseif($_SESSION['role']=='employee' && $keyword_content_individual_per!=1){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';

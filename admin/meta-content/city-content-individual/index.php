@@ -3,14 +3,8 @@
 <?php $pages = 'city_content_individual'; ?>
 <?php include '../../includes/header.php' ?>
 <?php
-$content_per = _get_user_perby_role($_SESSION['user_id'],'city_content_individual',$con);
 
 if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
-    // echo "not admin ------>" . $_SESSION['role'];
-    echo "<script>
-            window.location.href='../index.php';
-            </script>";
-}elseif($_SESSION['role']=='employee' && $content_per!=1){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';
