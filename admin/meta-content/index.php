@@ -2,7 +2,29 @@
 ?>
 <?php $pages = 'pages'; ?>
 <?php include '../includes/header.php' ?>
+<?php
+$meta_per = _get_user_perby_role($_SESSION['user_id'],'meta_content',$con);
 
+if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}elseif($_SESSION['role']=='employee' && $meta_per!=1){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}
+if (isset($_GET['id'])) {
+    if (!empty($_GET['id'])) {
+        mysqli_query($con, "DELETE FROM `blogs` where id={$_GET['id']}");
+        echo "<script>
+            window.location.href='" . ADMIN_URL . "meta-content/index.php';
+            </script>";
+    }
+}
+?>
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
