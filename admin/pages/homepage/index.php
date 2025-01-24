@@ -16,7 +16,7 @@ if (isset($_POST['submit'])) {
     $banner_title = mysqli_real_escape_string($con, $_POST['banner_title']);
     $banner_description = mysqli_real_escape_string($con, $_POST['banner_description']);
     $hidden_banner_image = $_POST['hidden_banner_image'];
-
+    $hidden_banner_mobile_image = $_POST['hidden_banner_mob_image'];
     $banner_details_title = $_POST['banner_details_title'];
     $banner_details_sub_title = $_POST['banner_details_sub_title'];
 
@@ -42,13 +42,34 @@ if (isset($_POST['submit'])) {
         $filevalue = $hidden_banner_image;
     }
 
+    $file_mob = $_FILES['banner_mob_image'];
+    $filename_mob = $file_mob['name'];
+    $filepath_mob = $file_mob['tmp_name'];
+    $fileerror_mob = $file_mob['error'];
+
+    if (!empty($filename_mob)) {
+        if ($fileerror_mob == 0) {
+            $string_mob = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            $files_mob =  substr(str_shuffle($string_mob), 0, 8);
+            $temp_mob = explode(".", $filename_mob);
+            $newfilename_mob = time() . $files_mob . '.' . end($temp_mob);
+            $destfile_mob = '../../uploads/images/' . $newfilename_mob;
+            move_uploaded_file($filepath_mob, $destfile_mob);
+        }
+    }
+
+    if (!empty($filename_mob)) {
+        $filevalue_mob =  $newfilename_mob;
+    } else {
+        $filevalue_mob = $hidden_banner_mobile_image;
+    }
+
     $query_delete = mysqli_query($con, "DELETE FROM `homepage_banner`");
     $query_delete = mysqli_query($con, "DELETE FROM `homepage_banner_details`");
 
-    $q = "INSERT INTO homepage_banner(`title`, `description` ,`image`) VALUES ('$banner_title', '$banner_description', '$filevalue')";
+    $q = "INSERT INTO homepage_banner(`title`, `description` ,`image`,`mobile_image`) VALUES ('$banner_title', '$banner_description', '$filevalue','$filevalue_mob')";
     $sql1 = mysqli_query($con, $q);
     // print_r($banner_details_title);
-
     foreach ($banner_details_title as $key => $banner_title) {
         if (!empty($banner_title)) {
             $banner_title = mysqli_real_escape_string($con, $banner_title);
@@ -279,6 +300,7 @@ $banner_image = "";
 $banner_details_title = "";
 $banner_details_sub_title = "";
 $details_image = "";
+$banner_mob_image = "";
 
 $banner_data = mysqli_query($con, "SELECT * FROM `homepage_banner`");
 $banner_result = mysqli_num_rows($banner_data);
@@ -287,6 +309,7 @@ if ($banner_result == 1) {
         $banner_title = $row['title'];
         $banner_description = $row['description'];
         $banner_image = $row['image'];
+        $banner_mob_image = $row['mobile_image'];
     }
 }
 $banner_details_data = mysqli_query($con, "SELECT * FROM `homepage_banner_details`");
@@ -432,6 +455,19 @@ $why_details_result = mysqli_num_rows($why_details_data);
                                 <?php
                                 if (!empty($banner_image)) {
                                     echo '<img src="../../uploads/images/' . $banner_image . '" class="img-thumbnail mt-2" width="100" height="100">';
+                                }
+                                ?>
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="banner_mob_image" class="form-label">Banner Mobile Image: </label>
+                                <input class="form-control" type="file" name="banner_mob_image" id="banner_mob_image">
+                                <input type="hidden" name="hidden_banner_mob_image" value="<?php echo $banner_mob_image; ?>">
+                                <?php
+                                if (!empty($banner_mob_image)) {
+                                    echo '<img src="../../uploads/images/' . $banner_mob_image . '" class="img-thumbnail mt-2" width="100" height="100">';
                                 }
                                 ?>
                             </div>

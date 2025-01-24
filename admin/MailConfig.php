@@ -24,17 +24,17 @@ function email($name, $to, $message, $subject)
         }*/
 
         //$from_name  = SMTP_TITLE;
-        $from       = 'dev@clickthedemo.com';
+        $from       = 'dailyalert@tender18.in';
         $to_name = $name;
 
         $mail->isSMTP();                                            //Send using SMTP
-        $mail->Host       = 'mail.clickthedemo.com';                     //Set the SMTP server to send through
+        $mail->Host       = 'email-smtp.ap-south-1.amazonaws.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = 'dev@clickthedemo.com';                     //SMTP username
-        $mail->Password   = 'A7{u2d&wE)do';                               //SMTP password
+        $mail->Username   = 'AKIAYPL3DWHYSKHC2OGG';                     //SMTP username
+        $mail->Password   = 'BLQmCM7s+xhMetgml4334fiQ9gx8op8uGBSA0ckvqmDH';                               //SMTP password
         //$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
         $mail->SMTPSecure = "tls";
-        $mail->Port       = 587;
+        $mail->Port       = 25;
         //Recipients
         $mail->setFrom($from, $to_name);
         // foreach($to as $tonew)

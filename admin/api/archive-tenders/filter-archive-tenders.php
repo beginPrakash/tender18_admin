@@ -399,12 +399,12 @@ function get_results($con, $postData)
         $condition_orderque .= " ELSE " . $k_count . " END, title DESC";
     }
     if(!empty($keyw)):
-        $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition $condition_orderque LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition $condition_orderque LIMIT $offset, $limit");
         
         // $s_condition = str_replace("WHERE","and",$condition);
         // $tender_data = mysqli_query($con, "(SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition) UNION ALL (SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");
     else:
-        $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition order By publish_date desc LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_archive` $condition order By publish_date desc LIMIT $offset, $limit");
     endif;
    
     $tender_result = mysqli_num_rows($tender_data);
@@ -487,6 +487,7 @@ function get_results($con, $postData)
             $result['tenders'][$count]['tender_emd'] = $tender_emd;
             $result['tenders'][$count]['documents'] = "#";
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
+            $result['tenders'][$count]['dep_type'] = $row['department'];
             $count++;
         }
     } else {

@@ -54,6 +54,22 @@ function get_results($con, $postData)
         $cnt++;
     }
 
+    // if (!empty($filter_keyword)) {
+    //     $filter_keyword = trim($filter_keyword);
+    //     $boolean_mode_keyword = "+" . str_replace(" ", " +", $filter_keyword); // Convert to Boolean Mode format
+    //     $condition_key = "";
+    //     $ucondition_key = "";
+        
+    //     // Build the MATCH AGAINST condition
+    //     $condition_key = "MATCH(title, description) AGAINST('$boolean_mode_keyword' IN BOOLEAN MODE)";
+    //     $ucondition_key = "MATCH(title) AGAINST('$boolean_mode_keyword' IN BOOLEAN MODE)";
+        
+    //     // Final WHERE clauses
+    //     $condition_filter .= " $condition_key";
+    //     $filter_keyword = explode(",", $filter_keyword);
+    //     $cnt++;
+    // }
+
     if (!empty($filter_keyword)) {
         $filter_keyword = explode(",", $filter_keyword);
         if (!empty($filter_keyword)) {
@@ -550,6 +566,68 @@ function get_results($con, $postData)
             $condition = "WHERE (" . $whereCondition1 . ")";
         }
 
+
+        // // Initialize components for the WHERE clause
+        // $match_conditions = [];
+        // $not_match_conditions = [];
+        // $additional_conditions = [];
+
+        // // Process $keywords if provided
+        // if (!empty($keywords)) {
+        //     $keywords = explode(',', $keywords);
+        //     foreach ($keywords as $keyword) {
+        //         $match_conditions[] = '+' . str_replace(' ', ' +', trim($keyword)); // Format for BOOLEAN MODE
+        //     }
+        // }
+
+        // // Process $words if provided
+        // if (!empty($words)) {
+        //     $words = explode(',', $words);
+        //     foreach ($words as $word) {
+        //         $match_conditions[] = '+' . str_replace(' ', ' +', trim($word));
+        //     }
+        // }
+
+        // // Combine match conditions for keywords and words
+        // if (!empty($match_conditions)) {
+        //     // Match conditions for inclusion
+        //     $positive_conditions = [];
+        //     // Example: For '+cctv +camera' and '+ecg +machine'
+        //     $positive_keywords = $match_conditions;
+        //     foreach ($positive_keywords as $positive_keyword) {
+        //         $positive_conditions[] = "MATCH(title, description) AGAINST('$positive_keyword' IN BOOLEAN MODE)";
+        //     }
+
+        //     // Combine all match conditions
+        //     $additional_conditions[] = '(' . implode(' OR ', $positive_conditions) . ')';
+        // }
+
+        // // Process $not_used_keywords if provided
+        // if (!empty($not_used_keywords)) {
+        //     $not_used_keywords = explode(',', $not_used_keywords);
+        //     foreach ($not_used_keywords as $not_keyword) {
+        //         $not_match_conditions[] = '+' . str_replace(' ', ' +', trim($not_keyword));
+        //     }
+
+        //     if (!empty($not_match_conditions)) {
+        //         // Match conditions for exclusion
+        //         $negative_conditions = [];
+        //         // Example: For '+ptz +cameras' and '+hard +disk'
+        //         $negative_keywords = $not_match_conditions;
+        //         foreach ($negative_keywords as $negative_keyword) {
+        //             $negative_conditions[] = "MATCH(title, description) AGAINST('$negative_keyword' IN BOOLEAN MODE)";
+        //         }
+
+        //         // Combine all NOT match conditions
+        //         $additional_conditions[] = 'NOT (' . implode(' OR ', $negative_conditions) . ')';
+        //     }
+        // }
+
+        // if (!empty($additional_conditions)) {
+        //     // Combine all conditions into the WHERE clause
+        //     $condition = "WHERE " . implode(" AND ", $additional_conditions);
+        // }
+
         if (empty($condition) && !empty($condition_new)) {
             $condition = preg_replace('/and/', 'where', $condition_new, 1);
         } else {
@@ -612,6 +690,8 @@ function get_results($con, $postData)
     $k_count = count($keywords_arr);
     $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
     if(!empty($keyw)):
+        // $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_posts` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+
         $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_posts` $condition $condition_filter) UNION ALL (SELECT * FROM `tenders_posts` $condition_u $condition_filter) $condition_orderque LIMIT $offset, $limit");
     else:
         $kcounter = 0;
@@ -638,11 +718,14 @@ function get_results($con, $postData)
         endif;
        
         if(!empty($keywords)):
-            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque_key LIMIT $offset, $limit");
+            $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_posts` $condition $condition_filter $condition_orderque_key LIMIT $offset, $limit");
+
+            // $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque_key LIMIT $offset, $limit");
         
         else:
-            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque order by publish_date desc LIMIT $offset, $limit");
-        
+            $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_posts` $condition $condition_filter $condition_orderque order by publish_date desc LIMIT $offset, $limit");
+
+            // $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_filter $condition_orderque order by publish_date desc LIMIT $offset, $limit");
         endif;
         
     endif;
@@ -765,6 +848,7 @@ function get_results($con, $postData)
             $result['tenders'][$count]['tender_emd'] = $tender_emd;
             $result['tenders'][$count]['documents'] = "#";
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
+            $result['tenders'][$count]['dep_type'] = $row['department'];
             $count++;
         }
     } else {

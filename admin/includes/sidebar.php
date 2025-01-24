@@ -23,6 +23,7 @@
     $agency_content_per = _get_user_perby_role($_SESSION['user_id'],'agency_content',$con);
     $keyword_content_per = _get_user_perby_role($_SESSION['user_id'],'keyword_content',$con);
     $meta_content_per = _get_user_perby_role($_SESSION['user_id'],'meta_content',$con);
+    $inquiries_content_per = _get_user_perby_role($_SESSION['user_id'],'inquiries',$con);
 ?>
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -209,26 +210,7 @@
                         <span data-key="t-dashboards">Career</span>
                     </a>
                 </li> -->
-                <?php if($_SESSION['role']=='admin' || $free_quote_form_per == 1) { ?>
-                    <li class="nav-item active">
-                        <a class="nav-link menu-link <?php if ($pages == 'free-quote') {
-                                                            echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/free-quote/index.php">
-                            <i class="ti ti-brand-google-home"></i>
-                            <span data-key="t-dashboards">Get A Free Quote Form</span>
-                        </a>
-                    </li>
-                <?php } ?>
-                <?php if($_SESSION['role']=='admin' || $tender_inquiry_per == 1) { ?>
-                    <li class="nav-item active">
-                        <a class="nav-link menu-link <?php if ($pages == 'tender-inquiry') {
-                                                            echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/tender-inquiry/index.php">
-                            <i class="ti ti-brand-google-home"></i>
-                            <span data-key="t-dashboards">Tender Inquiry</span>
-                        </a>
-                    </li>
-                <?php } ?>
+
                 <?php if($_SESSION['role']=='admin' || $feedback_inquiry_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'feedback-inquiry') {
@@ -249,16 +231,7 @@
                         </a>
                     </li>
                 <?php } ?>
-                <?php if($_SESSION['role']=='admin' || $registration_form_per == 1) { ?>
-                    <li class="nav-item active">
-                        <a class="nav-link menu-link <?php if ($pages == 'registration-form') {
-                                                            echo 'active';
-                                                        } ?>" href="<?php echo ADMIN_URL; ?>/registration-form/index.php">
-                            <i class="ti ti-brand-google-home"></i>
-                            <span data-key="t-dashboards">Registration Form</span>
-                        </a>
-                    </li>
-                <?php } ?>
+              
                 <?php if($_SESSION['role']=='admin' || $smtp_mgmt_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'smtp_mgmt') {
@@ -276,6 +249,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/meta-content/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Meta Content</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $inquiries_content_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'inquiries') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/inquiry/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Inquiries</span>
                         </a>
                     </li>
                 <?php } ?>
