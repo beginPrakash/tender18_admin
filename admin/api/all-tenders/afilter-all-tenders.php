@@ -399,12 +399,12 @@ function get_results($con, $postData)
     }
     
     if(!empty($keyw)):
-        $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_orderque LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_orderque LIMIT $offset, $limit");
         
         // $s_condition = str_replace("WHERE","and",$condition);
         // $tender_data = mysqli_query($con, "(SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition ) UNION ALL (SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");
     else:
-        $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_orderque  order by `publish_date` desc LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_orderque  order by `publish_date` desc LIMIT $offset, $limit");
     endif;
    
     $tender_result = mysqli_num_rows($tender_data);
@@ -487,13 +487,39 @@ function get_results($con, $postData)
             $result['tenders'][$count]['tender_emd'] = $tender_emd;
             $result['tenders'][$count]['documents'] = "#";
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
+            $result['tenders'][$count]['dep_type'] = $row['department'];
             $count++;
         }
     } else {
         $result['tenders'] = [];
     }
 
-    
+    $meta_arr = [];
+
+    $meta_data = mysqli_query($con, "SELECT `title`,`description`,`keywords`,`h1`,`content` FROM `all_tenders_meta_content` where id=1 ");
+    $meta_result = mysqli_num_rows($meta_data);
+    if ($meta_result == 1) {
+        while ($row = mysqli_fetch_assoc($meta_data)) {
+            $meta_arr =  $row;
+        }
+    }
+
+
+
+    if(!empty($meta_arr)){
+        $result['meta']['title'] = $meta_arr['title'];
+        $result['meta']['description'] = $meta_arr['description'];
+        $result['meta']['keywords'] = $meta_arr['keywords'];
+        $result['meta']['h1'] = $meta_arr['h1'];
+        $result['meta']['content'] = $meta_arr['content'];
+    }else{
+        $result['meta']['title'] = '';
+        $result['meta']['description'] = '';
+        $result['meta']['keywords'] = '';
+        $result['meta']['h1'] = '';
+        $result['meta']['content'] = '';
+        $result['meta']['label'] = '';
+    }
     
     if ($total > 1) {
         if ($page == 2) {
@@ -531,6 +557,6 @@ function get_results($con, $postData)
 if ($result === null) {
     echo json_encode(array("status" => "error"));
 } else {
-    echo json_encode(array("status" => " success", "data" => $result));
+    echo json_encode(array("status" => " success", "data" => $result),JSON_PARTIAL_OUTPUT_ON_ERROR);
 }
 die();

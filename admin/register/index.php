@@ -188,20 +188,11 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Archive Tenders</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['free_quote_form']">
-                                    <label class="form-check-label">Free Quote Form</label>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['inquiries']">
+                                    <label class="form-check-label">Inquiries</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['tender_inquiry']">
-                                    <label class="form-check-label">Tender Inquiry</label>
-                                </div>
-                                <div class="col-lg-3">
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['registration_form']">
-                                    <label class="form-check-label"> Registration Form</label>
-                                </div>
-                            </div>
+                           
                             <div class="row">
                                 <div class="col-lg-3">
                                     <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['feedback_inquiry']">

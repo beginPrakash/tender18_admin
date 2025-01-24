@@ -21,9 +21,15 @@ function get_results($con)
     $bannerResult = mysqli_num_rows($bannerData);
     if ($bannerResult == 1) {
         while ($row = mysqli_fetch_assoc($bannerData)) {
+            if(!empty($row['mobile_image'])){
+                $mobile_image = $row['mobile_image'];
+            }else{
+                $mobile_image = $row['image'];
+            }
             $result['main']['title'] = htmlspecialcode_generator($row['title']);
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
             $result['main']['image'] = ADMIN_URL . 'uploads/images/' . $row['image'];
+            $result['main']['mobile_image'] = ADMIN_URL . 'uploads/images/' . $mobile_image;
         }
     } else {
         $result['main'] = "No data found";

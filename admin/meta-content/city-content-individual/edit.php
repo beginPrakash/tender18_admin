@@ -36,7 +36,7 @@ if (isset($_POST['submit'])) {
     $result_data = mysqli_num_rows($select);
     $pass = mysqli_fetch_assoc($select);
     if ($result_data == 1) {
-        $q1 = "UPDATE `city_meta_content_individual` SET `title`='$title', `description`='$description', `keywords`='$keywords', `h1`='$h1', `content`='$content' WHERE `id`=$city_id";
+        $q1 = "UPDATE `city_meta_content_individual` SET `title`='$title', `description`='$description', `keywords`='$keywords', `h1`='$h1', `content`='$content' WHERE `city_id`=$city_id";
     }else{
         $q1 = "INSERT INTO city_meta_content_individual(`title`, `description`, `keywords`, `h1`, `content`, `city_id`) VALUES ('$title', '$description', '$keywords','$h1','$content',$city_id)";
     }

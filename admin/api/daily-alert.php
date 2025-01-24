@@ -35,7 +35,7 @@ function daily_alert($con, $postData)
     $mobile = mysqli_real_escape_string($con, $postData['mobile']);
     $state = mysqli_real_escape_string($con, $postData['state']);
 
-    $q1 = "INSERT INTO daily_alert_form(`name`, `company_name`, `email`, `mobile`, `state`) VALUES ('$name', '$company_name', '$email', '$mobile', '$state')";
+    $q1 = "INSERT INTO inquiries(`name`, `company_name`, `email`, `mobile`, `state`,`type`) VALUES ('$name', '$company_name', '$email', '$mobile', '$state','get_quote_form')";
     mysqli_query($con, $q1);
 
     $mail_name = 'Tender18';

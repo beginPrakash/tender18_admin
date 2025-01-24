@@ -54,6 +54,22 @@ function get_results($con, $postData)
         $cnt++;
     }
 
+    // if (!empty($filter_keyword)) {
+    //     $filter_keyword = trim($filter_keyword);
+    //     $boolean_mode_keyword = "+" . str_replace(" ", " +", $filter_keyword); // Convert to Boolean Mode format
+    //     $condition_key = "";
+    //     $ucondition_key = "";
+        
+    //     // Build the MATCH AGAINST condition
+    //     $condition_key = "MATCH(title, description) AGAINST('$boolean_mode_keyword' IN BOOLEAN MODE)";
+    //     $ucondition_key = "MATCH(title) AGAINST('$boolean_mode_keyword' IN BOOLEAN MODE)";
+        
+    //     // Final WHERE clauses
+    //     $condition .= " $condition_key";
+    //     $filter_keyword = explode(",", $filter_keyword);
+    //     $cnt++;
+    // }
+
     if (!empty($filter_keyword)) {
         $filter_keyword = explode(",", $filter_keyword);
         if (!empty($filter_keyword)) {
@@ -391,12 +407,17 @@ function get_results($con, $postData)
         $condition_orderque .= " ELSE " . $k_count . " END, title ASC";
     }
     if(!empty($keyw)):
+        // $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_live` $condition $condition_orderque LIMIT $offset, $limit");
+
         $s_condition = str_replace("WHERE","and",$condition);
         $tender_data = mysqli_query($con, "(SELECT * FROM `tenders_live` $condition) UNION ALL (SELECT * FROM `tenders_live` $condition_u $s_condition) $condition_orderque LIMIT $offset, $limit");
     else:
-        $tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` $condition $condition_orderque order by publish_date desc LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_live` $condition $condition_orderque order by `publish_date` desc LIMIT $offset, $limit");
+        
+        //$tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` $condition $condition_orderque order by publish_date desc LIMIT $offset, $limit");
     endif;
     //echo "(SELECT * FROM `tenders_live` $condition $condition_filter) UNION ALL (SELECT * FROM `tenders_live` $condition_u) $condition_orderque LIMIT $offset, $limit";exit;
+    
     $tender_result = mysqli_num_rows($tender_data);
     if ($limit > $total_query) {
         $limit = $total_query;
@@ -477,6 +498,7 @@ function get_results($con, $postData)
             $result['tenders'][$count]['tender_emd'] = $tender_emd;
             $result['tenders'][$count]['documents'] = "#";
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
+            $result['tenders'][$count]['dep_type'] = $row['department'];
             $count++;
         }
     } else {

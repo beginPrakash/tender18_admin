@@ -52,7 +52,7 @@ function daily_alert($con, $postData)
 
     $escapedTextData = mysqli_real_escape_string($con, $description);
 
-    $q1 = "INSERT INTO registration_form(`name`, `company_name`, `email`, `mobile`, `state`, `description`) VALUES ('$name', '$company_name', '$email', '$mobile', '$state', '$escapedTextData')";
+    $q1 = "INSERT INTO inquiries(`company_name`, `email`, `mobile`, `state`, `description`,`type`) VALUES ('$name', '$company_name', '$email', '$mobile', '$state', '$escapedTextData','registration_form')";
     mysqli_query($con, $q1);
 
     $result['name'] = htmlspecialcode_generator($name);

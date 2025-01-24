@@ -1150,7 +1150,7 @@ function get_results($con, $postData)
         // }
 
 
-        // Initialize components for the WHERE clause
+       // Initialize components for the WHERE clause
         $match_conditions = [];
         $not_match_conditions = [];
         $additional_conditions = [];
@@ -1171,10 +1171,18 @@ function get_results($con, $postData)
             }
         }
 
-        // Combine match conditions
+        // Combine match conditions for keywords and words
         if (!empty($match_conditions)) {
-            $boolean_mode_match = implode(' ', $match_conditions);
-            $additional_conditions[] = "MATCH(title, description) AGAINST('$boolean_mode_match' IN BOOLEAN MODE)";
+            // Match conditions for inclusion
+            $positive_conditions = [];
+            // Example: For '+cctv +camera' and '+ecg +machine'
+            $positive_keywords = $match_conditions;
+            foreach ($positive_keywords as $positive_keyword) {
+                $positive_conditions[] = "MATCH(title, description) AGAINST('$positive_keyword' IN BOOLEAN MODE)";
+            }
+
+            // Combine all match conditions
+            $additional_conditions[] = '(' . implode(' OR ', $positive_conditions) . ')';
         }
 
         // Process $not_used_keywords if provided
@@ -1183,9 +1191,18 @@ function get_results($con, $postData)
             foreach ($not_used_keywords as $not_keyword) {
                 $not_match_conditions[] = '+' . str_replace(' ', ' +', trim($not_keyword));
             }
+
             if (!empty($not_match_conditions)) {
-                $boolean_mode_not_match = implode(' ', $not_match_conditions);
-                $additional_conditions[] = "NOT MATCH(title, description) AGAINST('$boolean_mode_not_match' IN BOOLEAN MODE)";
+                // Match conditions for exclusion
+                $negative_conditions = [];
+                // Example: For '+ptz +cameras' and '+hard +disk'
+                $negative_keywords = $not_match_conditions;
+                foreach ($negative_keywords as $negative_keyword) {
+                    $negative_conditions[] = "MATCH(title, description) AGAINST('$negative_keyword' IN BOOLEAN MODE)";
+                }
+
+                // Combine all NOT match conditions
+                $additional_conditions[] = 'NOT (' . implode(' OR ', $negative_conditions) . ')';
             }
         }
 
@@ -1333,7 +1350,7 @@ function get_results($con, $postData)
     
 
     if(!empty($keyw)):
-        $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
+        $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque LIMIT $offset, $limit");
 
         // $tender_data = mysqli_query($con, "(SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter ) UNION ALL (SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition_u $condition_filter) $condition_orderque LIMIT $offset, $limit");
 
@@ -1386,13 +1403,13 @@ function get_results($con, $postData)
        
 
         if(!empty($keywords)):
-            $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque_key LIMIT $offset, $limit");
+            $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque_key LIMIT $offset, $limit");
 
         
 
         else:
 
-            $tender_data = mysqli_query($con, "SELECT `ref_no`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque order by publish_date desc LIMIT $offset, $limit");
+            $tender_data = mysqli_query($con, "SELECT `ref_no`,`department`,`city`,`state`,`pincode`,`title`,`agency_type`,`publish_date`,`due_date`,`tender_value`,`tender_fee`,`tender_emd` FROM `tenders_all` $condition $condition_filter $condition_orderque order by publish_date desc LIMIT $offset, $limit");
 
         
 
@@ -1629,6 +1646,7 @@ function get_results($con, $postData)
             $result['tenders'][$count]['documents'] = "#";
 
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
+            $result['tenders'][$count]['dep_type'] = $row['department'];
 
             $count++;
 

@@ -67,6 +67,31 @@ if (isset($_GET['move'])) {
     $trun = mysqli_query($con, "TRUNCATE TABLE `tenders_posts`");  
 }
 
+if (isset($_GET['amove'])) {
+    //echo "come";die();
+    $c_date = date('Y-m-d');
+
+    $amove = mysqli_query($con, "INSERT INTO `tenders_archive` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at)
+    SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at 
+    FROM `tenders_posts` where due_date < '$c_date'");
+
+    $status = true;
+    if ($status) {
+        if ($amove) {
+            $affected_rows = mysqli_affected_rows($con);
+            if ($affected_rows > 0) {
+                $_SESSION['success'] = 'Moved successfully.';
+            } else {
+                $_SESSION['error'] = 'No records moved.';
+            }
+        }
+    } else {
+        $_SESSION['error'] = 'Something went wrong.';
+    }
+    
+    $trun = mysqli_query($con, "DELETE FROM `tenders_posts` where due_date < '$c_date'");  
+}
+
 ?>
 <?php
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
@@ -230,6 +255,11 @@ if (!empty($_SESSION['error'])) {
                     <div class="col col-2 float-end">
                         <a href="<?php echo ADMIN_URL; ?>tenders/index.php?move=true" class="move" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center-01">
                             <h5 class="card-title btn w-100 bg-primary text-white">Move to Live Tenders</h5>
+                        </a>
+                    </div>
+                    <div class="col col-2 float-end">
+                        <a href="<?php echo ADMIN_URL; ?>tenders/index.php?amove=true" class="amove" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center-02">
+                            <h5 class="card-title btn w-100 bg-primary text-white">Move to Archive Tenders</h5>
                         </a>
                     </div>
                 </div>
@@ -428,6 +458,30 @@ if (!empty($_SESSION['error'])) {
                             </div>
                             <!-- /.modal-dialog -->
                         </div>
+
+                        <div class="modal fade bs-example-modal-center-02" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-body text-center p-5">
+                                        <i class="bi bi-exclamation-triangle text-warning display-5"></i>
+                                        <div class="mt-4">
+                                            <h4 class="mb-3">Are you sure you want to move all tenders to archive tenders?</h4>
+                                            <p class="text-muted mb-4">
+                                                If you click the move button, the data will be moved from the new tenders to archive tenders and you can not retrieve this data again.
+                                            </p>
+                                            <div class="hstack gap-2 justify-content-center">
+                                                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <a href="javascript:void(0);" class="btn btn-danger">Move</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- /.modal-content -->
+                            </div>
+                            <!-- /.modal-dialog -->
+                        </div>
                     </tbody>
                 </table>
                 <div class="row">
@@ -537,6 +591,12 @@ if (!empty($_SESSION['error'])) {
         e.preventDefault();
         var url = $(this).attr('href');
         $('.bs-example-modal-center-01 a.btn.btn-danger').prop('href', url);
+    });
+
+    $('.card-header a.amove').click(function(e) {
+        e.preventDefault();
+        var url = $(this).attr('href');
+        $('.bs-example-modal-center-02 a.btn.btn-danger').prop('href', url);
     });
 </script>
 

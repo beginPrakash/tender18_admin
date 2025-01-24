@@ -33,9 +33,16 @@ if (isset($_POST['importSubmit'])) {
             while(($line = fgetcsv($csvFile)) !== FALSE){      
                 // Get row data
                 $name   = $line[0];
-                $q = "INSERT INTO keywords(`name`) VALUES ('$name')";
+                $key_data = mysqli_query($con, "SELECT * FROM `keywords` where name like '%$name%'");
+$exist_result = mysqli_num_rows($key_data);
+
+if ($exist_result == 0) {
+    $q = "INSERT INTO keywords(`name`) VALUES ('$name')";
 
                 $sql = mysqli_query($con, $q);
+}
+               
+                
             }
             // Close opened CSV file
             fclose($csvFile);

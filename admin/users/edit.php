@@ -218,23 +218,12 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Archive Tenders</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <?php $quote_per = _get_user_perby_role($_GET['id'],'free_quote_form',$con); ?>
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($quote_per == '1') ? 'checked' : '';?> name="user_permis['free_quote_form']">
-                                    <label class="form-check-label">Free Quote Form</label>
+                                    <?php $inquiry_per = _get_user_perby_role($_GET['id'],'inquiries',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($inquiry_per == '1') ? 'checked' : '';?> name="user_permis['inquiries']">
+                                    <label class="form-check-label">Inquiries</label>
                                 </div>
                             </div>
-                            <div class="row">
-                                <div class="col-lg-3">
-                                    <?php $inquiry_per = _get_user_perby_role($_GET['id'],'tender_inquiry',$con); ?>
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($inquiry_per == '1') ? 'checked' : '';?> name="user_permis['tender_inquiry']">
-                                    <label class="form-check-label">Tender Inquiry</label>
-                                </div>
-                                <div class="col-lg-3">
-                                    <?php $reg_per = _get_user_perby_role($_GET['id'],'registration_form',$con); ?>
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($reg_per == '1') ? 'checked' : '';?> name="user_permis['registration_form']">
-                                    <label class="form-check-label"> Registration Form</label>
-                                </div>
-                            </div>
+                            
                             <div class="row">
                                 <div class="col-lg-3">
                                     <?php $feedback_per = _get_user_perby_role($_GET['id'],'feedback_inquiry',$con); ?>
