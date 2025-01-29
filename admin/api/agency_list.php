@@ -88,7 +88,31 @@ if ($result === null) {
 
 } else {
 
-    echo json_encode(array("status" => " success", "data" => $result),JSON_PARTIAL_OUTPUT_ON_ERROR);
+    // Ensure UTF-8 encoding
+function utf8ize($data) {
+    if (is_array($data)) {
+        return array_map('utf8ize', $data);
+    } elseif (is_string($data)) {
+        return mb_convert_encoding($data, 'UTF-8', 'UTF-8');
+    }
+    return $data;
+}
+
+$withque_data = utf8ize($result);
+
+function remove_question_marks($data) {
+    if (is_array($data)) {
+        return array_map('remove_question_marks', $data);
+    } elseif (is_string($data)) {
+        return str_replace('?', ' ', $data); // Remove "?"
+    }
+    return $data;
+}
+
+$data = remove_question_marks($withque_data);
+
+
+    echo json_encode(array("status" => " success", "data" => $data));
 
 }
 
