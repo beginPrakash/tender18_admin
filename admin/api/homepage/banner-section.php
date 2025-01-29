@@ -26,8 +26,8 @@ function get_results($con)
             }else{
                 $mobile_image = $row['image'];
             }
-            $result['main']['title'] = htmlspecialcode_generator($row['title']);
-            $result['main']['description'] = htmlspecialcode_generator($row['description']);
+            $result['main']['title'] = $row['title'];
+            $result['main']['description'] = $row['description'];
             $result['main']['image'] = ADMIN_URL . 'uploads/images/' . $row['image'];
             $result['main']['mobile_image'] = ADMIN_URL . 'uploads/images/' . $mobile_image;
         }

@@ -17,6 +17,13 @@ switch ($endpoint) {
 function get_results($con)
 {
     // return $con;
+    $header_data = mysqli_query($con, "SELECT * FROM `header`");
+    $header_result = mysqli_num_rows($header_data);
+    if ($header_result == 1) {
+        while ($row = mysqli_fetch_assoc($header_data)) {
+            $result['main']['whatsapp_num'] = $row['whatsapp_num'];
+        }
+    }
     $footerData = mysqli_query($con, "SELECT * FROM `footer`");
     $footerResult = mysqli_num_rows($footerData);
     if ($footerResult == 1) {
