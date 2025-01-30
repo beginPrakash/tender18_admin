@@ -30,8 +30,8 @@ function email($name, $to, $message, $subject)
         $mail->isSMTP();                                            //Send using SMTP
         $mail->Host       = 'email-smtp.ap-south-1.amazonaws.com';                     //Set the SMTP server to send through
         $mail->SMTPAuth   = true;                                   //Enable SMTP authentication
-        $mail->Username   = 'AKIAYPL3DWHYSKHC2OGG';                     //SMTP username
-        $mail->Password   = 'BLQmCM7s+xhMetgml4334fiQ9gx8op8uGBSA0ckvqmDH';                               //SMTP password
+        $mail->Username   = 'AKIAYPL3DWHYRXXFOMMI';                     //SMTP username
+        $mail->Password   = 'BFM8PqrvIDPS3k6ZT88CWXOTGeZVeGOMIxGTncaX6Z+b';                               //SMTP password
         //$mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;         //Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` encouraged
         $mail->SMTPSecure = "tls";
         $mail->Port       = 25;
@@ -80,7 +80,7 @@ function email($name, $to, $message, $subject)
         // $mail->AltBody = 'This is the body in plain text for non-HTML mail clients';
 
         $mail->send();
-        // echo 'Message has been sent';
+         //echo 'Message has been sent';
     } catch (Exception $e) {
         //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }

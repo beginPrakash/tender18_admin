@@ -459,6 +459,7 @@ function get_results($con, $postData)
             $result['tenders'][$count]['tender_emd'] = $tender_emd;
             $result['tenders'][$count]['documents'] = "#";
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
+            $result['tenders'][$count]['dep_type'] = $row['department'];
             $count++;
         }
     } else {
