@@ -341,9 +341,10 @@ function get_results($con, $postData)
     $total = ceil($total_query / $limit);
     $page = isset($postData['page_no']) ? abs((int) $postData['page_no']) : 1;
     $offset = ($page * $limit) - $limit;
-        $kcounter = 0;
+    $kcounter = 0;
         $ks=0;
         $keyword_key_val = '';
+        $condition_orderque_key='';
         if(!empty($keywords)):
            foreach ($keywords as $key => $value) {
                     if ($kcounter == 0 && $key <= 0) {
@@ -457,6 +458,7 @@ function get_results($con, $postData)
             $result['tenders'][$count]['tender_emd'] = $tender_emd;
             $result['tenders'][$count]['documents'] = "#";
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
+            $result['tenders'][$count]['dep_type'] = $row['department'];
             $count++;
         }
     } else {

@@ -415,17 +415,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     }
                                 }
 
+                                $dep_type = "";
+                                $dep_text = "";
+                                if($row['department'] == 'gem'){
+                                    $dep_text = "Source :";
+                                    $dep_type = "GEM Tenders";
+                                }
+
                                 //print_r($row);exit;
                                 $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0" style="padding-top:10px;"><tr style="background-color:#fff;"><td>';
                                 $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
                                     <tr style="background-color:#016492;color:#fff !important">
                                         <!-- Left Column -->
-                                        <td style="width:50%; padding: 10px;">
+                                        <td style="width:30%; padding: 10px;">
                                         <h6 style="margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">T18 Ref No : <span style="font-weight: 400;text-transform: capitalize;">'.$row['ref_no'].'</span></h6>
                                         </td>
                                         <!-- Right Column -->
-                                        <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Location : <span style="font-weight: 400;text-transform: capitalize;">'.$row['city'].', '.$row['state'].'</span></h6>
+                                        <td style="width:40%; padding: 10px;">
+                                        <h6 style="text-align:center;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Location : <span style="font-weight: 400;text-transform: capitalize;">'.$row['city'].', '.$row['state'].'</span></h6>
+                                        </td>
+                                        <td style="width:30%; padding: 10px;">
+                                        <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">'.$dep_text.' <span style="font-weight: 400;text-transform: capitalize;">'.$dep_type.'</span></h6>
                                         </td>
                                     </tr>
                                 </table>';
