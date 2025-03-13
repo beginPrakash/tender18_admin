@@ -13,7 +13,7 @@
             <p><b>Dear M/s. {{company_name}}</b></p>
             <p>Greetings from <a href="www.Tender18.com">www.Tender18.com</a></p>
             <p>We found following New Tenders related to your Product & Services.</p>
-            <p>The list of Today’s New Tenders - <b>{{cdate}}</b> is provided below.</p>
+            <p>The list of {{decoded_text}} New Tenders - <b>{{cdate}}</b> is provided below.</p>
             <h3><a href="{{HOME_URL}}user/new-tenders?id={{user_unique_id}}" class="btn" style="padding: 8px 33px;border-radius: 2px;font-family: Helvetica, Arial, sans-serif;font-size: 14px;color: #fff!important; text-decoration: none;font-weight: bold;display: inline-block;  background-color:#016492;">New Tenders</a></h3>
             <p>For any further assistance, email us at <a href="support@tender18.in">support@tender18.in</a> or contact our custom support on below Numbers.</p>
             <p>Warm regards,</p>

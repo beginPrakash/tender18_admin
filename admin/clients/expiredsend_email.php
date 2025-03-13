@@ -11,7 +11,7 @@ function highlightSearchTerm($text, $searchTerm)
             // $highlightedTerm = "<b>$searchTerm</b>";
             // return str_ireplace($searchTerm, $highlightedTerm, $text);
     
-            $highlightMarkup = '<strong style=color:#cb192d>';
+            $highlightMarkup = '<strong style=color:#cb192d;margin-right:3px;>';
             $closingHighlightMarkup = '</strong>';
             $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
             return $highlightedText;
@@ -70,7 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if($mail_type == 'link'):
                         
                         $template = file_get_contents('../clients/link_email_template.php');
-                        
+                        $texts = "Today's";
+                        $decoded_text = html_entity_decode($texts, ENT_QUOTES, 'UTF-8');
+                        $template = str_replace('{{decoded_text}}', $decoded_text, $template);
                         $template = str_replace('{{company_name}}', $company_name, $template);
                         $template = str_replace('{{cdate}}', $cdate, $template);
                         $template = str_replace('{{user_unique_id}}', $user_unique_id, $template);
@@ -473,7 +475,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         }
         
                         $template = file_get_contents('../clients/list_email_template.php');
-                    
+                        $texts = "Today's";
+                        $decoded_text = html_entity_decode($texts, ENT_QUOTES, 'UTF-8');
+                        $template = str_replace('{{decoded_text}}', $decoded_text, $template);
                         $template = str_replace('{{company_name}}', $company_name, $template);
                         $template = str_replace('{{cdate}}', $cdate, $template);
                         $template = str_replace('{{user_unique_id}}', $user_unique_id, $template);
