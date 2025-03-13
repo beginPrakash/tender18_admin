@@ -61,7 +61,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                         window.location.href='" . ADMIN_URL . "/meta-content/city-content-individual/index.php';
+                         window.location.href='" . ADMIN_URL . "/meta-content/city-content-individual/edit.php?id=".$_POST['city_id']."';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -127,6 +127,25 @@ if (!empty($_SESSION['error'])) {
             
                 }
             
+            }else{
+
+            $header_data = mysqli_query($con, "SELECT * FROM `city_meta_content`");
+
+            $header_result = mysqli_num_rows($header_data);
+
+            if ($header_result == 1) {
+
+                while ($row = mysqli_fetch_assoc($header_data)) {
+                    $title = $row['title'];
+                    $description = $row['description'];
+                    $content = $row['content'];
+                    $keywords = $row['keywords'];
+                    $h1 = $row['h1'];
+
+                }
+
+            }
+
             }
 
             $select = mysqli_query($con, "SELECT * FROM `tender_zipcodes` WHERE  `id`={$_GET['id']}");

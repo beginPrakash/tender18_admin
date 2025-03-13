@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body style="font-family: Arial, sans-serif;line-height: 1.6;">
     <div class="container" style="width: 80%;margin: 0 auto;padding: 20px;background-color: #f4f4f4;">
@@ -15,7 +14,7 @@
             <p><b>Dear M/s. {{company_name}}</b></p>
             <p>Greetings from <a href="www.Tender18.com">www.Tender18.com</a></p>
             <p>We found following New Tenders related to your Product & Services.</p>
-            <p>The list of {{decoded_text}} New Tenders - <b>{{cdate}}</b> is provided below.</p>
+            <p>The list of Today’s New Tenders - <b>{{cdate}}</b> is provided below.</p>
                     
                 {{ar}}
 

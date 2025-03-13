@@ -892,6 +892,6 @@ function get_results($con, $postData)
 if ($result === null) {
     echo json_encode(array("status" => "error"));
 } else {
-    echo json_encode(array("status" => " success", "data" => $result));
+    echo json_encode(array("status" => " success", "data" => $result),JSON_PARTIAL_OUTPUT_ON_ERROR);
 }
 die();
