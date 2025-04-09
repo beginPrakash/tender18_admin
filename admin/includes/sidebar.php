@@ -24,6 +24,7 @@
     $keyword_content_per = _get_user_perby_role($_SESSION['user_id'],'keyword_content',$con);
     $meta_content_per = _get_user_perby_role($_SESSION['user_id'],'meta_content',$con);
     $inquiries_content_per = _get_user_perby_role($_SESSION['user_id'],'inquiries',$con);
+    $cms_customer_per = _get_user_perby_role($_SESSION['user_id'],'cms_customer',$con);
 ?>
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -259,6 +260,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/inquiry/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Inquiries</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $cms_customer_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'cms_customer') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/cms_customer/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">CMS Customer</span>
                         </a>
                     </li>
                 <?php } ?>
