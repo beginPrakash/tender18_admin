@@ -18,9 +18,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($banner_result == 1) {
         while ($row = mysqli_fetch_assoc($banner_data)) {
             $cms_emailids = $row['email_ids'];
+            $mobile_no= $row['mobile_no'];
             $company_name= $row['company_name'];
             $keywords= $row['keywords'];
-            $mobile_no= $row['mobile_no'];
         }
     }
 
@@ -70,7 +70,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $HOME_URL = HOME_URL;
         $mail = new PHPMailer(true);
         $cdate = date('M d, Y');
-       
+
+
             $ar = '';
             //echo "SELECT * FROM `tenders_posts` $condition order by id desc";exit;
 
@@ -99,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $condition_orderque_key .= " ELSE " . $keys_count . " END, title ASC";
             endif;
 
-            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` WHERE id IN ($ids) $condition_orderque_key");
+            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_live` WHERE id IN ($ids) $condition_orderque_key");
             $tender_result = mysqli_num_rows($tender_data);
             if ($tender_result > 0) {
                 while ($row = mysqli_fetch_assoc($tender_data)) {
@@ -276,15 +277,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } catch (Exception $e) {
                 //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
             }
-       
+        
                 
         if($mcount > 0){
             echo "<script>
-            window.location.href='" . ADMIN_URL . "cms_tender/index.php?id=".$cms_id."&st=1';
+            window.location.href='" . ADMIN_URL . "cms_tender/live.php?id=".$cms_id."&st=1';
             </script>";
         }else{
             echo "<script>
-        window.location.href='" . ADMIN_URL . "cms_tender/index.php?id=".$cms_id."&st=0';
+        window.location.href='" . ADMIN_URL . "cms_tender/live.php?id=".$cms_id."&st=0';
         </script>";
         }
         

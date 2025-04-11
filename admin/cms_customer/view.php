@@ -36,7 +36,7 @@ $customer_id = "";
 $company_name = "";
 $customer_name = "";
 $email_ids = "";
-$mail_type = "";
+$mobile_no = "";
 $keywords = "";
 $words = "";
 $not_used_keywords = "";
@@ -56,7 +56,7 @@ if ($banner_result == 1) {
         $company_name = $row['company_name'];
         $customer_name = $row['customer_name'];
         $email_ids = $row['email_ids'];
-        $mail_type = $row['mail_type'];
+        $mobile_no = $row['mobile_no'];
         $keywords = $row['keywords'];
         $words = $row['words'];
         $not_used_keywords = $row['not_used_keywords'];
@@ -99,7 +99,7 @@ if ($banner_result == 1) {
                     </div>
                     <div class="col-xxl-12 col-md-12">
                         <div class="col-md-6">
-                            <label for="mobile" class="form-label"><b>Mail Type :</b></label> <?php echo $mail_type; ?>
+                            <label for="mobile" class="form-label"><b>Mobile No :</b></label> <?php echo $mobile_no; ?>
                         </div>
                     </div>
                     <div class="col-xxl-12 col-md-12">

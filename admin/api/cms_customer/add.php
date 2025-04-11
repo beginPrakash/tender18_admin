@@ -63,7 +63,7 @@ function get_results($con, $postData)
     $company_name = mysqli_real_escape_string($con, $postData['company_name']);
     $customer_name = mysqli_real_escape_string($con, $postData['customer_name']);
     $email_ids = mysqli_real_escape_string($con, $postData['email_ids']);
-    $mail_type = mysqli_real_escape_string($con, $postData['mail_type']);
+    $mobile_no = mysqli_real_escape_string($con, $postData['mobile_no']);
     $keywords = mysqli_real_escape_string($con, $postData['keywords']);
     $words = mysqli_real_escape_string($con, $postData['words']);
     $not_used_keywords = mysqli_real_escape_string($con, $postData['not_used_keywords']);
@@ -83,11 +83,11 @@ function get_results($con, $postData)
     $result = [];
 
     if ($user_result == 1) {
-        $q1 = "UPDATE `cms_customer` SET `company_name`='$company_name', `customer_name`='$customer_name', `email_ids`='$email_ids', `mail_type`='$mail_type', `keywords`='$keywords', `words`='$words', `not_used_keywords`='$not_used_keywords', `filter_city`='$filter_city', `filter_state`='$filter_state', `filter_tender_value`='$filter_tender_value', `filter_agency`='$filter_agency', `company_name`='$company_name', `filter_department`='$filter_department', `filter_type`='$filter_type',`sender_email_id`='$sender_email_id', `reply_email_id` = '$reply_email_id' WHERE `customer_id`='$customer_id'";
+        $q1 = "UPDATE `cms_customer` SET `company_name`='$company_name', `customer_name`='$customer_name', `email_ids`='$email_ids', `keywords`='$keywords', `words`='$words', `not_used_keywords`='$not_used_keywords', `filter_city`='$filter_city', `filter_state`='$filter_state', `filter_tender_value`='$filter_tender_value', `filter_agency`='$filter_agency', `company_name`='$company_name', `filter_department`='$filter_department', `filter_type`='$filter_type',`sender_email_id`='$sender_email_id', `reply_email_id` = '$reply_email_id', `mobile_no` = '$mobile_no' WHERE `customer_id`='$customer_id'";
             
     }else{
-        $q1 = "INSERT INTO cms_customer(`customer_id`, `company_name`, `customer_name`, `email_ids`, `mail_type`,`keywords`,`words`,`not_used_keywords`,`filter_city`,`filter_state`,`filter_tender_value`,`filter_agency`,`filter_department`,`filter_type`,`sender_email_id`,`reply_email_id`) 
-        VALUES ('$customer_id', '$company_name', '$customer_name', '$email_ids', '$mail_type','$keywords','$words','$not_used_keywords','$filter_city','$filter_state','$filter_tender_value','$filter_agency','$filter_department','$filter_type','$sender_email_id','$reply_email_id')";
+        $q1 = "INSERT INTO cms_customer(`customer_id`, `company_name`, `customer_name`, `email_ids`,`keywords`,`words`,`not_used_keywords`,`filter_city`,`filter_state`,`filter_tender_value`,`filter_agency`,`filter_department`,`filter_type`,`sender_email_id`,`reply_email_id`,`mobile_no`) 
+        VALUES ('$customer_id', '$company_name', '$customer_name', '$email_ids','$keywords','$words','$not_used_keywords','$filter_city','$filter_state','$filter_tender_value','$filter_agency','$filter_department','$filter_type','$sender_email_id','$reply_email_id','$mobile_no')";
         
         }
       
