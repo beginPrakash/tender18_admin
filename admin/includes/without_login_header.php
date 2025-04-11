@@ -34,7 +34,7 @@
   <input type="hidden" value="<?php echo ADMIN_URL; ?>" id="admin_url">
   <!-- Begin page -->
   <div id="layout-wrapper">
-    <?php include 'sidebar.php' ?>
+    <?php include 'sidebar_cms.php' ?>
     <!-- Vertical Overlay-->
     <div class="vertical-overlay"></div>
     <header id="page-topbar">

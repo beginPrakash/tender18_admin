@@ -22,7 +22,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/cms_tender/index.php?id=".$_GET['id'].";
+                        window.location.href='" . ADMIN_URL . "/cms_tender/live.php?id=".$_GET['id'].";
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -44,7 +44,6 @@ if (!empty($_SESSION['error'])) {
                  
              </script>";
 }
-
 function highlightSearchTerm($text, $searchTerm)
 {
     // $highlightedTerm = "<b>$searchTerm</b>";
@@ -55,7 +54,6 @@ function highlightSearchTerm($text, $searchTerm)
     $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
     return $highlightedText;
 }
-
 ?>
 <style>
     td {
@@ -71,13 +69,12 @@ function highlightSearchTerm($text, $searchTerm)
         word-wrap: break-word;
         white-space: normal !important;
     }
-   
 </style>
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">New Tenders</h4>
+            <h4 class="mb-sm-0">Live Tenders</h4>
         </div>
     </div>
 </div>
@@ -90,12 +87,12 @@ function highlightSearchTerm($text, $searchTerm)
                 <div class="row">
                     <div class="col-2">
                         <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>cms_tender/index.php?id=<?php echo $_GET['id']; ?>">
-                            <h5 class="card-title btn w-100 bg-primary text-white">New Tenders</h5>
+                            <h5 class="card-title btn w-100 tend_btn text-white">New Tenders</h5>
                         </a>
                     </div>
                     <div class="col-2">
                         <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>cms_tender/live.php?id=<?php echo $_GET['id']; ?>">
-                            <h5 class="card-title btn w-100 text-white tend_btn">Live Tenders</h5>
+                            <h5 class="card-title btn w-100 text-white bg-primary">Live Tenders</h5>
                         </a>
                     </div>
                     <div class="col-2">
@@ -122,7 +119,7 @@ function highlightSearchTerm($text, $searchTerm)
                     }
                 }
                 ?>
-            <form id="deleteForm" method="POST" action="send_email.php">
+            <form id="deleteForm" method="POST" action="livesend_email.php">
                 <input type="hidden" name="ids" id="ids">
                 <input type="hidden" name="cust_from_email" value="<?php echo $cust_from_email; ?>">
                 <input type="hidden" name="cust_reply_email" value="<?php echo $cust_reply_email; ?>">
@@ -380,10 +377,9 @@ function highlightSearchTerm($text, $searchTerm)
                             $condition .= $condition_new;
                         }
                         if(!empty($row['keywords'])):
-                            $sql = "SELECT * FROM `tenders_posts` $condition $condition_orderque_key";
+                            $sql = "SELECT * FROM `tenders_live` $condition $condition_orderque_key";
                         endif;
-                        //echo "SELECT * FROM `tenders_posts` $condition order by id desc";exit;
-
+                        
                         $kcounter = 0;
                         $ks=0;
                         $keyword_key_val = '';
@@ -415,7 +411,7 @@ function highlightSearchTerm($text, $searchTerm)
         
                         $i = 1;
                        
-                       
+
 
                         $tender_data = mysqli_query($con, $sql);
                         $tender_result = mysqli_num_rows($tender_data);
@@ -437,6 +433,7 @@ function highlightSearchTerm($text, $searchTerm)
                                 } else {
                                     $tender_value = $row['tender_value'];
                                 }
+
                                 $c_keywords = explode(',',$cust_keywords);
                                 if (count($c_keywords) > 0) {
                     
@@ -451,7 +448,7 @@ function highlightSearchTerm($text, $searchTerm)
                                     $result_title = htmlspecialcode_generator($highlightedResult);
                                 }
                                 $highlightedResult = $result_title;
-                             
+                                
                         ?>
                             <tr>
                                 <th scope="row"><input type="checkbox" name="row-check" class="row-check" value="<?php echo $row['id']; ?>"></th>
@@ -477,7 +474,7 @@ function highlightSearchTerm($text, $searchTerm)
 
 <script>
 
-    $('#example').DataTable({
+$('#example').DataTable({
         pageLength: 35,
         columnDefs: [
              // Disable ordering on the first column (index 0)
@@ -496,8 +493,6 @@ function highlightSearchTerm($text, $searchTerm)
         
         // Other options
     });
-
-   
     $('.remove-item-btn').click(function() {
         var url = $(this).parent().find('#delete_id').val();
         $("#delete_id_modal").attr('href', url);
