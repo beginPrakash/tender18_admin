@@ -28,7 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $mcount = 0;
     $m_arr = [];
     if (!empty($ids)) {
-        $mai_data = mysqli_query($con, "SELECT * FROM `smtp_management` where id = 1");
+        $mai_data = mysqli_query($con, "SELECT * FROM `cms_smtp_management` where id = 1");
         $tend_result = mysqli_num_rows($mai_data);
         $host = 'smtp.gmail.com';
         $user_name = 'sales@tender18mail.in';
@@ -261,7 +261,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
 
                 // Content
-                $subject = "Today’s New Tenders  - $cdate From TENDER18.COM";
+                $subject = "Tender’s Alert From Tender18.com - ".$company_name."";
                 $mail->isHTML(true); // Set email format to HTML
                 $mail->Subject = "=?UTF-8?B?'".base64_encode($subject)."'?=";
                 $mail->Body = $template;
