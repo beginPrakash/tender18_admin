@@ -438,18 +438,43 @@ function highlightSearchTerm($text, $searchTerm)
                                     $tender_value = $row['tender_value'];
                                 }
                                 $c_keywords = explode(',',$cust_keywords);
-                                if (count($c_keywords) > 0) {
+                                
+                                $result_title = "";
                     
+                                if (!empty($c_keywords) && !empty($words)) {
+                                    $highlightedResult = $row['title'];
+                                    foreach ($words as $word) {
+                                        $highlightedResult = highlightSearchTerm($highlightedResult, $word);
+                                    }
+                                    foreach ($c_keywords as $keyword) {
+                                        $keyword_arr = explode(' ', $keyword);
+                                        foreach ($keyword_arr as $key) {
+                                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                        }
+                                    }
+                        
+                                    $result_title = htmlspecialcode_generator($highlightedResult);
+                                } else if (!empty($c_keywords)) {
+                        
                                     $highlightedResult = $row['title'];
                                     foreach ($c_keywords as $keyword) {
                                         $keyword_arr = explode(' ', $keyword);
                                         foreach ($keyword_arr as $key) {
-                                          
                                             $highlightedResult = highlightSearchTerm($highlightedResult, $key);
                                         }
                                     }
                                     $result_title = htmlspecialcode_generator($highlightedResult);
+                                } else if (!empty($words)) {
+                                    $highlightedResult = $row['title'];
+                                    foreach ($words as $word) {
+                                        $highlightedResult = highlightSearchTerm($highlightedResult, $word);
+                                    }
+                                    $result_title = htmlspecialcode_generator($highlightedResult);
+                                } else {
+                                    $result_title = htmlspecialcode_generator($row['title']);
                                 }
+
+
                                 $highlightedResult = $result_title;
                              
                         ?>
