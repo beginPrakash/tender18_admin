@@ -223,7 +223,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             $template = file_get_contents('../cms_tender/list_email_template.php');
-            $texts = "Today's";
+            $texts = "Tender's";
             $decoded_text = html_entity_decode($texts, ENT_QUOTES, 'UTF-8');
             $template = str_replace('{{decoded_text}}', $decoded_text, $template);
             $template = str_replace('{{company_name}}', $company_name, $template);
