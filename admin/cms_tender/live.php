@@ -49,7 +49,7 @@ function highlightSearchTerm($text, $searchTerm)
     // $highlightedTerm = "<b>$searchTerm</b>";
     // return str_ireplace($searchTerm, $highlightedTerm, $text);
 
-    $highlightMarkup = '<strong style=color:#cb192d;margin-right:3px;>';
+    $highlightMarkup = '<strong style=color:#cb192d;margin-right:0px;>';
     $closingHighlightMarkup = '</strong>';
     $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
     return $highlightedText;
@@ -101,6 +101,7 @@ function highlightSearchTerm($text, $searchTerm)
                         </a>
                     </div>
                 </div>
+                <p>View Tender Link : <span class="copy" style="cursor: copy;color:#5a58eb" data-id="<?php echo HOME_URL . "cms-user/new-tenders?id=" . $_GET['id']; ?>"><?php echo HOME_URL . "cms-user/new-tenders?id=" . $_GET['id']; ?><span><p>
             </div>
             <div class="card-header">               
                 <button type="button" onclick="dataSelected()" class="card-title float-start btn bg-success text-white mb-0">Send Email</button>
@@ -445,7 +446,9 @@ function highlightSearchTerm($text, $searchTerm)
                                     foreach ($c_keywords as $keyword) {
                                         $keyword_arr = explode(' ', $keyword);
                                         foreach ($keyword_arr as $key) {
-                                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                            if($key != ''){
+                                                $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                            }
                                         }
                                     }
                         
@@ -456,7 +459,9 @@ function highlightSearchTerm($text, $searchTerm)
                                     foreach ($c_keywords as $keyword) {
                                         $keyword_arr = explode(' ', $keyword);
                                         foreach ($keyword_arr as $key) {
-                                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                            if($key != ''){
+                                                $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                            }
                                         }
                                     }
                                     $result_title = htmlspecialcode_generator($highlightedResult);
