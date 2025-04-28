@@ -18,9 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if ($banner_result == 1) {
         while ($row = mysqli_fetch_assoc($banner_data)) {
             $cms_emailids = $row['email_ids'];
+            $words = explode(',',$row['words']);
             $mobile_no= $row['mobile_no'];
             $company_name= $row['company_name'];
             $keywords= $row['keywords'];
+            $cust_keywords = $row['keywords'];
         }
     }
 
@@ -36,6 +38,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $port = '587';
         $from_email = 'sales@tender18mail.in';
         $from_name = 'Tender 18';
+        $rfrom_email='';
         if ($tend_result == 1) {
             while ($row = mysqli_fetch_assoc($mai_data)) {
                 $host = $row['host'];
@@ -47,6 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }else{
                     $from_email = $row['from_email'];
                 }
+                $rfrom_email = $row['from_email'];
                
             }
         }
@@ -56,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // $highlightedTerm = "<b>$searchTerm</b>";
             // return str_ireplace($searchTerm, $highlightedTerm, $text);
     
-            $highlightMarkup = '<strong style=color:#cb192d;margin-right:3px;>';
+            $highlightMarkup = '<strong style=color:#cb192d;margin-right:0px;>';
             $closingHighlightMarkup = '</strong>';
             $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
             return $highlightedText;
@@ -104,29 +108,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tender_result = mysqli_num_rows($tender_data);
             if ($tender_result > 0) {
                 while ($row = mysqli_fetch_assoc($tender_data)) {
-
-                    $result_title = "";
                     
-                    if (!empty($keywords) && !empty($words)) {
+                    $c_keywords = explode(',',$cust_keywords);
+                                
+                    $result_title = "";
+        
+                    if (!empty($c_keywords) && !empty($words)) {
                         $highlightedResult = $row['title'];
                         foreach ($words as $word) {
                             $highlightedResult = highlightSearchTerm($highlightedResult, $word);
                         }
-                        foreach ($keywords as $keyword) {
+                        foreach ($c_keywords as $keyword) {
                             $keyword_arr = explode(' ', $keyword);
                             foreach ($keyword_arr as $key) {
-                                $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                if($key != ''){
+                                    $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                }
                             }
                         }
-                        
+            
                         $result_title = htmlspecialcode_generator($highlightedResult);
-                    } else if (!empty($keywords)) {
-                    
+                    } else if (!empty($c_keywords)) {
+            
                         $highlightedResult = $row['title'];
-                        foreach ($keywords as $keyword) {
+                        foreach ($c_keywords as $keyword) {
                             $keyword_arr = explode(' ', $keyword);
                             foreach ($keyword_arr as $key) {
-                                $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                if($key != ''){
+                                    $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                }
                             }
                         }
                         $result_title = htmlspecialcode_generator($highlightedResult);
@@ -258,7 +268,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // ✅ Set Reply-To
                     $mail->addReplyTo($cust_reply_email, '');
                 }
-                
+                $mail->addReplyTo($rfrom_email, '');
 
                 // Content
                 $subject = "Tender’s Alert From Tender18.com - ".$company_name."";

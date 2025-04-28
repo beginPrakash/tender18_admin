@@ -63,6 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $department = $row['filter_department'];
                     $type = $row['filter_type'];
                     $keywords = $row['keywords'];
+                    $t_keywords = $row['keywords'];
                     $not_used_keywords = $row['not_used_keywords'];
                     $words = $row['words'];
                     $exp_uemail_ids = explode(',',$uemail_ids);
@@ -358,178 +359,197 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $condition_orderque_key .= " ELSE " . $keys_count . " END, title ASC";
                         endif;
 
-                        $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_orderque_key");
-                        $tender_result = mysqli_num_rows($tender_data);
-                        if ($tender_result > 0) {
-                            while ($row = mysqli_fetch_assoc($tender_data)) {
-
-                                $result_title = "";
-                              
-                                if (!empty($keywords) && !empty($words)) {
-                                    $highlightedResult = $row['title'];
-                                    foreach ($words as $word) {
-                                        $highlightedResult = highlightSearchTerm($highlightedResult, $word);
-                                    }
-                                    foreach ($keywords as $keyword) {
-                                        $keyword_arr = explode(' ', $keyword);
-                                        foreach ($keyword_arr as $key) {
-                                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
-                                        }
-                                    }
-                                    
-                                    $result_title = htmlspecialcode_generator($highlightedResult);
-                                } else if (!empty($keywords)) {
-                                
-                                    $highlightedResult = $row['title'];
-                                    foreach ($keywords as $keyword) {
-                                        $keyword_arr = explode(' ', $keyword);
-                                        foreach ($keyword_arr as $key) {
-                                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
-                                        }
-                                    }
-                                    $result_title = htmlspecialcode_generator($highlightedResult);
-                                } else if (!empty($words)) {
-                                    $highlightedResult = $row['title'];
-                                    foreach ($words as $word) {
-                                        $highlightedResult = highlightSearchTerm($highlightedResult, $word);
-                                    }
-                                    $result_title = htmlspecialcode_generator($highlightedResult);
-                                } else {
-                                    $result_title = htmlspecialcode_generator($row['title']);
+                        $tender_id_arr = [];
+                        $tender_datas = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition $condition_orderque_key");
+                        $tender_ids_count = mysqli_num_rows($tender_datas);
+                        if($tender_datas > 0){
+                            while ($rowst = mysqli_fetch_assoc($tender_datas)) {
+                                if($tender_datas > 0){
+                                    $tender_id_arr[] = $rowst['id'];
                                 }
-
-                                $highlightedResult = $result_title;
-                                if (!empty($filter_keyword)) {
-                                    $keyword_arr = [];
-                                    foreach ($filter_keyword as $keyword) {
-                                        $keyword_arr_new = explode(' ', $keyword);
-                                        foreach ($keyword_arr_new as $key) {
-                                            $keyword_arr[] = $key;
-                                        }
-                                    }
-                                    usort($keyword_arr, function ($a, $b) {
-                                        $lengthComparison = strlen($b) - strlen($a);
-                                        if ($lengthComparison !== 0) {
-                                            return $lengthComparison;
-                                        }
-                                        return strcmp($a, $b);
-                                    });
-                                    // print_r($keyword_arr);
-                                    foreach ($keyword_arr as $keyword) {
-                                        $highlightedResult = highlightSearchTerm($highlightedResult, $keyword);
-                                    }
-                                }
-                                $dep_type = "";
-                                $dep_text = "";
-                                if($row['department'] == 'gem'){
-                                    $dep_text = "Source :";
-                                    $dep_type = "GEM Tenders";
-                                }
-                               //print_r($row);exit;
-                                $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0" style="padding-top:10px;"><tr style="background-color:#fff;"><td>';
-                                $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
-                                    <tr style="background-color:#016492;color:#fff !important">
-                                        <!-- Left Column -->
-                                        <td style="width:30%; padding: 10px;">
-                                        <h6 style="margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">T18 Ref No : <span style="font-weight: 400;text-transform: capitalize;">'.$row['ref_no'].'</span></h6>
-                                        </td>
-                                        <!-- Right Column -->
-                                        <td style="width:40%; padding: 10px;">
-                                        <h6 style="text-align:center;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Location : <span style="font-weight: 400;text-transform: capitalize;">'.$row['city'].', '.$row['state'].'</span></h6>
-                                        </td>
-                                        <td style="width:30%; padding: 10px;">
-                                        <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">'.$dep_text.' <span style="font-weight: 400;text-transform: capitalize;">'.$dep_type.'</span></h6>
-                                        </td>
-                                    </tr>
-                                    </table>';
-                                $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
-
-                                <tr>
-                                        <td style="padding: 10px;">
-                                        <h4 style="margin-top: 0;margin-bottom: 0;"><a target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;font-size: 16px;font-family: DMSans;font-weight: 700;color: #016492;margin-bottom: 0;-webkit-line-clamp: 1;-webkit-box-orient: vertical;display: -webkit-box;overflow: hidden; text-transform: capitalize;">'.htmlspecialcode_generator($highlightedResult).'</a></h4>
-                                        </td>
-                                    </tr>
-                                </table>
-                                <hr style="margin-top:5px;color: inherit;opacity: .25;">';
-                                $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
-                                    <tr>
-                                        <!-- Left Column -->
-                                        <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:left;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Agency / Dept : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.$row['agency_type'].'</span></h6>
-                                        </td>
-                                        <!-- Right Column -->
-                                        <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Tender Value : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.$row['tender_value'].'</span></h6>
-                                        </td>
-                                    </tr>
-                                    </table>';
-                                $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
-                                <tr>
-                                        <!-- Left Column -->
-                                        <td style="width:50%; padding: 10px;">
-                                        <h6 style="text-align:left;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Due Date : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.date('M d, Y',strtotime($row['due_date'])).'</span></h6>
-                                        </td>
-                                        <!-- Right Column -->
-                                        <td style="width:50%; padding: 10px;">
-                                        <p style="text-align:right;margin-top: 0;"><a class="btn" target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;height: unset;width: unset;color: #222;padding: 4px;border: 1px solid #222;font-weight: 600;border-radius: 0;font-family: Arial, sans-serif;font-size:10px;">View Documents</a></p>
-                                        </td>
-                                    </tr>
-                                </table>';
-                                $ar.='</td></tr></table>';
-                                //print_r($row);exit;
                             }
-                        }
-        
-                        $template = file_get_contents('../clients/list_email_template.php');
-                        $texts = "Today's";
-                        $decoded_text = html_entity_decode($texts, ENT_QUOTES, 'UTF-8');
-                        $template = str_replace('{{decoded_text}}', $decoded_text, $template);
-                        $template = str_replace('{{company_name}}', $company_name, $template);
-                        $template = str_replace('{{cdate}}', $cdate, $template);
-                        $template = str_replace('{{user_unique_id}}', $user_unique_id, $template);
-                        $template = str_replace('{{ADMIN_URL}}', $ADMIN_URL, $template);
-                        $template = str_replace('{{HOME_URL}}', $HOME_URL, $template);
-                        $template = str_replace('{{ar}}', $ar, $template);
-                        
-                        try {
-                            // Server settings
-                            $mail->SMTPDebug = 0; // Disable verbose debug output
-                            $mail->isSMTP(); // Send using SMTP
-                            $mail->Host = $host; // Set the SMTP server to send through
-                            $mail->SMTPAuth = true; // Enable SMTP authentication
-                            $mail->Username = $user_name; // SMTP username
-                            $mail->Password = $password; // SMTP password
-                            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
-                            $mail->Port = $port; // TCP port to connect to
+                        }   
 
-                            // Recipients
-                            $mail->setFrom($from_email, $from_name);
-                            
-                            // Add multiple recipients
-                            
-                            $recipients = $exp_uemail_ids;
-                            foreach ($recipients as $recipient) {
-                                $mail->addAddress($recipient);
-                            }
+                        if(count($tender_id_arr) > 0){
+                            $exp_ten_ids = implode(',',$tender_id_arr);
 
-                            // Content
-                            $subject = "Today’s New Tenders  - $cdate From TENDER18.COM";
-                            $mail->isHTML(true); // Set email format to HTML
-                            $mail->Subject = "=?UTF-8?B?'".base64_encode($subject)."'?=";
-                            $mail->Body = $template;
-                            //print_r($mail);exit;
-                            // Send the email
-                            
+                            $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` where `id` in($exp_ten_ids)");
+                            $tender_result = mysqli_num_rows($tender_data);
                             if ($tender_result > 0) {
-                                $mail->send();
-                                sleep(1);
+                                while ($row = mysqli_fetch_assoc($tender_data)) {
+
+                                    $result_title = "";
+                                    $c_keywords = explode(',',$t_keywords);
+                                    if (!empty($c_keywords) && !empty($words)) {
+                                        $highlightedResult = $row['title'];
+                                        foreach ($words as $word) {
+                                            $highlightedResult = highlightSearchTerm($highlightedResult, $word);
+                                        }
+                                        foreach ($c_keywords as $keyword) {
+                                            $keyword_arr = explode(' ', $keyword);
+                                            foreach ($keyword_arr as $key) {
+                                                if($key != ''){
+                                                    $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                                }
+                                            }
+                                        }
+                                        
+                                        $result_title = htmlspecialcode_generator($highlightedResult);
+                                    } else if (!empty($c_keywords)) {
+                                    
+                                        $highlightedResult = $row['title'];
+                                        foreach ($c_keywords as $keyword) {
+                                            $keyword_arr = explode(' ', $keyword);
+                                            foreach ($keyword_arr as $key) {
+                                                if($key != ''){
+                                                    $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                                }
+                                            }
+                                        }
+                                        $result_title = htmlspecialcode_generator($highlightedResult);
+                                    } else if (!empty($words)) {
+                                        $highlightedResult = $row['title'];
+                                        foreach ($words as $word) {
+                                            $highlightedResult = highlightSearchTerm($highlightedResult, $word);
+                                        }
+                                        $result_title = htmlspecialcode_generator($highlightedResult);
+                                    } else {
+                                        $result_title = htmlspecialcode_generator($row['title']);
+                                    }
+
+                                    $highlightedResult = $result_title;
+                                    if (!empty($filter_keyword)) {
+                                        $keyword_arr = [];
+                                        foreach ($filter_keyword as $keyword) {
+                                            $keyword_arr_new = explode(' ', $keyword);
+                                            foreach ($keyword_arr_new as $key) {
+                                                $keyword_arr[] = $key;
+                                            }
+                                        }
+                                        usort($keyword_arr, function ($a, $b) {
+                                            $lengthComparison = strlen($b) - strlen($a);
+                                            if ($lengthComparison !== 0) {
+                                                return $lengthComparison;
+                                            }
+                                            return strcmp($a, $b);
+                                        });
+                                        // print_r($keyword_arr);
+                                        foreach ($keyword_arr as $keyword) {
+                                            $highlightedResult = highlightSearchTerm($highlightedResult, $keyword);
+                                        }
+                                    }
+                                    $dep_type = "";
+                                    $dep_text = "";
+                                    if($row['department'] == 'gem'){
+                                        $dep_text = "Source :";
+                                        $dep_type = "GEM Tenders";
+                                    }
+                                //print_r($row);exit;
+                                    $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0" style="padding-top:10px;"><tr style="background-color:#fff;"><td>';
+                                    $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                        <tr style="background-color:#016492;color:#fff !important">
+                                            <!-- Left Column -->
+                                            <td style="width:30%; padding: 10px;">
+                                            <h6 style="margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">T18 Ref No : <span style="font-weight: 400;text-transform: capitalize;">'.$row['ref_no'].'</span></h6>
+                                            </td>
+                                            <!-- Right Column -->
+                                            <td style="width:40%; padding: 10px;">
+                                            <h6 style="text-align:center;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Location : <span style="font-weight: 400;text-transform: capitalize;">'.$row['city'].', '.$row['state'].'</span></h6>
+                                            </td>
+                                            <td style="width:30%; padding: 10px;">
+                                            <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">'.$dep_text.' <span style="font-weight: 400;text-transform: capitalize;">'.$dep_type.'</span></h6>
+                                            </td>
+                                        </tr>
+                                        </table>';
+                                    $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
+
+                                    <tr>
+                                            <td style="padding: 10px;">
+                                            <h4 style="margin-top: 0;margin-bottom: 0;"><a target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;font-size: 16px;font-family: DMSans;font-weight: 700;color: #016492;margin-bottom: 0;-webkit-line-clamp: 1;-webkit-box-orient: vertical;display: -webkit-box;overflow: hidden; text-transform: capitalize;">'.htmlspecialcode_generator($highlightedResult).'</a></h4>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <hr style="margin-top:5px;color: inherit;opacity: .25;">';
+                                    $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                        <tr>
+                                            <!-- Left Column -->
+                                            <td style="width:50%; padding: 10px;">
+                                            <h6 style="text-align:left;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Agency / Dept : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.$row['agency_type'].'</span></h6>
+                                            </td>
+                                            <!-- Right Column -->
+                                            <td style="width:50%; padding: 10px;">
+                                            <h6 style="text-align:right;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Tender Value : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.$row['tender_value'].'</span></h6>
+                                            </td>
+                                        </tr>
+                                        </table>';
+                                    $ar.='<table width="100%" cellspacing="0" cellpadding="0" border="0">
+                                    <tr>
+                                            <!-- Left Column -->
+                                            <td style="width:50%; padding: 10px;">
+                                            <h6 style="text-align:left;margin-top: 0;font-size: 14px;font-family: DMSans;font-weight: 600;margin-bottom: 0;text-transform: capitalize;">Due Date : <span style="color:#777;font-weight: 400;text-transform: capitalize;">'.date('M d, Y',strtotime($row['due_date'])).'</span></h6>
+                                            </td>
+                                            <!-- Right Column -->
+                                            <td style="width:50%; padding: 10px;">
+                                            <p style="text-align:right;margin-top: 0;"><a class="btn" target="_blank" href="'.$HOME_URL.'tenders-details/'.$row['ref_no'].'/'.$user_unique_id.'" style="text-decoration:none !important;height: unset;width: unset;color: #222;padding: 4px;border: 1px solid #222;font-weight: 600;border-radius: 0;font-family: Arial, sans-serif;font-size:10px;">View Documents</a></p>
+                                            </td>
+                                        </tr>
+                                    </table>';
+                                    $ar.='</td></tr></table>';
+                                    //print_r($row);exit;
+                                }
                             }
-                            $mcount++;
-                            //echo 'Email sent successfully';
-                        } catch (Exception $e) {
-                            //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+        
+                            $template = file_get_contents('../clients/list_email_template.php');
+                            $texts = "Today's";
+                            $decoded_text = html_entity_decode($texts, ENT_QUOTES, 'UTF-8');
+                            $template = str_replace('{{decoded_text}}', $decoded_text, $template);
+                            $template = str_replace('{{company_name}}', $company_name, $template);
+                            $template = str_replace('{{cdate}}', $cdate, $template);
+                            $template = str_replace('{{user_unique_id}}', $user_unique_id, $template);
+                            $template = str_replace('{{ADMIN_URL}}', $ADMIN_URL, $template);
+                            $template = str_replace('{{HOME_URL}}', $HOME_URL, $template);
+                            $template = str_replace('{{ar}}', $ar, $template);
+                            
+                            try {
+                                // Server settings
+                                $mail->SMTPDebug = 0; // Disable verbose debug output
+                                $mail->isSMTP(); // Send using SMTP
+                                $mail->Host = $host; // Set the SMTP server to send through
+                                $mail->SMTPAuth = true; // Enable SMTP authentication
+                                $mail->Username = $user_name; // SMTP username
+                                $mail->Password = $password; // SMTP password
+                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+                                $mail->Port = $port; // TCP port to connect to
+
+                                // Recipients
+                                $mail->setFrom($from_email, $from_name);
+                                
+                                // Add multiple recipients
+                                
+                                $recipients = $exp_uemail_ids;
+                                foreach ($recipients as $recipient) {
+                                    $mail->addAddress($recipient);
+                                }
+
+                                // Content
+                                $subject = "Today’s New Tenders  - $cdate From TENDER18.COM";
+                                $mail->isHTML(true); // Set email format to HTML
+                                $mail->Subject = "=?UTF-8?B?'".base64_encode($subject)."'?=";
+                                $mail->Body = $template;
+                                //print_r($mail);exit;
+                                // Send the email
+                                
+                                //if ($tender_result > 0) {
+                                    $mail->send();
+                                    sleep(1);
+                                //}
+                                $mcount++;
+                                //echo 'Email sent successfully';
+                            } catch (Exception $e) {
+                                //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
+                            }
                         }
-                    else:
+                   
                     endif;
                 endif;   
             }

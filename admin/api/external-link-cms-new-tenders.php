@@ -62,8 +62,8 @@ function get_results($con, $postData)
     $mno="";
     $expired_date="";
     $ustatus="";
-    $user_unique_id = $postData['user_unique_id'];
-    $user_data = mysqli_query($con, "SELECT * FROM `users` WHERE  `user_unique_id`='$user_unique_id'");
+    $user_unique_id = base64_decode($postData['user_unique_id']);
+    $user_data = mysqli_query($con, "SELECT * FROM `cms_customer` WHERE  `customer_id`='$user_unique_id'");
 
     $user_result = mysqli_num_rows($user_data);
     if ($user_result == 1) {
@@ -77,25 +77,16 @@ function get_results($con, $postData)
             $agency = $row['filter_agency'];
             $department = $row['filter_department'];
             $type = $row['filter_type'];
-            $custom_care_number = $row['custom_care_number'];
-            $tech_person_name = $row['tech_person_name'];
-            $tech_person_number = $row['tech_person_number'];
             $uname = $row['customer_name'];
-            $uemail = $row['users_email'];
+            $uemail = $row['email_ids'];
             $cname = $row['company_name'];
-            $mno = $row['mobile_number'];
-            $expired_date = date('M d, Y',strtotime($row['expired_date']));
-            $ustatus = $row['status'];
+            $mno = $row['mobile_no'];
+
         }
 
-        $result['custom_care_number'] = $custom_care_number;
-        $result['tech_person_name'] = $tech_person_name;
-        $result['tech_person_number'] = $tech_person_number;
         $result['uname'] = $uname;
         $result['uemail'] = $uemail;
         $result['mno'] = $mno;
-        $result['expired_date'] = $expired_date;
-        $result['ustatus'] = $ustatus;
         $result['cname'] = $cname;
 
         if (!empty($city)) {

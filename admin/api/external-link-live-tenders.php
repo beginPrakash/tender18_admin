@@ -410,7 +410,9 @@ function get_results($con, $postData)
                 foreach ($keywords as $keyword) {
                     $keyword_arr = explode(' ', $keyword);
                     foreach ($keyword_arr as $key) {
-                        $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        if($key != ''){
+                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        }
                     }
                 }
                 $result['tenders'][$count]['title'] = htmlspecialcode_generator($highlightedResult);
@@ -419,7 +421,9 @@ function get_results($con, $postData)
                 foreach ($keywords as $keyword) {
                     $keyword_arr = explode(' ', $keyword);
                     foreach ($keyword_arr as $key) {
-                        $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        if($key != ''){
+                            $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                        }
                     }
                 }
                 $result['tenders'][$count]['title'] = htmlspecialcode_generator($highlightedResult);
