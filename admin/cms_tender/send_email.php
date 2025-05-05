@@ -56,13 +56,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       
         function highlightSearchTerm($text, $searchTerm)
         {
-            // $highlightedTerm = "<b>$searchTerm</b>";
-            // return str_ireplace($searchTerm, $highlightedTerm, $text);
-    
-            $highlightMarkup = '<strong style=color:#cb192d;margin-right:0px;>';
-            $closingHighlightMarkup = '</strong>';
-            $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
-            return $highlightedText;
+             $highlightedTerm = "<strong style=color:#cb192d;margin-right:2px;>$searchTerm</strong>";
+             return str_ireplace($searchTerm, $highlightedTerm, $text);
+  
+            // $highlightMarkup = '<strong style=color:#cb192d;margin-right:0px;>';
+            // $closingHighlightMarkup = '</strong>';
+            // $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
+            // return $highlightedText;
         }
 
         
@@ -108,7 +108,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 while ($row = mysqli_fetch_assoc($tender_data)) {
                     
                     $c_keywords = explode(',',$cust_keywords);
-                                
+                           
                     $result_title = "";
         
                     if (!empty($c_keywords) && !empty($words)) {
@@ -116,25 +116,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         foreach ($words as $word) {
                             $highlightedResult = highlightSearchTerm($highlightedResult, $word);
                         }
+                      
                         foreach ($c_keywords as $keyword) {
+                            $keyword = trim($keyword);
                             $keyword_arr = explode(' ', $keyword);
+                           
                             foreach ($keyword_arr as $key) {
-                                if($key != ''){
+                               
                                     $highlightedResult = highlightSearchTerm($highlightedResult, $key);
-                                }
+                                
                             }
                         }
-            
+                       
                         $result_title = htmlspecialcode_generator($highlightedResult);
+                  
                     } else if (!empty($c_keywords)) {
-            
+                    
                         $highlightedResult = $row['title'];
                         foreach ($c_keywords as $keyword) {
+                            $keyword = trim($keyword);
                             $keyword_arr = explode(' ', $keyword);
                             foreach ($keyword_arr as $key) {
-                                if($key != ''){
-                                    $highlightedResult = highlightSearchTerm($highlightedResult, $key);
-                                }
+                                $highlightedResult = highlightSearchTerm($highlightedResult, $key);
+                                
                             }
                         }
                         $result_title = htmlspecialcode_generator($highlightedResult);
@@ -149,26 +153,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
 
                     $highlightedResult = $result_title;
-                    if (!empty($filter_keyword)) {
-                        $keyword_arr = [];
-                        foreach ($filter_keyword as $keyword) {
-                            $keyword_arr_new = explode(' ', $keyword);
-                            foreach ($keyword_arr_new as $key) {
-                                $keyword_arr[] = $key;
-                            }
-                        }
-                        usort($keyword_arr, function ($a, $b) {
-                            $lengthComparison = strlen($b) - strlen($a);
-                            if ($lengthComparison !== 0) {
-                                return $lengthComparison;
-                            }
-                            return strcmp($a, $b);
-                        });
-                        // print_r($keyword_arr);
-                        foreach ($keyword_arr as $keyword) {
-                            $highlightedResult = highlightSearchTerm($highlightedResult, $keyword);
-                        }
-                    }
+                  
+    
                     $dep_type = "";
                     $dep_text = "";
                     if($row['department'] == 'gem'){
@@ -258,6 +244,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Add multiple recipients
                 
                 $recipients = $exp_uemail_ids;
+                
                 foreach ($recipients as $recipient) {
                     $mail->addAddress($recipient);
                 }
@@ -275,7 +262,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $mail->Body = $template;
             
                 // Send the email
-                //print_r($mail);exit;
+              
                 if ($tender_result > 0) {
                     $mail->send();
                     sleep(1);
