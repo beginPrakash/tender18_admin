@@ -82,7 +82,7 @@ function get_results($con, $postData)
 
     $result = [];
 
-    if ($user_result == 1) {
+    if ($user_result >= 1) {
         $q1 = "UPDATE `cms_customer` SET `company_name`='$company_name', `customer_name`='$customer_name', `email_ids`='$email_ids', `keywords`='$keywords', `words`='$words', `not_used_keywords`='$not_used_keywords', `filter_city`='$filter_city', `filter_state`='$filter_state', `filter_tender_value`='$filter_tender_value', `filter_agency`='$filter_agency', `company_name`='$company_name', `filter_department`='$filter_department', `filter_type`='$filter_type',`sender_email_id`='$sender_email_id', `reply_email_id` = '$reply_email_id', `mobile_no` = '$mobile_no' WHERE `customer_id`='$customer_id'";
             
     }else{

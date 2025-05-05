@@ -82,7 +82,7 @@ function get_results($con)
 
     $offset = ($page * $limit) - $limit;
 
-    $tender_data = mysqli_query($con, "SELECT * FROM `blogs` order by id desc");
+    $tender_data = mysqli_query($con, "SELECT * FROM `blogs` order by id desc LIMIT $offset, $limit");
 
     $tender_result = mysqli_num_rows($tender_data);
 
@@ -132,63 +132,63 @@ function get_results($con)
 
     }
 
-    // if ($total > 1) {
+    if ($total > 1) {
 
-    //     if ($page == 2) {
+        if ($page == 2) {
 
-    //         $result['links'][] = ($page - 1);
+            $result['links'][] = ($page - 1);
 
-    //     }
+        }
 
-    //     if ($page > 2) {
+        if ($page > 2) {
 
-    //         $result['links'][] = 1;
+            $result['links'][] = 1;
 
-    //         if ($page > 3) {
+            if ($page > 3) {
 
-    //             $result['links'][] = '...';
+                $result['links'][] = '...';
 
-    //         }
+            }
 
-    //     }
+        }
 
-    //     for ($i = max(2, $page - 2); $i < $page; $i++) {
+        for ($i = max(2, $page - 2); $i < $page; $i++) {
 
-    //         $result['links'][] = $i;
+            $result['links'][] = $i;
 
-    //     }
+        }
 
-    //     $result['links'][$page] = "<b>" . $page . "</b>";
+        $result['links'][$page] = "<b>" . $page . "</b>";
 
-    //     for ($i = $page + 1; $i <= min($total - 1, $page + 2); $i++) {
+        for ($i = $page + 1; $i <= min($total - 1, $page + 2); $i++) {
 
-    //         $result['links'][] = $i;
+            $result['links'][] = $i;
 
-    //     }
+        }
 
-    //     if ($page < $total - 1) {
+        if ($page < $total - 1) {
 
-    //         if ($page < $total - 2) {
+            if ($page < $total - 2) {
 
-    //             $result['links'][] = '...';
+                $result['links'][] = '...';
 
-    //         }
+            }
 
-    //         $result['links'][] = $total;
+            $result['links'][] = $total;
 
-    //     }
+        }
 
-    //     if ($page == $total - 1) {
+        if ($page == $total - 1) {
 
-    //         $result['links'][] = ($page + 1);
+            $result['links'][] = ($page + 1);
 
-    //     }
+        }
 
-    // } else {
+    } else {
 
-    //     $result['links'] = [];
+        $result['links'] = [];
 
-    // }
+    }
 
     return $result;
 
