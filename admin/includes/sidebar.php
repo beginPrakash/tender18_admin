@@ -15,6 +15,7 @@
     $complain_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'complain_inquiry',$con);
     $registration_form_per = _get_user_perby_role($_SESSION['user_id'],'registration_form',$con);
     $blogs_per = _get_user_perby_role($_SESSION['user_id'],'blogs',$con);
+    $blogs_link_per = _get_user_perby_role($_SESSION['user_id'],'blog_link',$con);
     $states_per = _get_user_perby_role($_SESSION['user_id'],'states',$con);
     $departments_per = _get_user_perby_role($_SESSION['user_id'],'departments',$con);
     $keywords_per = _get_user_perby_role($_SESSION['user_id'],'keywords',$con);
@@ -124,6 +125,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/blogs/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Blogs</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $blogs_link_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'blog_list_links') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/blog_list_links/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Blog List Links</span>
                         </a>
                     </li>
                 <?php } ?>
