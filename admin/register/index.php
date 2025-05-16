@@ -233,7 +233,16 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Meta Content</label>
                                 </div>
                             </div>
-                            
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['cms_customer']">
+                                    <label class="form-check-label">CMS Customer</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['blog_link']">
+                                    <label class="form-check-label">Blog List Links</label>
+                                </div>
+                            </div>
                         </div>    
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">

@@ -93,12 +93,80 @@ function get_results($con, $postData)
 
             $result['main']['blog_image'] = $blog_image;
 
+            $main_title = $row['main_title'];
+
+            //get blog links
+            $blog_links = "";
+
+            $title_url = [];
+            $title_url1 = [];
+            $title_url2 = [];
+
+            $main_title = $row['main_title'];
+
+            $title_url = json_decode($row['title_urls']);
+
+            if(!empty($title_url) && count($title_url) > 0){
+                $result['main']['main_title'] = $main_title;
+                $titlearr = [];
+                foreach($title_url as $key => $val){
+                
+                    $titlearr[$key]['link_title'] = $val->link_title;
+                    $titlearr[$key]['link_url'] = $val->link_url;
+                }
+            
+                $result['title_urls'] = $titlearr;
+
+            }else{
+                $result['title_urls'] = [];
+            }
+
+            $main_title1 = $row['main_title1'];
+
+            $title_url1 = json_decode($row['title_urls1']);
+
+            if(!empty($title_url1) && count($title_url1) > 0){
+                $result['main']['main_title1'] = $main_title1;
+                $titlearr1 = [];
+                foreach($title_url1 as $key => $val){
+                
+                    $titlearr1[$key]['link_title'] = $val->link_title;
+                    $titlearr1[$key]['link_url'] = $val->link_url;
+                }
+            
+                $result['title_urls1'] = $titlearr1;
+
+            }else{
+                $result['title_urls1'] = [];
+            }
+            $main_title2 = $row['main_title2'];
+
+            $title_url2 = json_decode($row['title_urls2']);
+
+            if(!empty($title_url2) && count($title_url2) > 0){
+                $result['main']['main_title2'] = $main_title2;
+                $titlearr2 = [];
+                foreach($title_url2 as $key => $val){
+                
+
+                    $titlearr2[$key]['link_title'] = $val->link_title;
+                    $titlearr2[$key]['link_url'] = $val->link_url;
+                }
+            
+                $result['title_urls2'] = $titlearr2;
+
+            }else{
+                $result['title_urls2'] = [];
+            }
+
         }
 
     } else {
 
         $result['main'] = "No data found";
-
+        $result['title_urls'] = "No data found";
+        $result['title_urls1'] = "No data found";
+        $result['title_urls2'] = "No data found";
     }
 
 

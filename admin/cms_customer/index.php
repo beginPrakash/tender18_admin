@@ -4,14 +4,14 @@
 <?php include '../includes/header.php';?>
 
 <?php
-$inquiries_per = _get_user_perby_role($_SESSION['user_id'],'inquiries',$con);
+$cmscust_per = _get_user_perby_role($_SESSION['user_id'],'cms_customer',$con);
 
 if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';
             </script>";
-}elseif($_SESSION['role']=='employee' && $inquiries_per!=1){ 
+}elseif($_SESSION['role']=='employee' && $cmscust_per!=1){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';

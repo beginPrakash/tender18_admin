@@ -25,7 +25,6 @@ header('Access-Control-Allow-Origin: *');
 $endpoint = isset($_GET['endpoint']) ? $_GET['endpoint'] : '';
 
 
-
 switch ($endpoint) {
 
 
@@ -132,6 +131,44 @@ function get_results($con)
 
     }
 
+    //get blog links
+    $blog_links = "";
+
+    $title_url = [];
+
+
+    $header_data = mysqli_query($con, "SELECT * FROM `blog_links` where `id`=1");
+
+    $header_result = mysqli_num_rows($header_data);
+
+    if ($header_result == 1) {
+
+        while ($row = mysqli_fetch_assoc($header_data)) {
+
+            $main_title = $row['main_title'];
+
+            $title_url = json_decode($row['title_url']);
+
+        }
+
+    }
+
+    if(!empty($title_url) && count($title_url) > 0){
+        $result['main_title'] = $main_title;
+        $titlearr = [];
+        foreach($title_url as $key => $val){
+         
+            $titlearr[$key]['link_title'] = $val->link_title;
+            $titlearr[$key]['link_url'] = $val->link_url;
+        }
+      
+        $result['title_urls'] = $titlearr;
+
+    }else{
+        $result['main_title'] = "";
+        $result['title_urls'] = "";
+    }
+
     if ($total > 1) {
 
         if ($page == 2) {
@@ -193,10 +230,6 @@ function get_results($con)
     return $result;
 
 }
-
-
-
-
 
 
 

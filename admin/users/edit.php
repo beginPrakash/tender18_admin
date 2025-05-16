@@ -274,6 +274,19 @@ if (!empty($_SESSION['error'])) {
                                 </div>
                                 
                             </div>
+                            <div class="row">
+                                
+                                <div class="col-lg-3">
+                                    <?php $cmscust_per = _get_user_perby_role($_GET['id'],'cms_customer',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($cmscust_per == '1') ? 'checked' : '';?> name="user_permis['cms_customer']">
+                                    <label class="form-check-label">CMS Customer</label>
+                                </div>
+                               <div class="col-lg-3">
+                                    <?php $bloglink_per = _get_user_perby_role($_GET['id'],'blog_link',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($bloglink_per == '1') ? 'checked' : '';?> name="user_permis['blog_link']">
+                                    <label class="form-check-label">Blog List Links</label>
+                                </div>
+                            </div>
                             
                             
                         </div>  

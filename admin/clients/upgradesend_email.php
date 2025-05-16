@@ -11,7 +11,7 @@ function highlightSearchTerm($text, $searchTerm)
             // $highlightedTerm = "<b>$searchTerm</b>";
             // return str_ireplace($searchTerm, $highlightedTerm, $text);
     
-            $highlightMarkup = '<strong style=color:#cb192d;>';
+            $highlightMarkup = '<strong style=color:#cb192d;margin-right:2px;>';
             $closingHighlightMarkup = '</strong>';
             $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
             return $highlightedText;
@@ -385,7 +385,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         $highlightedResult = highlightSearchTerm($highlightedResult, $word);
                                     }
                                     foreach ($c_keywords as $keyword) {
-                                        echo"here";
+                                      
                                         $keyword_arr = explode(' ', $keyword);
                                         foreach ($keyword_arr as $key) {
                                             if($key != ''){

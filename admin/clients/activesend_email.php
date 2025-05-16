@@ -11,7 +11,7 @@ function highlightSearchTerm($text, $searchTerm)
             // $highlightedTerm = "<b>$searchTerm</b>";
             // return str_ireplace($searchTerm, $highlightedTerm, $text);
     
-            $highlightMarkup = '<strong style=color:#cb192d;margin-right:1px;>';
+            $highlightMarkup = '<strong style=color:#cb192d;margin-right:2px;>';
             $closingHighlightMarkup = '</strong>';
             $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
             return $highlightedText;
