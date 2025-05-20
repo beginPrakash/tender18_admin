@@ -123,8 +123,13 @@ if (isset($_POST['submit'])) {
         $q = "INSERT INTO users(users_name, users_email ,users_password, user_role, user_unique_id" . $newDataCol . ") VALUES ('$username', '$email', '$pass', '$user_role', '$unique_code'" . $newDataVal . ")";
         $sql = mysqli_query($con, $q);
         $last_insert_id = mysqli_insert_id($con);
+
+        $log_qu = "INSERT INTO clients_log(`user_id`,`action_type`) VALUES ($last_insert_id,'add')";
+        mysqli_query($con, $log_qu);
         //save payment details
         if(!empty($payment_arr) && count($payment_arr)):
+            $log_qu = "INSERT INTO clients_log(`user_id`,`action_type`) VALUES ($user_id,'payment_details_add')";
+            mysqli_query($con, $log_qu);
             foreach($payment_arr as $key => $val):
                 if(!empty($val->payment_date)):
                     $timestamp2 = strtotime($val->payment_date);
@@ -141,6 +146,8 @@ if (isset($_POST['submit'])) {
 
         //save plan details
         if(!empty($plan_arr) && count($plan_arr)):
+            $log_qu = "INSERT INTO clients_log(`user_id`,`action_type`) VALUES ($user_id,'plan_details_add')";
+            mysqli_query($con, $log_qu);
             foreach($plan_arr as $key => $val):
                 if(!empty($val->completion_date)):
                     $timestamp2 = strtotime($val->completion_date);

@@ -4,6 +4,9 @@
 <?php include '../includes/header.php' ?>
 <?php
 if (isset($_GET['id'])) {
+    $as_id = $_GET['id'];
+    $log_qu = "INSERT INTO agency_log(`agency_id`,`action_type`) VALUES ($as_id,'delete')";
+    mysqli_query($con, $log_qu);
     $del = mysqli_query($con, "DELETE FROM `tender_agencies` where id='" . $_GET['id'] . "'");
     $status = true;
     if ($status) {
