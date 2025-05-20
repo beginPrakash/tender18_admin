@@ -24,6 +24,9 @@ if (isset($_POST['submit'])) {
     // die();
     $sql1 = mysqli_query($con, $q1);
 
+    $log_qu = "INSERT INTO agency_log(`pseudo_name`, `agency_name`,`agency_id`,`action_type`) VALUES ('$title', '$ref_no',$tenderID,'update')";
+    mysqli_query($con, $log_qu);
+
     $status = true;
     if ($status) {
         $_SESSION['success'] = 'Updated successfully.';

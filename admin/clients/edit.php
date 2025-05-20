@@ -88,10 +88,15 @@ if (isset($_POST['submit'])) {
 
         $q = "UPDATE `users` SET users_name='$username', users_email='$email', user_role='$user_role' $passw where user_id='$user_id' and user_unique_id='$unique_code'";
         $sql = mysqli_query($con, $q);
+
+        $log_qu = "INSERT INTO clients_log(`user_id`,`action_type`) VALUES ($user_id,'update')";
+        mysqli_query($con, $log_qu);
         //save payment details
         mysqli_query($con, "DELETE FROM `client_payment_details` where user_id={$_GET['id']}");
         //save payment details
         if(!empty($payment_arr) && count($payment_arr)):
+            $log_qu = "INSERT INTO clients_log(`user_id`,`action_type`) VALUES ($user_id,'payment_details_update')";
+            mysqli_query($con, $log_qu);
             foreach($payment_arr as $key => $val):
                 if(!empty($val->payment_date)):
                     $timestamp2 = strtotime($val->payment_date);
@@ -111,6 +116,8 @@ if (isset($_POST['submit'])) {
         mysqli_query($con, "DELETE FROM `client_plan_details` where user_id={$_GET['id']}");
         //save plan details
         if(!empty($plan_arr) && count($plan_arr)):
+            $log_qu = "INSERT INTO clients_log(`user_id`,`action_type`) VALUES ($user_id,'plan_details_update')";
+            mysqli_query($con, $log_qu);
             foreach($plan_arr as $key => $val):
                 if(!empty($val->completion_date)):
                     $timestamp2 = strtotime($val->completion_date);
