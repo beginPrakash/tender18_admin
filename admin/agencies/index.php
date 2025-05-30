@@ -3,11 +3,11 @@
 <?php $pages = 'agencies'; ?>
 <?php include '../includes/header.php' ?>
 <?php
-if (isset($_GET['id'])) {
-    $as_id = $_GET['id'];
+if (isset($_POST['ag_id'])) {
+    $as_id = $_POST['ag_id'];
     $log_qu = "INSERT INTO agency_log(`agency_id`,`action_type`) VALUES ($as_id,'delete')";
     mysqli_query($con, $log_qu);
-    $del = mysqli_query($con, "DELETE FROM `tender_agencies` where id='" . $_GET['id'] . "'");
+    $del = mysqli_query($con, "DELETE FROM `tender_agencies` where id='" . $_POST['ag_id'] . "'");
     $status = true;
     if ($status) {
         $_SESSION['success'] = 'Deleted successfully.';
@@ -130,7 +130,9 @@ if (!empty($_SESSION['error'])) {
     </div>
 </div>
 <!-- end page title -->
-
+<form id="postForm" method="POST" action="" style="display:none;">
+    <input type="hidden" name="ag_id" id="ag_id" value="">
+</form>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -246,7 +248,7 @@ if (!empty($_SESSION['error'])) {
                                     <td><?php echo $data['agency_name']; ?></td>
                                     <td class="action_element">
                                         <a href="<?php echo ADMIN_URL; ?>agencies/edit-agency.php?id=<?php echo $data['id']; ?>"><i style="font-size: 20px;" class="ri-pencil-fill text-success"></i></a> &nbsp | &nbsp
-                                        <a href="<?php echo ADMIN_URL; ?>agencies/index.php?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
+                                        <a href="#" class="delete" data-agid="<?php echo $data['id']; ?>" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
                                     </td>
                                 </tr>
                             <?php $i++;
@@ -270,7 +272,7 @@ if (!empty($_SESSION['error'])) {
                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                                                     Close
                                                 </button>
-                                                <a href="javascript:void(0);" class="btn btn-danger">Delete</a>
+                                                <a href="javascript:void(0);" class="btn btn-danger" onclick="document.getElementById('postForm').submit(); return false;">Delete</a>
                                             </div>
                                         </div>
                                     </div>
@@ -351,10 +353,11 @@ if (!empty($_SESSION['error'])) {
 <?php include '../includes/footer.php';  ?>
 
 <script>
+    var ag_url = "<?php echo ADMIN_URL; ?>agencies/index.php";
     $('.action_element a.delete').click(function(e) {
         e.preventDefault();
-        var url = $(this).attr('href');
-        $('.bs-example-modal-center a.btn.btn-danger').prop('href', url);
+        var ag_id=$(this).attr('data-agid');
+        $('#ag_id').val(ag_id);
     });
 </script>
 
