@@ -26,7 +26,11 @@
     $keyword_content_per = _get_user_perby_role($_SESSION['user_id'],'keyword_content',$con);
     $meta_content_per = _get_user_perby_role($_SESSION['user_id'],'meta_content',$con);
     $inquiries_content_per = _get_user_perby_role($_SESSION['user_id'],'inquiries',$con);
+    $gem_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'gem_inquiries',$con);
     $cms_customer_per = _get_user_perby_role($_SESSION['user_id'],'cms_customer',$con);
+    $gem_state_per = _get_user_perby_role($_SESSION['user_id'],'gem_states',$con);
+    $gem_city_per = _get_user_perby_role($_SESSION['user_id'],'gem_city',$con);
+    
 ?>
 <!-- ========== App Menu ========== -->
 <div class="app-menu navbar-menu">
@@ -244,6 +248,17 @@
                         </a>
                     </li>
                 <?php } ?>
+
+                <?php if($_SESSION['role']=='admin' || $gem_inquiry_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'gem_inquiry') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/gem_inquiry/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">GEM Inquiry</span>
+                        </a>
+                    </li>
+                <?php } ?>
               
                 <?php if($_SESSION['role']=='admin' || $smtp_mgmt_per == 1) { ?>
                     <li class="nav-item active">
@@ -272,6 +287,26 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/meta-content/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Meta Content</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $gem_state_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'gem_states') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/gem_states/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">GEM States</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $gem_city_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'gem_city') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/gem_city/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">GEM Cities</span>
                         </a>
                     </li>
                 <?php } ?>
