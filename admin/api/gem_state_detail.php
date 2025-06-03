@@ -58,7 +58,7 @@ function get_results($con, $postData)
 
 {
 
-    $state_name = $postData['state'];
+    $state_name = $postData['id'];
 
     $user_data = mysqli_query($con, "SELECT * FROM `gem_state_data` WHERE  `id` = 1");
 
