@@ -243,6 +243,17 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Blog List Links</label>
                                 </div>
                             </div>
+                            <div class="row">
+                                
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['gem_city']">
+                                    <label class="form-check-label">GEM City</label>
+                                </div>
+                               <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['gem_states']">
+                                    <label class="form-check-label">GEM State</label>
+                                </div>
+                            </div>
                         </div>    
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">

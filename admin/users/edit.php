@@ -287,6 +287,19 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Blog List Links</label>
                                 </div>
                             </div>
+                            <div class="row">
+                                
+                                <div class="col-lg-3">
+                                    <?php $gemcity_per = _get_user_perby_role($_GET['id'],'gem_city',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($gemcity_per == '1') ? 'checked' : '';?> name="user_permis['gem_city']">
+                                    <label class="form-check-label">GEM City</label>
+                                </div>
+                               <div class="col-lg-3">
+                                    <?php $gemstate_per = _get_user_perby_role($_GET['id'],'gem_states',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($gemstate_per == '1') ? 'checked' : '';?> name="user_permis['gem_states']">
+                                    <label class="form-check-label">GEM State</label>
+                                </div>
+                            </div>
                             
                             
                         </div>  
