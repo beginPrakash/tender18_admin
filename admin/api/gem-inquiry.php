@@ -74,7 +74,7 @@ function daily_alert($con, $postData)
     $message .= '<b>Mobile :</b> ' . htmlspecialcode_generator($mobile) . '<br>';
     $message .= '<b>State :</b> ' . htmlspecialcode_generator($state) . '<br>';
     $message .= '';
-    $subject = 'Tender Inquiry';
+    $subject = 'GEM Inquiry';
     $mail = new PHPMailer(true);
     try {
         // Server settings

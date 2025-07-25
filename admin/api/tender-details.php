@@ -59,6 +59,8 @@ function get_results($con, $postData)
             $agency = $row['filter_agency'];
             $department = $row['filter_department'];
             $type = $row['filter_type'];
+            $is_view_document = $row['is_view_document'];
+            $client_type = $row['client_type'];
         }
 
         $condition_new = "";
@@ -327,6 +329,9 @@ function get_results($con, $postData)
                 $result['tenders']['publish_date'] = date('M d, Y', strtotime($row['publish_date']));
                 $result['tenders']['due_date'] = date('M d, Y', strtotime($row['due_date']));
                 $result['tenders']['opening_date'] = date('M d, Y', strtotime($row['opening_date']));
+                $result['tenders']['is_view_document'] = $is_view_document;
+                $result['tenders']['client_type'] = $client_type;
+                
                 $tender_value = "";
                 if (empty($row['tender_value']) && $row['tender_value'] > 0) {
                     $tender_value = 'Refer Document';
@@ -401,6 +406,8 @@ function get_results($con, $postData)
                 $result['tenders']['publish_date'] = date('M d, Y', strtotime($row['publish_date']));
                 $result['tenders']['due_date'] = date('M d, Y', strtotime($row['due_date']));
                 $result['tenders']['opening_date'] = date('M d, Y', strtotime($row['opening_date']));
+                $result['tenders']['is_view_document'] = '';
+                $result['tenders']['client_type'] = '';
                 $tender_value = "";
                 if (empty($row['tender_value']) && $row['tender_value'] > 0) {
                     $tender_value = 'Refer Document';

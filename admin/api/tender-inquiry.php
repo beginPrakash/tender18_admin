@@ -39,8 +39,14 @@ function daily_alert($con, $postData)
     $email = mysqli_real_escape_string($con, $postData['email']);
     $mobile = mysqli_real_escape_string($con, $postData['mobile']);
     $state = mysqli_real_escape_string($con, $postData['state']);
+    $client_type = $postData['client_type'];
 
-    $q1 = "INSERT INTO inquiries(`tender_id`, `name`, `company_name`, `email`, `mobile`, `state`,`type`) VALUES ('$tender_id', '$name', '$company_name', '$email', '$mobile', '$state','tender_inquiry')";
+    if($client_type == 'democlient'){
+        $q1 = "INSERT INTO client_demo_inquiries(`tender_id`, `name`, `company_name`, `email`, `mobile`, `state`) VALUES ('$tender_id', '$name', '$company_name', '$email', '$mobile', '$state')";
+        
+    }else{
+        $q1 = "INSERT INTO inquiries(`tender_id`, `name`, `company_name`, `email`, `mobile`, `state`,`type`) VALUES ('$tender_id', '$name', '$company_name', '$email', '$mobile', '$state','tender_inquiry')";
+    }
     mysqli_query($con, $q1);
 
     // $tenders_data1 = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM `tenders_posts` where id='" . $tender_id . "'"));

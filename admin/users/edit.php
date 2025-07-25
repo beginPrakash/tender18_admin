@@ -218,9 +218,9 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Archive Tenders</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <?php $inquiry_per = _get_user_perby_role($_GET['id'],'inquiries',$con); ?>
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($inquiry_per == '1') ? 'checked' : '';?> name="user_permis['inquiries']">
-                                    <label class="form-check-label">Inquiries</label>
+                                    <?php $all_tenders_per = _get_user_perby_role($_GET['id'],'all_tenders',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($all_tenders_per == '1') ? 'checked' : '';?> name="user_permis['all_tenders']">
+                                    <label class="form-check-label">All Tenders</label>
                                 </div>
                             </div>
                             
@@ -298,6 +298,37 @@ if (!empty($_SESSION['error'])) {
                                     <?php $gemstate_per = _get_user_perby_role($_GET['id'],'gem_states',$con); ?>
                                     <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($gemstate_per == '1') ? 'checked' : '';?> name="user_permis['gem_states']">
                                     <label class="form-check-label">GEM State</label>
+                                </div>
+                            </div>
+                            <div class="row">  
+                                <div class="col-lg-3">
+                                    <?php $agency_per = _get_user_perby_role($_GET['id'],'agencies',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($agency_per == '1') ? 'checked' : '';?> name="user_permis['agencies']">
+                                    <label class="form-check-label">Agencies</label>
+                                </div>
+                               <div class="col-lg-3">
+                                    <?php $zipcode_per = _get_user_perby_role($_GET['id'],'zipcodes',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($zipcode_per == '1') ? 'checked' : '';?> name="user_permis['zipcodes']">
+                                    <label class="form-check-label">Zipcodes</label>
+                                </div>
+                            </div>
+                            <div class="row"> 
+                                <div class="col-lg-3">
+                                    <?php $geminquiry_per = _get_user_perby_role($_GET['id'],'gem_inquiries',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($geminquiry_per == '1') ? 'checked' : '';?> name="user_permis['gem_inquiries']">
+                                    <label class="form-check-label">GEM Inquiry</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <?php $inquiry_per = _get_user_perby_role($_GET['id'],'inquiries',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($inquiry_per == '1') ? 'checked' : '';?> name="user_permis['inquiries']">
+                                    <label class="form-check-label">Inquiries</label>
+                                </div>
+                            </div>
+                            <div class="row"> 
+                                <div class="col-lg-3">
+                                    <?php $services_per = _get_user_perby_role($_GET['id'],'services',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($services_per == '1') ? 'checked' : '';?> name="user_permis['services']">
+                                    <label class="form-check-label">Services</label>
                                 </div>
                             </div>
                             

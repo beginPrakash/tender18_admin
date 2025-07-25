@@ -147,6 +147,7 @@ if (isset($_POST['submit'])) {
                 $status = $_POST['status'];
                 $email_ids = $_POST['email_ids'];
                 $mail_type = $_POST['mail_type'];
+                $is_view_document = $_POST['is_view_document'] ?? NULL;
                 $keywords = mysqli_real_escape_string($con, $_POST['keywords']);
                 $words = mysqli_real_escape_string($con, $_POST['words']);
                 $not_used_keywords = mysqli_real_escape_string($con, $_POST['not_used_keywords']);
@@ -167,7 +168,7 @@ if (isset($_POST['submit'])) {
                 $timestamp2 = strtotime($expired_date);
                 $expired_date = date("Y-m-d", $timestamp2);
 
-                $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date', custom_care_number='$custom_care_number', tech_person_name='$tech_person_name', tech_person_number='$tech_person_number', email_ids='$email_ids', mail_type='$mail_type' where user_id='$user_id' and user_unique_id='$unique_code'";
+                $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date', custom_care_number='$custom_care_number', tech_person_name='$tech_person_name', tech_person_number='$tech_person_number', email_ids='$email_ids', mail_type='$mail_type', 'is_view_document'='$is_view_document' where user_id='$user_id' and user_unique_id='$unique_code'";
                 $sql1 = mysqli_query($con, $q1);
             }
             $_SESSION['success'] = 'Updated successfully.';
@@ -302,6 +303,21 @@ if (!empty($_SESSION['error'])) {
                                 </div>
                             </div>
                         </div>
+                        <?php if(!empty($fetch_users) && $fetch_users['client_type'] == 'democlient'){ ?>
+                            <div class="col-xxl-12 col-md-12">
+                                <div class="row">
+                                    <label for="is_view_document" class="form-label">Is View Document : </label>
+                                    <div class="col-lg-3">
+                                        <input class="form-check-input" type="radio" value="yes" name="is_view_document" <?php echo ($fetch_users['is_view_document'] == 'yes') ? 'checked' : '' ?>>
+                                        <label class="form-check-label">Yes</label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input class="form-check-input" type="radio" value="no" name="is_view_document" <?php echo ($fetch_users['is_view_document'] == 'no') ? 'checked' : '' ?>>
+                                        <label class="form-check-label">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="password" class="form-label">Password : </label>

@@ -188,8 +188,8 @@ if (!empty($_SESSION['error'])) {
                                     <label class="form-check-label">Archive Tenders</label>
                                 </div>
                                 <div class="col-lg-3">
-                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['inquiries']">
-                                    <label class="form-check-label">Inquiries</label>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['all_tenders']">
+                                    <label class="form-check-label">All Tenders</label>
                                 </div>
                             </div>
                            
@@ -252,6 +252,32 @@ if (!empty($_SESSION['error'])) {
                                <div class="col-lg-3">
                                     <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['gem_states']">
                                     <label class="form-check-label">GEM State</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['agencies']">
+                                    <label class="form-check-label">Agencies</label>
+                                </div>
+                               <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['zipcodes']">
+                                    <label class="form-check-label">Zipcodes</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['inquiries']">
+                                    <label class="form-check-label">Inquiries</label>
+                                </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['gem_inquiries']">
+                                    <label class="form-check-label">GEM Inquiry</label>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['services']">
+                                    <label class="form-check-label">Services</label>
                                 </div>
                             </div>
                         </div>    

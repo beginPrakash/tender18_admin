@@ -2,10 +2,12 @@
 
     $dashboards_per = _get_user_perby_role($_SESSION['user_id'],'dashboards',$con);
     $archive_tenders_per = _get_user_perby_role($_SESSION['user_id'],'archive_tenders',$con);
+    $all_tenders_per = _get_user_perby_role($_SESSION['user_id'],'all_tenders',$con);
     $live_tenders_per = _get_user_perby_role($_SESSION['user_id'],'live_tenders',$con);
     $tenders_per = _get_user_perby_role($_SESSION['user_id'],'tenders',$con);
     $menus_per = _get_user_perby_role($_SESSION['user_id'],'menus',$con);
     $clients_per = _get_user_perby_role($_SESSION['user_id'],'clients',$con);
+    $democlients_per = _get_user_perby_role($_SESSION['user_id'],'demo_clients',$con);
     $users_per = _get_user_perby_role($_SESSION['user_id'],'users',$con);
     $testimonials_per = _get_user_perby_role($_SESSION['user_id'],'testimonials',$con);
     $pages_per = _get_user_perby_role($_SESSION['user_id'],'pages',$con);
@@ -15,7 +17,9 @@
     $complain_inquiry_per = _get_user_perby_role($_SESSION['user_id'],'complain_inquiry',$con);
     $registration_form_per = _get_user_perby_role($_SESSION['user_id'],'registration_form',$con);
     $blogs_per = _get_user_perby_role($_SESSION['user_id'],'blogs',$con);
+    $services_per = _get_user_perby_role($_SESSION['user_id'],'services',$con);
     $blogs_link_per = _get_user_perby_role($_SESSION['user_id'],'blog_link',$con);
+    $footer_link_per = _get_user_perby_role($_SESSION['user_id'],'footer_links',$con);
     $states_per = _get_user_perby_role($_SESSION['user_id'],'states',$con);
     $departments_per = _get_user_perby_role($_SESSION['user_id'],'departments',$con);
     $keywords_per = _get_user_perby_role($_SESSION['user_id'],'keywords',$con);
@@ -30,6 +34,8 @@
     $cms_customer_per = _get_user_perby_role($_SESSION['user_id'],'cms_customer',$con);
     $gem_state_per = _get_user_perby_role($_SESSION['user_id'],'gem_states',$con);
     $gem_city_per = _get_user_perby_role($_SESSION['user_id'],'gem_city',$con);
+    $zipcodes_per = _get_user_perby_role($_SESSION['user_id'],'zipcodes',$con);
+    $agencies_per = _get_user_perby_role($_SESSION['user_id'],'agencies',$con);
     
 ?>
 <!-- ========== App Menu ========== -->
@@ -122,6 +128,16 @@
                         </a>
                     </li>
                 <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $democlients_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'demo-client') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/demo-client/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Demo Clients</span>
+                        </a>
+                    </li>
+                <?php } ?>
                 <?php if($_SESSION['role']=='admin' || $blogs_per == 1) { ?>
                     <li class="nav-item active">
                         <a class="nav-link menu-link <?php if ($pages == 'blogs') {
@@ -139,6 +155,26 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/blog_list_links/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Blog List Links</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $footer_link_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'footer_links') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/footer_links/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Footer Links</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $services_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'services') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/services/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Services</span>
                         </a>
                     </li>
                 <?php } ?>
@@ -172,26 +208,30 @@
                         </a>
                     </li>
                 <?php } ?>
-                <!-- <li class="nav-item active">
-                    <a class="nav-link menu-link <?php if ($pages == 'agencies') {
-                                                        echo 'active';
-                                                    } ?>" href="<?php echo ADMIN_URL; ?>/agencies">
-                        <i class="ti ti-brand-google-home"></i>
-                        <span data-key="t-dashboards">Agencies</span>
-                    </a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link menu-link <?php if ($pages == 'zipcodes') {
-                                                        echo 'active';
-                                                    } ?>" href="<?php echo ADMIN_URL; ?>/zipcodes">
-                        <i class="ti ti-brand-google-home"></i>
-                        <span data-key="t-dashboards">Zipcodes</span>
-                    </a>
-                </li> -->
+                <?php if($_SESSION['role']=='admin' || $agencies_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'agencies') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/agencies/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Agencies</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $zipcodes_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'zipcodes') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/zipcodes/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Zipcodes</span>
+                        </a>
+                    </li>
+                <?php } ?>
 
                 <?php if($_SESSION['role']=='admin' || $tenders_per == 1) { ?>
                     <li class="nav-item active">
-                        <a class="nav-link menu-link <?php if ($pages == 'tenders' || $pages == 'zipcodes' || $pages == 'agencies') {
+                        <a class="nav-link menu-link <?php if ($pages == 'tenders') {
                                                             echo 'active';
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/tenders/index.php">
                             <i class="ti ti-brand-google-home"></i>
@@ -216,6 +256,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>archive-tenders/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Archive Tenders</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $all_tenders_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'all-tenders') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>all-tenders/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">All Tenders</span>
                         </a>
                     </li>
                 <?php } ?>
@@ -317,6 +367,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/inquiry/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">Inquiries</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $inquiries_content_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'demo-client-inquiry') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/demo-client-inquiry/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Demo Client Inquiries</span>
                         </a>
                     </li>
                 <?php } ?>
