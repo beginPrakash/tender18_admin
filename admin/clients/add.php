@@ -91,7 +91,8 @@ if (isset($_POST['submit'])) {
         $state = $_POST['state'];
         $status = $_POST['status'];
         $email_ids = $_POST['email_ids'];
-        $mail_type = $_POST['mail_type'];
+        $mail_type = $_POST['mail_type'] ?? 'link';
+        $is_view_document = $_POST['is_view_document'] ?? NULL;
         $keywords = mysqli_real_escape_string($con, $_POST['keywords']);
         $words = mysqli_real_escape_string($con, $_POST['words']);
         $not_used_keywords = mysqli_real_escape_string($con, $_POST['not_used_keywords']);
@@ -104,6 +105,7 @@ if (isset($_POST['submit'])) {
         $filter_type = mysqli_real_escape_string($con, $_POST['filter_type']);
         $start_date = $_POST['start_date'];
         $duration = $_POST['duration'];
+        $client_type = $_POST['client_type'];
         $expired_date = $_POST['expired_date'];
 
         $timestamp1 = strtotime($start_date);
@@ -112,8 +114,8 @@ if (isset($_POST['submit'])) {
         $timestamp2 = strtotime($expired_date);
         $expired_date = date("Y-m-d", $timestamp2);
 
-        $newDataCol = ", company_name, customer_name, alt_email, mobile_number, alt_mobile, whatsapp_alert_no, address, state, status, keywords, words, not_used_keywords, all_filters, filter_city, filter_state, filter_tender_value, filter_agency, filter_department, filter_type, start_date, duration, expired_date, custom_care_number, tech_person_name, tech_person_number,email_ids,mail_type";
-        $newDataVal = ", '$company_name', '$customer_name', '$alt_email', '$mobile_number', '$alt_mobile', '$whatsapp_alert_no', '$address', '$state', '$status', '$keywords', '$words', '$not_used_keywords', '$all_filters', '$filter_city', '$filter_state', '$filter_tender_value', '$filter_agency', '$filter_department', '$filter_type', '$start_date', '$duration', '$expired_date', '$custom_care_number', '$tech_person_name', '$tech_person_number', '$email_ids', '$mail_type'";
+        $newDataCol = ", company_name, customer_name, alt_email, mobile_number, alt_mobile, whatsapp_alert_no, address, state, status, keywords, words, not_used_keywords, all_filters, filter_city, filter_state, filter_tender_value, filter_agency, filter_department, filter_type, start_date, duration, expired_date, custom_care_number, tech_person_name, tech_person_number,email_ids,mail_type,is_view_document,client_type";
+        $newDataVal = ", '$company_name', '$customer_name', '$alt_email', '$mobile_number', '$alt_mobile', '$whatsapp_alert_no', '$address', '$state', '$status', '$keywords', '$words', '$not_used_keywords', '$all_filters', '$filter_city', '$filter_state', '$filter_tender_value', '$filter_agency', '$filter_department', '$filter_type', '$start_date', '$duration', '$expired_date', '$custom_care_number', '$tech_person_name', '$tech_person_number', '$email_ids', '$mail_type','$is_view_document','$client_type'";
     } else {
         $newDataCol = "";
         $newDataVal = "";
@@ -181,7 +183,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/clients';
+                        window.location.href='" . ADMIN_URL . "/clients/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -239,6 +241,15 @@ if (!empty($_SESSION['error'])) {
             <!-- <div class="card-header">
                 <h4 class="card-title mb-0">Change Password</h4>
             </div> -->
+            <?php 
+            $cid = $_GET['cid'] ?? '';
+            $csql = "SELECT * FROM `demo_client` where id={$cid}";
+            $cresult = mysqli_query($con, $csql);
+            if(!empty($cid)){
+                $fetch_users = mysqli_fetch_assoc($cresult);
+            }
+           
+?>
             <form action="" method="post" id="register" enctype="multipart/form-data">
                 <div class="card-body">
                     <div class="row gy-4">
@@ -256,13 +267,13 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="username" class="form-label">Username : <span class="text-danger">*</span></label>
-                                <input type="text" name="username" placeholder="Enter Username " class="form-control" id="username">
+                                <input type="text" name="username" placeholder="Enter Username " class="form-control" id="username" value="<?php echo $fetch_users['name'] ?? ''; ?>">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="email" class="form-label">Email : <span class="text-danger">*</span></label>
-                                <input type="email" name="email" placeholder="Enter Email " class="form-control" id="email">
+                                <input type="email" name="email" placeholder="Enter Email " class="form-control" id="email" value="<?php echo $fetch_users['email_id'] ?? ''; ?>">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -284,17 +295,32 @@ if (!empty($_SESSION['error'])) {
                                 </div>
                             </div>
                         </div>
+                        <?php if(!empty($cid)){ ?>
+                            <div class="col-xxl-12 col-md-12">
+                                <div class="row">
+                                    <label for="is_view_document" class="form-label">Is View Document : </label>
+                                    <div class="col-lg-3">
+                                        <input class="form-check-input" type="radio" value="yes" name="is_view_document">
+                                        <label class="form-check-label">Yes</label>
+                                    </div>
+                                    <div class="col-lg-3">
+                                        <input class="form-check-input" type="radio" value="no" name="is_view_document" <?php echo (!empty($cid)) ? 'checked' : ''; ?>>
+                                        <label class="form-check-label">No</label>
+                                    </div>
+                                </div>
+                            </div>
+                        <?php } ?>
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="pass" class="form-label">Password : <span class="text-danger">*</span></label>
-                                <input type="password" name="pass" placeholder="Enter Password " class="form-control" id="pass">
+                                <input type="password" name="pass" placeholder="Enter Password " class="form-control" id="pass" value="<?php echo $fetch_users['password'] ?? ''; ?>">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="company_name" class="form-label">Company Name : <span class="text-danger">*</span></label>
-                                <input type="text" name="company_name" placeholder="Enter Company Name " class="form-control" id="company_name">
+                                <input type="text" name="company_name" placeholder="Enter Company Name " class="form-control" id="company_name" value="<?php echo $fetch_users['company_name'] ?? ''; ?>">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
@@ -312,7 +338,7 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="mobile_number" class="form-label">Mobile Number : <span class="text-danger">*</span></label>
-                                <input type="text" name="mobile_number" placeholder="Enter Mobile Number " class="form-control" id="mobile_number">
+                                <input type="text" name="mobile_number" placeholder="Enter Mobile Number " class="form-control" id="mobile_number" value="<?php echo $fetch_users['phone_no'] ?? ''; ?>">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
@@ -338,42 +364,114 @@ if (!empty($_SESSION['error'])) {
                                 <label for="state" class="form-label">State : <span class="text-danger">*</span></label>
                                 <select id="state" name="state" class="form-select">
                                     <option value="">Select State</option>
-                                    <option value="Andaman and Nicobar Islands">Andaman and Nicobar Islands</option>
-                                    <option value="Andhra Pradesh">Andhra Pradesh</option>
-                                    <option value="Arunachal Pradesh">Arunachal Pradesh</option>
-                                    <option value="Assam">Assam</option>
-                                    <option value="Bihar">Bihar</option>
-                                    <option value="Chandigarh">Chandigarh</option>
-                                    <option value="Chhattisgarh">Chhattisgarh</option>
-                                    <option value="Dadra And Nagar Haveli">Dadra And Nagar Haveli</option>
-                                    <option value="Delhi">Delhi</option>
-                                    <option value="Goa">Goa</option>
-                                    <option value="Gujarat">Gujarat</option>
-                                    <option value="Haryana">Haryana</option>
-                                    <option value="Himachal Pradesh">Himachal Pradesh</option>
-                                    <option value="Jammu & Kashmir">Jammu & Kashmir</option>
-                                    <option value="Jharkhand">Jharkhand</option>
-                                    <option value="Karnataka">Karnataka</option>
-                                    <option value="Kerala">Kerala</option>
-                                    <option value="Ladakh">Ladakh</option>
-                                    <option value="Lakshadweep">Lakshadweep</option>
-                                    <option value="Madhya Pradesh">Madhya Pradesh</option>
-                                    <option value="Maharashtra">Maharashtra</option>
-                                    <option value="Manipur">Manipur</option>
-                                    <option value="Meghalaya">Meghalaya</option>
-                                    <option value="Mizoram">Mizoram</option>
-                                    <option value="Nagaland">Nagaland</option>
-                                    <option value="Odisha">Odisha</option>
-                                    <option value="Puducherry">Puducherry</option>
-                                    <option value="Punjab">Punjab</option>
-                                    <option value="Rajasthan">Rajasthan</option>
-                                    <option value="Sikkim">Sikkim</option>
-                                    <option value="Tamil Nadu">Tamil Nadu</option>
-                                    <option value="Telangana">Telangana</option>
-                                    <option value="Tripura">Tripura</option>
-                                    <option value="Uttar Pradesh">Uttar Pradesh</option>
-                                    <option value="Uttarakhand">Uttarakhand</option>
-                                    <option value="West Bengal">West Bengal</option>
+                                    <option value="Andaman and Nicobar Islands" <?php if (!empty($fetch_users) && strpos('Andaman and Nicobar Islands',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Andaman and Nicobar Islands</option>
+                                    <option value="Andhra Pradesh" <?php if (!empty($fetch_users) && strpos('Andhra Pradesh',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Andhra Pradesh</option>
+                                    <option value="Arunachal Pradesh" <?php if (!empty($fetch_users) && strpos('Arunachal Pradesh',$fetch_users['state']) !== false) {
+                                                                            echo "selected";
+                                                                        } ?>>Arunachal Pradesh</option>
+                                    <option value="Assam" <?php if (!empty($fetch_users) && strpos('Assam',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Assam</option>
+                                    <option value="Bihar" <?php if (!empty($fetch_users) && strpos('Bihar',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Bihar</option>
+                                    <option value="Chandigarh" <?php if (!empty($fetch_users) && strpos('Chandigarh',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Chandigarh</option>                        
+                                    <option value="Chhattisgarh" <?php if (!empty($fetch_users) && strpos('Chhattisgarh',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Chhattisgarh</option>
+                                    <option value="Dadra And Nagar Haveli" <?php if (!empty($fetch_users) && strpos('Dadra And Nagar Haveli',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Dadra And Nagar Haveli</option>
+                                    <option value="Delhi" <?php if (!empty($fetch_users) && strpos('Delhi',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Delhi</option>
+                                    <option value="Goa" <?php if (!empty($fetch_users) && strpos('Goa',$fetch_users['state']) !== false) {
+                                                            echo "selected";
+                                                        } ?>>Goa</option>
+                                    <option value="Gujarat" <?php if (!empty($fetch_users) && strpos('Gujarat',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Gujarat</option>
+                                    <option value="Haryana" <?php if (!empty($fetch_users) && strpos('Haryana',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Haryana</option>
+                                    <option value="Himachal Pradesh" <?php if (!empty($fetch_users) && strpos('Himachal Pradesh',$fetch_users['state']) !== false) {
+                                                                            echo "selected";
+                                                                        } ?>>Himachal Pradesh</option>
+                                    <option value="Jammu & Kashmir" <?php if (!empty($fetch_users) && strpos('Jammu & Kashmir',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Jammu & Kashmir</option>
+                                    <option value="Jharkhand" <?php if (!empty($fetch_users) && strpos('Jharkhand',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Jharkhand</option>
+                                    <option value="Karnataka" <?php if (!empty($fetch_users) && strpos('Karnataka',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Karnataka</option>
+                                    <option value="Kerala" <?php if (!empty($fetch_users) && strpos('Kerala',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Kerala</option>
+                                    <option value="Ladakh" <?php if (!empty($fetch_users) && strpos('Ladakh',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Ladakh</option>
+                                    <option value="Lakshadweep" <?php if (!empty($fetch_users) && strpos('Lakshadweep',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Lakshadweep</option>
+                                    <option value="Madhya Pradesh" <?php if (!empty($fetch_users) && strpos('Madhya Pradesh',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Madhya Pradesh</option>
+                                    <option value="Maharashtra" <?php if (!empty($fetch_users) && strpos('Maharashtra',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Maharashtra</option>
+                                    <option value="Manipur" <?php if (!empty($fetch_users) && strpos('Manipur',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Manipur</option>
+                                    <option value="Meghalaya" <?php if (!empty($fetch_users) && strpos('Meghalaya',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Meghalaya</option>
+                                    <option value="Mizoram" <?php if (!empty($fetch_users) && strpos('Mizoram',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Mizoram</option>
+                                    <option value="Nagaland" <?php if (!empty($fetch_users) && strpos('Nagaland',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Nagaland</option>
+                                    <option value="Odisha" <?php if (!empty($fetch_users) && strpos('Odisha',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Odisha</option>
+                                    <option value="Puducherry" <?php if (!empty($fetch_users) && strpos('Puducherry',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Puducherry</option>
+                                    <option value="Punjab" <?php if (!empty($fetch_users) && strpos('Punjab',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Punjab</option>
+                                    <option value="Rajasthan" <?php if (!empty($fetch_users) && strpos('Rajasthan',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Rajasthan</option>
+                                    <option value="Sikkim" <?php if (!empty($fetch_users) && strpos('Sikkim',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Sikkim</option>
+                                    <option value="Tamil Nadu" <?php if (!empty($fetch_users) && strpos('Tamil Nadu',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Tamil Nadu</option>
+                                    <option value="Telangana" <?php if (!empty($fetch_users) && strpos('Telangana',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Telangana</option>
+                                    <option value="Tripura" <?php if (!empty($fetch_users) && strpos('Tripura',$fetch_users['state']) !== false) {
+                                                                echo "selected";
+                                                            } ?>>Tripura</option>
+                                    <option value="Uttar Pradesh" <?php if (!empty($fetch_users) && strpos('Uttar Pradesh',$fetch_users['state']) !== false) {
+                                                                        echo "selected";
+                                                                    } ?>>Uttar Pradesh</option>
+                                    <option value="Uttarakhand" <?php if (!empty($fetch_users) && strpos('Uttarakhand',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>Uttarakhand</option>
+                                    <option value="West Bengal" <?php if (!empty($fetch_users) && strpos('West Bengal',$fetch_users['state']) !== false) {
+                                                                    echo "selected";
+                                                                } ?>>West Bengal</option>
                                 </select>
                             </div>
                         </div>
@@ -410,10 +508,11 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="keywords" class="form-label">Keywords : <span class="text-danger">*</span></label>
-                                <textarea name="keywords" rows="3" placeholder="Enter Keywords " class="form-control" id="keywords"></textarea>
+                                <textarea name="keywords" rows="3" placeholder="Enter Keywords " class="form-control" id="keywords"><?php echo $fetch_users['keywords'] ?? ''; ?></textarea>
                                 <!-- <input type="text" name="keywords" placeholder="Enter Keywords " data-choices data-choices-text-unique-true data-choices-removeItem class="form-control" id="keywords"> -->
                             </div>
                         </div>
+                        <input type="hidden" name="client_type" value="<?php echo (!empty($fetch_users)) ? 'democlient' : 'normal'; ?>">
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="words" class="form-label">Words : <span class="text-danger">*</span></label>

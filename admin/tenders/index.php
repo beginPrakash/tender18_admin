@@ -242,7 +242,7 @@ if (!empty($_SESSION['error'])) {
             ?>
             <div class="card-header">
                 <div class="row mb-4">
-                    <div class="col col-2 float-end">
+                    <!-- <div class="col col-2 float-end">
                         <a href="<?php echo ADMIN_URL; ?>agencies/index.php">
                             <h5 class="card-title btn w-100 bg-primary text-white">Add Agencies</h5>
                         </a>
@@ -251,7 +251,7 @@ if (!empty($_SESSION['error'])) {
                         <a href="<?php echo ADMIN_URL; ?>zipcodes/index.php">
                             <h5 class="card-title btn w-100 bg-primary text-white">Add Zipcodes</h5>
                         </a>
-                    </div>
+                    </div> -->
                     <div class="col col-2 float-end">
                         <a href="<?php echo ADMIN_URL; ?>tenders/index.php?move=true" class="move" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center-01">
                             <h5 class="card-title btn w-100 bg-primary text-white">Move to Live Tenders</h5>

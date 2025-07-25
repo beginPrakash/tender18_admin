@@ -3,6 +3,20 @@
 <?php $pages = 'agencies'; ?>
 <?php include '../includes/header.php' ?>
 <?php
+$agencies_per = _get_user_perby_role($_SESSION['user_id'],'agencies',$con);
+
+if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}elseif($_SESSION['role']=='employee' && $agencies_per!=1){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}
+
 if (isset($_POST['ag_id'])) {
     $as_id = $_POST['ag_id'];
     $log_qu = "INSERT INTO agency_log(`agency_id`,`action_type`) VALUES ($as_id,'delete')";

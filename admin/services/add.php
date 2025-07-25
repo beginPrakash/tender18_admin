@@ -1,0 +1,197 @@
+<?php
+
+include "../includes/authentication.php";
+?>
+<?php $pages = 'blogs'; ?>
+<?php include '../includes/header.php'; ?>
+<?php // include '../includes/connection.php';
+
+?>
+<?php
+$blogs_per = _get_user_perby_role($_SESSION['user_id'],'blogs',$con);
+
+if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}elseif($_SESSION['role']=='employee' && $blogs_per!=1){ 
+    // echo "not admin ------>" . $_SESSION['role'];
+    echo "<script>
+            window.location.href='../index.php';
+            </script>";
+}
+?>
+<?php
+if (isset($_POST['submit'])) {
+    $title = mysqli_real_escape_string($con, $_POST['title']);
+    $description = $_POST['description'];
+    $h1 = $_POST['h1'];
+    $meta_title = mysqli_real_escape_string($con, $_POST['meta_title']);
+    $meta_description = mysqli_real_escape_string($con, $_POST['meta_description']);
+    $file = $_FILES['service_image'];
+    $filename = $file['name'];
+    $filepath = $file['tmp_name'];
+    $fileerror = $file['error'];
+
+    if (!empty($filename)) {
+        if ($fileerror == 0) {
+            $string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            $files =  substr(str_shuffle($string), 0, 8);
+            $temp = explode(".", $filename);
+            $newfilename = time() . $files . '.' . end($temp);
+            $destfile = '../uploads/images/' . $newfilename;
+            move_uploaded_file($filepath, $destfile);
+        }
+    }
+
+    $con_desc = preg_replace('/(<a\s+[^>]*)(\w+)="([^"]*)"/', '$1$2=$3', $description);
+    $con_desc =mysqli_real_escape_string($con, $con_desc);
+
+    if (!empty($filename)) {
+        $filevalue =  $newfilename;
+    } else {
+        $filevalue = '';
+    }
+    $created_by = $_SESSION['user_id']; 
+        $q = "INSERT INTO services(`title`, `description`, `service_image`, `created_by`,`h1`,`meta_title`,`meta_description`) VALUES ('$title', '$con_desc', '$filevalue',$created_by,'$h1','$meta_title','$meta_description')";
+
+        $sql = mysqli_query($con, $q);
+
+        if ($sql) {
+            $_SESSION['success'] = 'Service created successfully.';
+        } else {
+            $_SESSION['error'] = 'Something went wrong.';
+        }
+}
+?>
+<?php
+if (!empty($_SESSION['success'])) {
+    echo '<div class="alert alert-success alert-dismissible fade show mb-4 show msg_box" role="alert">
+            <strong>' . $_SESSION['success'] . '</strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+    $_SESSION['success'] = "";
+    echo "
+             <script>
+                     setTimeout(function(){
+                        window.location.href='" . ADMIN_URL . "/services/index.php';
+                         document.querySelector('.msg_box').remove();
+                     }, 3000);
+                 
+             </script>";
+}
+if (!empty($_SESSION['error'])) {
+    echo '<div class="alert alert-danger alert-dismissible fade show mb-4 msg_box" role="alert">
+            <strong> ' . $_SESSION['error'] . ' </strong>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>';
+    $_SESSION['error'] = "";
+    echo "
+             <script>
+                     setTimeout(function(){
+                         //window.location.reload();
+                         document.querySelector('.msg_box').remove();
+ 
+                         }, 3000);
+                 
+             </script>";
+}
+
+?>
+
+<div class="row">
+    <div class="col-12">
+        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
+            <h4 class="mb-sm-0">Services</h4>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-lg-12">
+        <div class="card">
+            <!-- <div class="card-header">
+                <h4 class="card-title mb-0">Change Password</h4>
+            </div> -->
+            <form action="" method="post" id="service_form" enctype="multipart/form-data">
+                <div class="card-body">
+                    <div class="row gy-4">
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="title" class="form-label">Title : <span class="text-danger">*</span></label>
+                                <input type="text" name="title" placeholder="Enter Title " class="form-control" id="title">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="description" class="form-label">Description : <span class="text-danger">*</span></label>
+                                <textarea rows="5" name="description" class="form-control d-none" id="description"></textarea>
+                                <div class="ckeditor-classic-total ckeditor-classic-job-profile"></div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="service_image" class="form-label">Service Image: <span class="text-danger">*</span></label>
+                                <input class="form-control" type="file" name="service_image" id="service_image">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="h1" class="form-label">H1 : <span class="text-danger">*</span></label>
+                                <input type="text" name="h1" placeholder="Enter H1 " class="form-control" id="h1">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="meta_title" class="form-label">Meta Title : </label>
+                                <input type="text" name="meta_title" placeholder="Enter Meta Title " class="form-control" id="meta_title">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="meta_description" class="form-label">Meta Description : </label>
+                                <textarea rows="5" name="meta_description" class="form-control" id="meta_description"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="text-start">
+                                <button type="submit" class="btn btn-primary" name="submit">Submit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<?php include "../includes/footer.php" ?>
+<script>
+$(document).ready(function() {
+        $('#service_form').validate({
+            rules: {
+                'title': "required",
+                'description': "required",
+                'service_image': "required",
+            },
+            
+        });
+
+        ClassicEditor.create(document.querySelector(".ckeditor-classic-job-profile"))
+        .then(function(c) {
+            c.ui.view.editable.element.style.height = "200px";
+        })
+        .catch(function(c) {
+            console.error(c);
+        });
+
+        $('#service_form').submit(function(event) {
+            $('.ckeditor-classic-total').each(function(i, obj) {
+                var data = $(this).parent().find(".ck-editor .ck-editor__main .ck-editor__editable").html();
+                if (data != "")
+                    $(this).parent().find('textarea').val(data);
+            });
+        });
+
+});
+</script>
