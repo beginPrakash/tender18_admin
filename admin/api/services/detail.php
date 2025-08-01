@@ -95,7 +95,7 @@ function get_results($con, $postData)
 
             $result['main']['meta_title'] = $row['meta_title'];
 
-            $result['main']['meta_description'] = strip_tags(substr($row['description'], 0, 150));
+            $result['main']['meta_description'] = $row['meta_description'];
 
         }
 
