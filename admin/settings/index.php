@@ -16,6 +16,8 @@ if (isset($_POST['btnInsert'])) {
     $button_link = $_POST['button_link'];
     $button_text1 = mysqli_real_escape_string($con, $_POST['button_text1']);
     $button_link1 = $_POST['button_link1'];
+    $button_text2 = mysqli_real_escape_string($con, $_POST['button_text2']);
+    $button_link2 = $_POST['button_link2'];
     $copyright_text = mysqli_real_escape_string($con, $_POST['copyright_text']);
     $quick_menu_title = mysqli_real_escape_string($con, $_POST['quick_menu_title']);
     $contact_menu_title = mysqli_real_escape_string($con, $_POST['contact_menu_title']);
@@ -71,7 +73,7 @@ if (isset($_POST['btnInsert'])) {
         $filevalue2 =  $hidden_mobile_logo;
     }
 
-    $query = "INSERT INTO header (`desktop_logo`, `mobile_logo`, `button_link`, `button_text`, `button_link1`, `button_text1`, `whatsapp_num`) VALUES('$filevalue1', '$filevalue2', '$button_link', '$button_text', '$button_link1', '$button_text1', '$whatsapp_num')";
+    $query = "INSERT INTO header (`desktop_logo`, `mobile_logo`, `button_link`, `button_text`, `button_link1`, `button_text1`, `button_link2`, `button_text2`, `whatsapp_num`) VALUES('$filevalue1', '$filevalue2', '$button_link', '$button_text', '$button_link1', '$button_text1', '$button_link2', '$button_text2', '$whatsapp_num')";
     $sql1 = mysqli_query($con, $query);
 
     $query_2 = "INSERT INTO footer (`copyright_text`,`quick_menu_title`,`contact_menu_title`,`tender_menu_title`,`terms_text`,`terms_link`, `first_email`, `second_email`, `address`, `contact_no`, `facebook_link`, `twitter_link`, `linked_link`, `youtube_link`, `instagram_link`) VALUES('$copyright_text', '$quick_menu_title', '$contact_menu_title', '$tender_menu_title', '$terms_text', '$terms_link', '$first_email', '$second_email', '$address', '$contact_no', '$facebook_link', '$twitter_link', '$linked_link', '$youtube_link', '$instagram_link')";
@@ -131,6 +133,8 @@ $button_link = "";
 $button_text = "";
 $button_link1 = "";
 $button_text1 = "";
+$button_link2 = "";
+$button_text2 = "";
 $copyright_text = "";
 $first_email = "";
 $second_email = "";
@@ -159,6 +163,8 @@ if ($header_result == 1) {
         $button_text = $row['button_text'];
         $button_link1 = $row['button_link1'];
         $button_text1 = $row['button_text1'];
+        $button_link2 = $row['button_link2'];
+        $button_text2 = $row['button_text2'];
         $whatsapp_num = $row['whatsapp_num'];
     }
 }
@@ -248,6 +254,18 @@ if ($footer_result == 1) {
                             <div class="col-md-6">
                                 <label for="button_link1" class="form-label">Button Link1 : <span class="text-danger">*</span></label>
                                 <input type="text" name="button_link1" class="form-control" id="button_link1" value="<?php echo $button_link1; ?>">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="button_text2" class="form-label">Button Text2 : <span class="text-danger">*</span></label>
+                                <input type="text" name="button_text2" class="form-control" id="button_text2" value="<?php echo htmlspecialcode_generator($button_text2); ?>">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="button_link2" class="form-label">Button Link2 : <span class="text-danger">*</span></label>
+                                <input type="text" name="button_link2" class="form-control" id="button_link2" value="<?php echo $button_link2; ?>">
                             </div>
                         </div>
                     </div>

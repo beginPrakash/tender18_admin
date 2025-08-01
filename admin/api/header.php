@@ -27,12 +27,14 @@ function get_results($con)
             $result['main']['button_text'] = htmlspecialcode_generator($row['button_text']);
             $result['main']['button_link1'] = $row['button_link1'];
             $result['main']['button_text1'] = htmlspecialcode_generator($row['button_text1']);
+            $result['main']['button_link2'] = $row['button_link2'];
+            $result['main']['button_text2'] = htmlspecialcode_generator($row['button_text2']);
             $result['main']['whatsapp_num'] = $row['whatsapp_num'];
         }
     } else {
         $result['main'] = "No data found";
     }
-    $menus_data = mysqli_query($con, "SELECT * FROM `menus` where `location`='header'");
+    $menus_data = mysqli_query($con, "SELECT * FROM `menus` where `location`='header' order by id ASC limit 5");
     $menus_result = mysqli_num_rows($menus_data);
     if ($menus_result > 0) {
         $count = 1;

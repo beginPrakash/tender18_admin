@@ -114,6 +114,7 @@ if (!empty($_SESSION['error'])) {
     <div class="col-lg-12">
         <div class="card">
             <?php
+            //print_r($_GET);exit;
             if (isset($_GET['search_term']) && !empty($_GET['search_term']) && isset($_GET['due_date']) && !empty($_GET['due_date'])) {
                 $search = $_GET['search_term'];
                 $due_date = $_GET['due_date'];
@@ -121,11 +122,11 @@ if (!empty($_SESSION['error'])) {
                 $from = date('Y-m-d 00:00:00', strtotime($arr[0]));
                 $to = date('Y-m-d 00:00:00', strtotime($arr[1]));
                 $condition = "where (title like '%$search%' or ref_no like '%$search%' or tender_id like '%$search%' or city like '%$search%' or state like '%$search%') and due_date BETWEEN '" . $from . "' AND '" . $to . "'";
-            } else if (isset($_GET['search_term']) && !empty($_GET['search_term'])) {
+            } else if (isset($_GET['search_term']) && !empty($_GET['search_term']) && empty($_GET['due_date'])) {
                 $search = $_GET['search_term'];
                 $due_date = "";
                 $condition = "where (title like '%$search%' or ref_no like '%$search%' or tender_id like '%$search%' or city like '%$search%' or state like '%$search%')";
-            } else if (isset($_GET['due_date']) && !empty($_GET['due_date'])) {
+            } else if (isset($_GET['due_date']) && !empty($_GET['due_date']) && empty($_GET['search_term'])) {
                 $search = "";
                 $due_date = $_GET['due_date'];
                 $arr = explode('/', $due_date);
@@ -154,16 +155,16 @@ if (!empty($_SESSION['error'])) {
                                         Show
                                         <select name="page-limit" aria-controls="example" onchange="this.form.submit()" class="form-select form-select-sm">
                                             <option value="10" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 10) {
-                                                                    echo "selected";
+                                                                    "selected";
                                                                 } ?>>10</option>
                                             <option value="25" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 25) {
-                                                                    echo "selected";
+                                                                   "selected";
                                                                 } ?>>25</option>
                                             <option value="50" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 50) {
-                                                                    echo "selected";
+                                                                   "selected";
                                                                 } ?>>50</option>
                                             <option value="100" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 100) {
-                                                                    echo "selected";
+                                                                   "selected";
                                                                 } ?>>100</option>
                                         </select>
                                         entries
@@ -181,7 +182,7 @@ if (!empty($_SESSION['error'])) {
                                         <?php if(count($get_month_list) > 0) {
                                             $fdue_date = $_GET['due_date'] ?? '';
                                             foreach($get_month_list as $key => $val){ ?>
-                                                <option value="<?php echo $val['value']; ?>"?> <?php if($val['value'] == $fdue_date) { echo 'selected'; } ?><?php echo $val['label']; ?></option>
+                                                <option value="<?php echo $val['value']; ?>" <?php if($val['value'] == $fdue_date) { echo 'selected'; } ?>><?php echo $val['label']; ?></option>
                                         <?php    }
                                         } ?>
                                     </select>
@@ -216,7 +217,7 @@ if (!empty($_SESSION['error'])) {
                         } else {
                             $limit = 10;
                         }
-                        $total_query = mysqli_fetch_array(mysqli_query($con, "SELECT COUNT(*) FROM `tenders_all` $condition order by `id` DESC "))[0];
+                        $total_query = mysqli_fetch_array(mysqli_query($con, "SELECT COUNT(*) FROM `tenders_all` $condition order by `due_date` DESC "))[0];
                         // print_r($total_query);
                         $total = ceil($total_query / $limit);
                         $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;

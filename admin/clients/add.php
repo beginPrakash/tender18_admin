@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
     $files =  substr(str_shuffle($string), 0, 8);
     $unique_code = time() . $files;
     $fetch = mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE  users_name='$username' OR users_email='$email'"));
-
+    $all_filters = '';
     if (isset($_POST['company_name'])) {
         $company_name = mysqli_real_escape_string($con, $_POST['company_name']);
         $customer_name = $_POST['customer_name'];
@@ -96,7 +96,10 @@ if (isset($_POST['submit'])) {
         $keywords = mysqli_real_escape_string($con, $_POST['keywords']);
         $words = mysqli_real_escape_string($con, $_POST['words']);
         $not_used_keywords = mysqli_real_escape_string($con, $_POST['not_used_keywords']);
-        $all_filters = implode(",", $_POST['all_filters']);
+        if(!empty($_POST['all_filters'])){
+            $all_filters = implode(",", $_POST['all_filters']);
+        }
+        
         $filter_city = mysqli_real_escape_string($con, $_POST['filter_city']);
         $filter_state = mysqli_real_escape_string($con, $_POST['filter_state']);
         $filter_tender_value = mysqli_real_escape_string($con, $_POST['filter_tender_value']);
@@ -267,7 +270,7 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="username" class="form-label">Username : <span class="text-danger">*</span></label>
-                                <input type="text" name="username" placeholder="Enter Username " class="form-control" id="username" value="<?php echo $fetch_users['name'] ?? ''; ?>">
+                                <input type="text" name="username" placeholder="Enter Username " class="form-control" id="username" value="<?php echo $fetch_users['email_id'] ?? ''; ?>">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -326,7 +329,7 @@ if (!empty($_SESSION['error'])) {
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
                                 <label for="customer_name" class="form-label">Customer Name : <span class="text-danger">*</span></label>
-                                <input type="text" name="customer_name" placeholder="Enter Customer Name " class="form-control" id="customer_name">
+                                <input type="text" name="customer_name" placeholder="Enter Customer Name " class="form-control" id="customer_name" value="<?php echo $fetch_users['name'] ?? ''; ?>">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
@@ -349,13 +352,13 @@ if (!empty($_SESSION['error'])) {
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="whatsapp_alert_no" class="form-label">Whatsapp Alert Number : <span class="text-danger">*</span></label>
+                                <label for="whatsapp_alert_no" class="form-label">Whatsapp Alert Number :</label>
                                 <input type="text" name="whatsapp_alert_no" placeholder="Enter Whatsapp Alert Number " class="form-control" id="whatsapp_alert_no">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="address" class="form-label">Address : <span class="text-danger">*</span></label>
+                                <label for="address" class="form-label">Address :</label>
                                 <textarea name="address" rows="3" placeholder="Enter Address " class="form-control" id="address"></textarea>
                             </div>
                         </div>
@@ -502,6 +505,7 @@ if (!empty($_SESSION['error'])) {
                                     <option value="Expired">Expired</option>
                                     <option value="Renew">Renew</option>
                                     <option value="Upgrade">Upgrade</option>
+                                    <option value="DemoClient">DemoClient</option>
                                 </select>
                             </div>
                         </div>
@@ -515,31 +519,31 @@ if (!empty($_SESSION['error'])) {
                         <input type="hidden" name="client_type" value="<?php echo (!empty($fetch_users)) ? 'democlient' : 'normal'; ?>">
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="words" class="form-label">Words : <span class="text-danger">*</span></label>
+                                <label for="words" class="form-label">Words : </label>
                                 <input type="text" name="words" data-choices data-choices-text-unique-true data-choices-removeItem placeholder="Enter Words " class="form-control" id="words">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="not_used_keywords" class="form-label">Not Used Keywords: <span class="text-danger">*</span></label>
+                                <label for="not_used_keywords" class="form-label">Not Used Keywords: </label>
                                 <input type="text" name="not_used_keywords" data-choices data-choices-text-unique-true data-choices-removeItem placeholder="Enter Not Used  Keywords " class="form-control" id="not_used_keywords">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="custom_care_number" class="form-label">Custom Care Number : <span class="text-danger">*</span></label>
+                                <label for="custom_care_number" class="form-label">Custom Care Number : </label>
                                 <input type="text" name="custom_care_number" placeholder="Enter Custom Care Number " class="form-control" id="custom_care_number">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="tech_person_name" class="form-label">Technical Person Name : <span class="text-danger">*</span></label>
+                                <label for="tech_person_name" class="form-label">Technical Person Name : </label>
                                 <input type="text" name="tech_person_name" placeholder="Enter Technical Person Name " class="form-control" id="tech_person_name">
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="tech_person_number" class="form-label">Technical Person Number : <span class="text-danger">*</span></label>
+                                <label for="tech_person_number" class="form-label">Technical Person Number : </label>
                                 <input type="text" name="tech_person_number" placeholder="Enter Technical Person Number " class="form-control" id="tech_person_number">
                             </div>
                         </div>
@@ -749,49 +753,49 @@ if (!empty($_SESSION['error'])) {
                         </div>
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_city" class="form-label">Filter City : <span class="text-danger">*</span></label>
+                                <label for="filter_city" class="form-label">Filter City :</label>
                                 <input type="text" name="filter_city" placeholder=" " data-choices data-choices-text-unique-true data-choices-removeItem class="form-control" id="filter_city">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_state" class="form-label">Filter State : <span class="text-danger">*</span></label>
+                                <label for="filter_state" class="form-label">Filter State :</label>
                                 <input type="text" name="filter_state" placeholder=" " data-choices data-choices-text-unique-true data-choices-removeItem class="form-control" id="filter_state">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_tender_value" class="form-label">Filter Tender Value : <span class="text-danger">*</span></label>
+                                <label for="filter_tender_value" class="form-label">Filter Tender Value :</label>
                                 <input type="text" name="filter_tender_value" placeholder=" " class="form-control" id="filter_tender_value">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_agency" class="form-label">Filter Agency : <span class="text-danger">*</span></label>
+                                <label for="filter_agency" class="form-label">Filter Agency :</label>
                                 <input type="text" name="filter_agency" placeholder=" " data-choices data-choices-text-unique-true data-choices-removeItem class="form-control" id="filter_agency">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_department" class="form-label">Filter Department Type : <span class="text-danger">*</span></label>
+                                <label for="filter_department" class="form-label">Filter Department Type : </label>
                                 <input type="text" name="filter_department" placeholder=" " data-choices data-choices-text-unique-true data-choices-removeItem class="form-control" id="filter_department">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_type" class="form-label">Filter Type : <span class="text-danger">*</span></label>
+                                <label for="filter_type" class="form-label">Filter Type : </label>
                                 <input type="text" name="filter_type" placeholder=" " data-choices data-choices-text-unique-true data-choices-removeItem class="form-control" id="filter_type">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="all_filters" class="form-label w-100 mb-2">All filters: <span class="text-danger">*</span></label>
+                                <label for="all_filters" class="form-label w-100 mb-2">All filters: </label>
 
                                 <div class="w-100">
                                     <input class="form-check-input" type="checkbox" value="ref_no" name="all_filters[]" id="formCheck1">

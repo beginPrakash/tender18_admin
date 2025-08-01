@@ -119,6 +119,11 @@
                             <td>Sample Tender</td>
                             <td><a href="<?php echo ADMIN_URL; ?>pages/sample-tender/index.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
                         </tr>
+                        <tr>
+                            <th scope="row">16</th>
+                            <td>Demo Client</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>pages/demo-client-form/index.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>

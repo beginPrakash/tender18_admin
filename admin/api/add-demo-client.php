@@ -51,17 +51,19 @@ function get_results($con, $postData)
     $state = mysqli_real_escape_string($con, $postData['state']);
     $keywords = mysqli_real_escape_string($con, $postData['keywords']);
     $pass = $postData['password'];
+    $banner_data = mysqli_query($con, "SELECT * FROM `demo_client` where email_id='" . $email_id . "'");
+    $banner_result = mysqli_num_rows($banner_data);
+    if ($banner_result != 0) {
+        $result['message'] = "Email already exists";
+    }else{
+        $q1 = "INSERT INTO demo_client(`name`,`company_name`, `email_id`, `phone_no`, `state`,`keywords`,`password`) VALUES ('$name', '$company_name', '$email_id', '$phone_no', '$state','$keywords','$pass')";
+        mysqli_query($con, $q1);
+        $result['message'] = "Data Saved Successfully";
 
-    $q1 = "INSERT INTO demo_client(`name`,`company_name`, `email_id`, `phone_no`, `state`,`keywords`,`password`) VALUES ('$name', '$company_name', '$email_id', '$phone_no', '$state','$keywords','$pass')";
-    mysqli_query($con, $q1);
+    }
+    
+    
 
-    $result['name'] = htmlspecialcode_generator($name);
-    $result['company_name'] = htmlspecialcode_generator($company_name);
-    $result['email'] = htmlspecialcode_generator($email_id);
-    $result['mobile'] = htmlspecialcode_generator($phone_no);
-    $result['state'] = htmlspecialcode_generator($state);
-    $result['keywords'] = htmlspecialcode_generator($keywords);
-    $result['message'] = "Data saved";
     return $result;
 }
 

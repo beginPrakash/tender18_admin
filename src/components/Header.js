@@ -305,6 +305,9 @@ const pathname = usePathname()
                       <div className="menu-register">
                         <Link href="/register">{data.button_text}</Link>
                       </div>
+                      <div className="menu-register">
+                        <Link href="/demo-client">{data.button_text2}</Link>
+                      </div>
                     </>
                   )}
                 </div>
