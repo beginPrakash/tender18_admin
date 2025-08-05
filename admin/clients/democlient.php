@@ -20,10 +20,11 @@ if (isset($_GET['id']) && isset($_GET['unique_code'])) {
     if (!empty($_GET['id']) && !empty($_GET['unique_code'])) {
         mysqli_query($con, "DELETE FROM `users` where user_id={$_GET['id']} AND user_unique_id={$_GET['unique_code']}");
         echo "<script>
-            window.location.href='" . ADMIN_URL . "clients/expired.php';
+            window.location.href='" . ADMIN_URL . "clients/democlient.php';
             </script>";
     }
 }
+
 if (isset($_GET['st'])) {
     if ($_GET['st'] == 1) {
         $_SESSION['success'] = 'Mail sent successfully.';
@@ -41,7 +42,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/clients/expired.php';
+                        window.location.href='" . ADMIN_URL . "/clients/democlient.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -63,6 +64,7 @@ if (!empty($_SESSION['error'])) {
                  
              </script>";
 }
+
 ?>
 <!-- start page title -->
 <div class="row">
@@ -86,7 +88,7 @@ if (!empty($_SESSION['error'])) {
                     </div>
                     <div class="col-2">
                         <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>clients/expired.php">
-                            <h5 class="card-title btn w-100 bg-success text-white">Expired</h5>
+                            <h5 class="card-title btn w-100 bg-primary text-white">Expired</h5>
                         </a>
                     </div>
                     <div class="col-2">
@@ -101,7 +103,7 @@ if (!empty($_SESSION['error'])) {
                     </div>
                     <div class="col-2">
                         <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>clients/democlient.php">
-                            <h5 class="card-title btn w-100 bg-primary text-white">DemoClient</h5>
+                            <h5 class="card-title btn w-100 bg-success text-white">DemoClient</h5>
                         </a>
                     </div>
                 </div>
@@ -114,7 +116,7 @@ if (!empty($_SESSION['error'])) {
                 <!-- <h5 class="card-title mb-0">Basic Datatables</h5> -->
             </div>
             <div class="card-body">
-                <form id="deleteForm" method="POST" action="expiredsend_email.php">
+                <form id="deleteForm" method="POST" action="democlientsend_email.php">
                     <input type="hidden" name="ids" id="ids">
                 </form>
                 <table id="example" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%">
@@ -132,7 +134,7 @@ if (!empty($_SESSION['error'])) {
                     </thead>
                     <tbody>
                         <?php
-                        function truncate_and_append($text, $length = 200)
+                        function truncate_and_append($text, $length = 20)
                         {
                             if (strlen($text) <= $length) {
                                 return $text;
@@ -141,7 +143,7 @@ if (!empty($_SESSION['error'])) {
                             }
                         }
                         $i = 1;
-                        $fetching_users = mysqli_query($con, "SELECT * FROM users where user_role='user' and `status`='Expired' order by user_id desc");
+                        $fetching_users = mysqli_query($con, "SELECT * FROM users where user_role='user' and `status`='DemoClient' order by user_id desc");
                         while ($row = mysqli_fetch_assoc($fetching_users)) {
                         ?>
                             <tr>
@@ -152,7 +154,6 @@ if (!empty($_SESSION['error'])) {
                                 <td><?php echo $row['mobile_number']; ?></td>
                                 <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/new-tenders?id=" . $row['user_unique_id']; ?>"><?php echo truncate_and_append(HOME_URL . "user/new-tenders/?id=" . $row['user_unique_id']); ?></td>
                                 <td class="copy" style="cursor: copy;" data-id="<?php echo HOME_URL . "user/live-tenders?id=" . $row['user_unique_id']; ?>"><?php echo HOME_URL . "user/live-tenders/?id=" . $row['user_unique_id']; ?></td>
-                                
                                 <td>
                                     <div class="dropdown d-inline-block">
                                         <button class="btn btn-subtle-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -239,6 +240,7 @@ if (!empty($_SESSION['error'])) {
         else
             window.location.href = '<?php echo ADMIN_URL; ?>users';
     });
+
     function dataSelected() {
         const checkboxes = document.querySelectorAll('input[name="row-check"]:checked');
         const ids = Array.from(checkboxes).map(cb => cb.value);

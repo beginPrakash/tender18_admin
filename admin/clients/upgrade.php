@@ -99,6 +99,11 @@ if (!empty($_SESSION['error'])) {
                             <h5 class="card-title btn w-100 bg-success text-white">Upgrade</h5>
                         </a>
                     </div>
+                    <div class="col-2">
+                        <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>clients/democlient.php">
+                            <h5 class="card-title btn w-100 bg-primary text-white">DemoClient</h5>
+                        </a>
+                    </div>
                 </div>
             </div>
             <div class="card-header">
@@ -221,10 +226,11 @@ if (!empty($_SESSION['error'])) {
         });
     }
 
-    $('.remove-item-btn').click(function() {
+    $(document).on('click','.remove-item-btn',function() {
         var url = $(this).parent().find('#delete_id').val();
         $("#delete_id_modal").attr('href', url);
     });
+    
     $('#user_role').change(function() {
         var user_role = $(this).val();
         if (user_role)
