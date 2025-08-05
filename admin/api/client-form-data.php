@@ -23,6 +23,9 @@ function get_results($con)
         while ($row = mysqli_fetch_assoc($whyData)) {
             $result['main']['title'] = htmlspecialcode_generator($row['title']);
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
+            $result['main']['h1'] = $row['h1'];
+            $result['main']['meta_title'] = $row['meta_title'];
+            $result['main']['meta_description'] = htmlspecialcode_generator($row['meta_description']);
         }
     } else {
         $result['main'] = "No data found";

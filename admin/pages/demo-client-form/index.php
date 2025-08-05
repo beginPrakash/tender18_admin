@@ -18,11 +18,14 @@ if (isset($_POST['submit'])) {
 
     $why_details_title = $_POST['why_details_title'];
     $why_details_sub_title = $_POST['why_details_sub_title'];
+    $h1 = $_POST['h1'];
+    $meta_title = $_POST['meta_title'];
+    $meta_description = mysqli_real_escape_string($con, $_POST['meta_description']);
 
     $query_delete = mysqli_query($con, "DELETE FROM `client_demo_why_section`");
     $query_delete = mysqli_query($con, "DELETE FROM `client_demo_why_details`");
 
-    $q = "INSERT INTO client_demo_why_section(`title`, `description`) VALUES ('$why_title', '$why_description')";
+    $q = "INSERT INTO client_demo_why_section(`title`, `description`, `h1`, `meta_title`, `meta_description`) VALUES ('$why_title', '$why_description', '$h1', '$meta_title', '$meta_description')";
     $sql1 = mysqli_query($con, $q);
     // print_r($why_details_title);
 
@@ -96,6 +99,9 @@ $why_title = "";
 $why_description = "";
 $why_details_title = "";
 $why_details_sub_title = "";
+$meta_description = "";
+$h1 = "";
+$mata_title = "";
 
 
 $why_data = mysqli_query($con, "SELECT * FROM `client_demo_why_section`");
@@ -104,6 +110,9 @@ if ($why_result == 1) {
     while ($row = mysqli_fetch_assoc($why_data)) {
         $why_title = $row['title'];
         $why_description = $row['description'];
+        $h1 = $row['h1'];
+        $meta_title = $row['meta_title'];
+        $meta_description = $row['meta_description'];
     }
 }
 $why_details_data = mysqli_query($con, "SELECT * FROM `client_demo_why_details`");
@@ -114,6 +123,31 @@ $why_details_result = mysqli_num_rows($why_details_data);
     <div class="col-lg-12">
         <div class="card">
             <form action="" method="post" id="homepages" enctype="multipart/form-data">
+                <div class="card-header">
+                    <h4 class="card-title mb-0">Meta Section</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row gy-4">
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="h1" class="form-label">H1 : <span class="text-danger">*</span></label>
+                                <input type="text" name="h1" class="form-control" value="<?php echo $h1; ?>" id="h1">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="meta_title" class="form-label">Meta Title : <span class="text-danger">*</span></label>
+                                <input type="text" name="meta_title" class="form-control" value="<?php echo $meta_title; ?>" id="meta_title">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="meta_description" class="form-label">Meta Description : <span class="text-danger">*</span></label>
+                                <textarea rows="3" name="meta_description" class="form-control" id="meta_description"><?php echo htmlspecialcode_generator($meta_description); ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="card-header">
                     <h4 class="card-title mb-0">Why Section</h4>
                 </div>
