@@ -58,6 +58,7 @@ if (isset($_GET['id'])) {
                             <th>Email ID</th>
                             <th>Mobile No</th>
                             <th>State</th>
+                            <th>Created On</th>
                             <th>Action</th>
                         </tr>
                     </thead>
@@ -74,6 +75,7 @@ if (isset($_GET['id'])) {
                                 <td><?php echo $row['email_id']; ?></td>
                                 <td><?php echo $row['phone_no']; ?></td>
                                 <td><?php echo $row['state']; ?></td>
+                                <td><?php echo (new DateTime($row['created_at']))->format('d-m-Y H:i:s'); ?></td>
                                 <td>
                                     <div class="dropdown d-inline-block">
                                         <button class="btn btn-subtle-secondary btn-sm dropdown" type="button" data-bs-toggle="dropdown" aria-expanded="false">

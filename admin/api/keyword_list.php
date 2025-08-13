@@ -18,7 +18,7 @@ $result = get_results($con);
 function get_results($con)
 {
     $key_like = $_GET['q'];
-    $agency_data = mysqli_query($con, "SELECT * FROM `keywords` WHERE name like '$key_like%' order by name ASC");
+    $agency_data = mysqli_query($con, "SELECT * FROM `keywords` WHERE name like '$key_like%' group by name order by name ASC");
     $state_result = mysqli_num_rows($agency_data);
     if ($state_result > 0) {
         $count = 1;
