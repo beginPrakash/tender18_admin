@@ -66,7 +66,7 @@ function post_users($con, $postData)
 
     $key_like = $postData['q'];
 
-    $select = mysqli_query($con, "SELECT * FROM `keywords` WHERE name like '$key_like%' order by name ASC");
+    $select = mysqli_query($con, "SELECT * FROM `keywords` WHERE name like '$key_like%' group by name order by name ASC");
 
     $result_data = mysqli_num_rows($select);
 

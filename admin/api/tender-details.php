@@ -391,7 +391,9 @@ function get_results($con, $postData)
                     }
                 }
                 $result['tenders']['city'] = $row['city'];
+                $result['tenders']['tend_city'] = str_replace(' ', '-', $row['city']).'-tenders';
                 $result['tenders']['state'] = $row['state'];
+                $result['tenders']['tend_state'] = str_replace(' ', '-', $row['state']).'-tenders';
                 $result['tenders']['location'] = $location;
                 $pincode = "";
                 if (empty($row['pincode'])) {
@@ -403,6 +405,7 @@ function get_results($con, $postData)
                 $result['tenders']['title'] = htmlspecialcode_generator($row['title']);
                 $result['tenders']['description'] = htmlspecialcode_generator($row['description']);
                 $result['tenders']['agency'] = htmlspecialcode_generator($row['agency_type']);
+                $result['tenders']['tend_agency'] = str_replace(' ', '-', htmlspecialcode_generator($row['agency_type'])).'-tenders';
                 $result['tenders']['publish_date'] = date('M d, Y', strtotime($row['publish_date']));
                 $result['tenders']['due_date'] = date('M d, Y', strtotime($row['due_date']));
                 $result['tenders']['opening_date'] = date('M d, Y', strtotime($row['opening_date']));
