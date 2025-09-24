@@ -234,6 +234,7 @@ if (!empty($_SESSION['error'])) {
                         if ($tenders_result > 0) {
                             $i = ($offset + 1);
                             foreach ($tenders_data as $data) {
+                                
                         ?>
                                 <tr class="<?php if ($i % 2 == 0) {
                                                 echo "even";

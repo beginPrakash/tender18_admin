@@ -89,7 +89,7 @@ function get_results($con, $postData)
 
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
 
-            $result['main']['meta_description'] = strip_tags(substr($row['description'], 0, 150));
+            $result['main']['meta_description'] = strip_tags(substr($row['description'], 0, 300));
 
             $result['main']['blog_image'] = $blog_image;
 

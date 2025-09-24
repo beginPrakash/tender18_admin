@@ -92,26 +92,21 @@ function get_results($con)
 
             $location = "";
 
+            $city = "";
+            $state="";
             if (!empty($row['city'])) {
-
                 $location = $row['city'];
-
+                $city = $row['city'];
             }
-
             if (!empty($row['state'])) {
-
                 if (!empty($location)) {
-
                     $location .= ", " . $row['state'];
-
+                    $state = $row['state'];
                 } else {
-
                     $location = $row['state'];
-
+                    $state = $row['state'];
                 }
-
             }
-
             $result['tenders'][$count]['location'] = $location;
 
             $pincode = "";
@@ -130,7 +125,12 @@ function get_results($con)
 
             $result['tenders'][$count]['title'] = htmlspecialcode_generator($row['title']);
 
+            $result['tenders'][$count]['city'] = $city;
+            $result['tenders'][$count]['tend_city'] = str_replace(' ', '-', $city).'-tenders';
+            $result['tenders'][$count]['state'] = $state;
+            $result['tenders'][$count]['tend_state'] = str_replace(' ', '-', $state).'-tenders';
             $result['tenders'][$count]['agency'] = htmlspecialcode_generator($row['agency_type']);
+            $result['tenders'][$count]['tend_agency'] = str_replace(' ', '-', htmlspecialcode_generator($row['agency_type'])).'-tenders';
 
             $result['tenders'][$count]['publish_date'] = date('M d, Y', strtotime($row['publish_date']));
 

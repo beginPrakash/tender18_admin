@@ -51,6 +51,7 @@ function get_results($con, $postData)
     $state = mysqli_real_escape_string($con, $postData['state']);
     $keywords = mysqli_real_escape_string($con, $postData['keywords']);
     $pass = $postData['password'];
+    $inquiry_url = mysqli_real_escape_string($con, $postData['inquiry_url']);
 
     $banner_data = mysqli_query($con, "SELECT * FROM `demo_client` where email_id='" . $email_id . "'");
     $banner_result = mysqli_num_rows($banner_data);
@@ -123,6 +124,45 @@ function get_results($con, $postData)
     }else{
         $q1 = "INSERT INTO demo_client(`name`,`company_name`, `email_id`, `phone_no`, `state`,`keywords`,`password`) VALUES ('$name', '$company_name', '$email_id', '$phone_no', '$state','$keywords','$pass')";
         mysqli_query($con, $q1);
+
+        $url = "https://t18cms.tender18.com/wp-json/myapi/v1/add-product";
+
+        // Post data
+        $data = [
+            'tender_ref_no'   => '',
+            'inquiry_url' => $inquiry_url,
+            'name'=> $name,
+            'company_name'  => $company_name,
+            'email'  => $email_id,
+            'mobile_no'  => $phone_no,
+            'state'  => $state,
+            'description'  => $keywords,
+            'gem_state_city'  => '',
+        ];
+
+        // Initialize cURL
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        //curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $app_password);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ]);
+
+        // Optional: Disable SSL verification for localhost
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        // Execute request
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+        curl_close($ch);
+
         $result['message'] = "Data Saved Successfully";
 
     }
