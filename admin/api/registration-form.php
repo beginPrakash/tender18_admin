@@ -38,6 +38,7 @@ function daily_alert($con, $postData)
     $mobile = mysqli_real_escape_string($con, $postData['mobile']);
     $state = mysqli_real_escape_string($con, $postData['state']);
     $description = mysqli_real_escape_string($con, $postData['description']);
+    $inquiry_url = mysqli_real_escape_string($con, $postData['inquiry_url']);
 
     $mai_data = mysqli_query($con, "SELECT * FROM `smtp_management` where id = 1");
     $tend_result = mysqli_num_rows($mai_data);
@@ -103,6 +104,44 @@ function daily_alert($con, $postData)
 
     $q1 = "INSERT INTO inquiries(`name`,`company_name`, `email`, `mobile`, `state`,`type`) VALUES ('$name', '$company_name', '$email', '$mobile', '$state','registration_form')";
     mysqli_query($con, $q1);
+
+    $url = "https://t18cms.tender18.com/wp-json/myapi/v1/add-product";
+
+        // Post data
+        $data = [
+            'tender_ref_no'   => '',
+            'inquiry_url' => $inquiry_url,
+            'name'=> $name,
+            'company_name'  => $company_name,
+            'email'  => $email,
+            'mobile_no'  => $mobile,
+            'state'  => $state,
+            'description'  => $escapedTextData,
+            'gem_state_city'  => '',
+        ];
+
+        // Initialize cURL
+        $ch = curl_init($url);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYHOST, false);
+        //curl_setopt($ch, CURLOPT_USERPWD, $username . ':' . $app_password);
+        curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+        curl_setopt($ch, CURLOPT_POST, true);
+        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($ch, CURLOPT_HTTPHEADER, [
+            'Content-Type: application/json',
+            'Accept: application/json'
+        ]);
+
+        // Optional: Disable SSL verification for localhost
+        // curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+
+        // Execute request
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $curlError = curl_error($ch);
+        curl_close($ch);
 
     $result['name'] = htmlspecialcode_generator($name);
     $result['company_name'] = htmlspecialcode_generator($company_name);
