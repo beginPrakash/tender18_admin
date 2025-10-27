@@ -610,13 +610,27 @@ $digital_feature_result = mysqli_num_rows($digital_feature_data);
         });
 </script> -->
 <script>
-    ClassicEditor.create(document.querySelector(".ckeditor-classic-two"))
-        .then(function(c) {
-            c.ui.view.editable.element.style.height = "200px";
-        })
-        .catch(function(c) {
-            console.error(c);
-        });
+    ClassicEditor
+  .create(document.querySelector(".ckeditor-classic-two"), {
+    // Force proper block elements
+    paragraph: {
+      // replace <p> with <div> if nested
+      replaceWith: 'div'
+    },
+    link: {
+      decorators: {
+        addTargetToExternalLinks: true,
+        defaultProtocol: 'https://'
+      }
+    }
+  })
+  .then(function (editor) {
+    editor.ui.view.editable.element.style.height = "200px";
+  })
+  .catch(function (err) {
+    console.error(err);
+  });
+
 </script>
 <script>
     ClassicEditor.create(document.querySelector(".ckeditor-classic-three"))

@@ -115,15 +115,25 @@ function daily_alert($con, $postData)
 
     $mail_name = 'Tender18';
     $to = ADMIN_EMAIL;
-    $message = 'Hello Admin, below are the GEM Inquiry form details...<br><br>';
-    $message .= '<b>GEM State/City. :</b> ' . htmlspecialcode_generator($gem_state_city) . '<br>';
+    
+    if($type != 'gem_agency'){
+        $message = 'Hello Admin, below are the GEM Inquiry form details...<br><br>';
+        $message .= '<b>GEM State/City. :</b> ' . htmlspecialcode_generator($gem_state_city) . '<br>';
+    }else{
+        $message = 'Hello Admin, below are the Tender Bidding Inquiry form details...<br><br>';
+    }
     $message .= '<b>Name :</b> ' . htmlspecialcode_generator($name) . '<br>';
     $message .= '<b>Company Name :</b> ' . htmlspecialcode_generator($company_name) . '<br>';
     $message .= '<b>Email :</b> ' . htmlspecialcode_generator($email) . '<br>';
     $message .= '<b>Mobile :</b> ' . htmlspecialcode_generator($mobile) . '<br>';
     $message .= '<b>State :</b> ' . htmlspecialcode_generator($state) . '<br>';
     $message .= '';
-    $subject = 'GEM Inquiry';
+    if($type == 'gem_agency'){
+        $subject = 'Tender Bidding Inquiry';
+    }else{
+        $subject = 'GEM Inquiry';
+    }
+    
     $mail = new PHPMailer(true);
     try {
         // Server settings

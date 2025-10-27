@@ -34,6 +34,7 @@
     $cms_customer_per = _get_user_perby_role($_SESSION['user_id'],'cms_customer',$con);
     $gem_state_per = _get_user_perby_role($_SESSION['user_id'],'gem_states',$con);
     $gem_city_per = _get_user_perby_role($_SESSION['user_id'],'gem_city',$con);
+    $gem_agency_per = _get_user_perby_role($_SESSION['user_id'],'gem_agency',$con);
     $zipcodes_per = _get_user_perby_role($_SESSION['user_id'],'zipcodes',$con);
     $agencies_per = _get_user_perby_role($_SESSION['user_id'],'agencies',$con);
     
@@ -357,6 +358,16 @@
                                                         } ?>" href="<?php echo ADMIN_URL; ?>/gem_city/index.php">
                             <i class="ti ti-brand-google-home"></i>
                             <span data-key="t-dashboards">GEM Cities</span>
+                        </a>
+                    </li>
+                <?php } ?>
+                <?php if($_SESSION['role']=='admin' || $gem_agency_per == 1) { ?>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php if ($pages == 'gem_agency') {
+                                                            echo 'active';
+                                                        } ?>" href="<?php echo ADMIN_URL; ?>/gem_agency/index.php">
+                            <i class="ti ti-brand-google-home"></i>
+                            <span data-key="t-dashboards">Tender Bidding Agencies</span>
                         </a>
                     </li>
                 <?php } ?>

@@ -32,7 +32,7 @@ $endpoint = isset($postData['endpoint']) ? $postData['endpoint'] : '';
 
 switch ($endpoint) {
 
-    case 'getGemCityDetailData':
+    case 'getGemAgencyDetailData':
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
@@ -58,9 +58,9 @@ function get_results($con, $postData)
 
 {
 
-    $city = $postData['id'];
+    $agency = $postData['id'];
 
-    $user_data = mysqli_query($con, "SELECT * FROM `gem_city_data` WHERE  `id` = 1");
+    $user_data = mysqli_query($con, "SELECT * FROM `gem_agency_data` WHERE  `id` = 1");
 
 
 
@@ -71,27 +71,27 @@ function get_results($con, $postData)
 
         while ($row = mysqli_fetch_assoc($user_data)) {
 
-            $image = $row['city_image'];
+            $image = $row['agency_image'];
 
-            $city_image = '';
+            $agency_image = '';
 
             if (!empty($image)) {
 
-                $city_image =  ADMIN_URL . 'uploads/images/' . $image;
+                $agency_image =  ADMIN_URL . 'uploads/images/' . $image;
 
             }
 
             //replace variable to state
-            $city_nam = ucfirst(str_replace("-", " ",$city));
-            $city_namt = $city.'-tenders';
+            $agency_nam = ucwords(str_replace("-", " ",$agency));
+            $agency_namt = $agency.'-tenders';
             $HOME_URL = HOME_URL;
-            $city_url = "<a href=".HOME_URL.'all-india-tenders/city-tenders/'.$city_namt.">".$city_nam."</a>";
-            $title = str_replace("(City)",$city_nam,$row['title']);
-            $description_url = str_replace("(City_url)",$city_url,$row['description']);
-            $description = str_replace("(City)",$city_nam,$description_url);
-            $meta_title = str_replace("(City)",$city_nam,$row['meta_title']);
-            $meta_description = str_replace("(City)",$city_nam,$row['meta_description']);
-            $h1 = str_replace("(City)",$city_nam,$row['h1']);
+            $agency_url = "<a href=".HOME_URL.'all-india-tenders/agency-tenders/'.$agency_namt.">".$agency_nam."</a>";
+            $title = str_replace("(Agency)",$agency_nam,$row['title']);
+            $description_url = str_replace("(Agency_url)",$agency_url,$row['description']);
+            $description = str_replace("(Agency)",$agency_nam,$description_url);
+            $meta_title = str_replace("(Agency)",$agency_nam,$row['meta_title']);
+            $meta_description = str_replace("(Agency)",$agency_nam,$row['meta_description']);
+            $h1 = str_replace("(Agency)",$agency_nam,$row['h1']);
             $result['main']['title'] = htmlspecialcode_generator($title);
 
             $result['main']['description'] = htmlspecialcode_generator($description);
@@ -102,7 +102,7 @@ function get_results($con, $postData)
 
             $result['main']['h1'] = htmlspecialcode_generator($h1);
 
-            $result['main']['city_image'] = $city_image;
+            $result['main']['agency_image'] = $agency_image;
 
             $main_title = $row['main_title'];
 

@@ -2,20 +2,20 @@
 
 include "../includes/authentication.php";
 ?>
-<?php $pages = 'gem_states'; ?>
+<?php $pages = 'gem_agency'; ?>
 <?php include '../includes/header.php'; ?>
 <?php // include '../includes/connection.php';
 
 ?>
 <?php
-$gemstate_per = _get_user_perby_role($_SESSION['user_id'],'gem_states',$con);
+$gemagency_per = _get_user_perby_role($_SESSION['user_id'],'gem_agency',$con);
 
 if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';
             </script>";
-}elseif($_SESSION['role']=='employee' && $gemstate_per!=1){ 
+}elseif($_SESSION['role']=='employee' && $gemagency_per!=1){ 
     // echo "not admin ------>" . $_SESSION['role'];
     echo "<script>
             window.location.href='../index.php';
@@ -24,20 +24,20 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
 if (isset($_GET['id']) && isset($_GET['unique_code'])) {
     if (empty($_GET['id'])) {
         echo "<script>
-            window.location.href='" . ADMIN_URL . "gem_states/index.php';
+            window.location.href='" . ADMIN_URL . "gem_agency/index.php';
             </script>";
     }
 }
 ?>
 <?php
 if (isset($_POST['submit'])) {
-        $hidden_state_image = $_POST['hidden_state_image'];
+        $hidden_agency_image = $_POST['hidden_agency_image'];
         $title = mysqli_real_escape_string($con, $_POST['title']);
         $description = $_POST['description'];
         $h1 = $_POST['h1'];
         $meta_title = mysqli_real_escape_string($con, $_POST['meta_title']);
         $meta_description = mysqli_real_escape_string($con, $_POST['meta_description']);
-        $file = $_FILES['state_image'];
+        $file = $_FILES['agency_image'];
         $filename = $file['name'];
         $main_title = $_POST['main_title'];
         $more_link_url = $_POST['more_link_url'];
@@ -67,9 +67,9 @@ if (isset($_POST['submit'])) {
         if (!empty($filename)) {
             $filevalue =  $newfilename;
         } else {
-            $filevalue = $hidden_state_image;
+            $filevalue = $hidden_agency_image;
         }  
-        $q = "UPDATE `gem_state_data` SET title='$title', description='$con_desc',h1='$h1', meta_title='$meta_title', meta_description='$meta_description', state_image='$filevalue', main_title='$main_title', more_link_url='$more_link_url', title_urls='$link_arr', main_title1='$main_title1', more_link_url1='$more_link_url1', title_urls1='$link_arr1', main_title2='$main_title2', more_link_url2='$more_link_url2',title_urls2='$link_arr2' where id=1";
+        $q = "UPDATE `gem_agency_data` SET title='$title', description='$con_desc',h1='$h1', meta_title='$meta_title', meta_description='$meta_description', agency_image='$filevalue', main_title='$main_title', more_link_url='$more_link_url', title_urls='$link_arr', main_title1='$main_title1', more_link_url1='$more_link_url1', title_urls1='$link_arr1', main_title2='$main_title2', more_link_url2='$more_link_url2',title_urls2='$link_arr2' where id=1";
         // var_dump($q);
         $sql = mysqli_query($con, $q);
         
@@ -90,7 +90,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                         window.location.href='" . ADMIN_URL . "/gem_states/index.php';
+                         window.location.href='" . ADMIN_URL . "/gem_agency/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -117,7 +117,7 @@ if (!empty($_SESSION['error'])) {
 <div class="row">
     <div class="col-12">
         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-            <h4 class="mb-sm-0">GEM States Data</h4>
+            <h4 class="mb-sm-0">Tender Bidding Agencies Data</h4>
         </div>
     </div>
 </div>
@@ -127,10 +127,10 @@ if (!empty($_SESSION['error'])) {
             <!-- <div class="card-header">
                 <h4 class="card-title mb-0">Change Password</h4>
             </div> -->
-            <?php $fetch_data = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM `gem_state_data` where id=1"));
+            <?php $fetch_data = mysqli_fetch_assoc(mysqli_query($con, "SELECT * FROM `gem_agency_data` where id=1"));
             
             ?>
-            <form action="" method="post" id="gemstate_form" enctype="multipart/form-data">
+            <form action="" method="post" id="gemagency_form" enctype="multipart/form-data">
                 <div class="card-body">
                     <div class="row gy-4">
 
@@ -149,14 +149,14 @@ if (!empty($_SESSION['error'])) {
                         </div>
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
-                                <label for="state_image" class="form-label">State Image:</label>
-                                <input class="form-control" type="file" name="state_image" id="state_image">
-                                <?php $state_image = $fetch_data['state_image']; ?>
-                                <input type="hidden" name="hidden_state_image" value="<?php echo $state_image; ?>">
+                                <label for="agency_image" class="form-label">State Image:</label>
+                                <input class="form-control" type="file" name="agency_image" id="agency_image">
+                                <?php $agency_image = $fetch_data['agency_image']; ?>
+                                <input type="hidden" name="hidden_agency_image" value="<?php echo $agency_image; ?>">
                                 <?php
                                 
-                                if (!empty($state_image)) {
-                                    echo '<img src="../uploads/images/' . $state_image . '" class="img-thumbnail mt-2" width="100" height="100">';
+                                if (!empty($agency_image)) {
+                                    echo '<img src="../uploads/images/' . $agency_image . '" class="img-thumbnail mt-2" width="100" height="100">';
                                 }
                                 ?>
                             </div>
@@ -407,7 +407,7 @@ if (!empty($_SESSION['error'])) {
 <?php include "../includes/footer.php" ?>
 <script>
     $(document).ready(function() {
-        $('#gemstate_form').validate({
+        $('#gemagency_form').validate({
             rules: {
                 'title': "required",
                 'description': "required",
@@ -424,7 +424,7 @@ if (!empty($_SESSION['error'])) {
             console.error(c);
         });
 
-        $('#gemstate_form').submit(function(event) {
+        $('#gemagency_form').submit(function(event) {
             $('.ckeditor-classic-total').each(function(i, obj) {
                 var data = $(this).parent().find(".ck-editor .ck-editor__main .ck-editor__editable").html();
                 if (data != "")

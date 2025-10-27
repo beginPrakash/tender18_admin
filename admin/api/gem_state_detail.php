@@ -82,9 +82,13 @@ function get_results($con, $postData)
             }
 
             //replace variable to state
-            $state_nam = ucfirst($state_name);
+            $state_nam = ucfirst(str_replace("-", " ",$state_name));
+            $state_namt = $state_name.'-tenders';
+            $HOME_URL = HOME_URL;
+            $state_url = "<a href=".HOME_URL.'all-india-tenders/state-tenders/'.$state_namt.">".$state_nam."</a>";
             $title = str_replace("(State)",$state_nam,$row['title']);
-            $description = str_replace("(State)",$state_nam,$row['description']);
+            $description_url = str_replace("(State_url)",$state_url,$row['description']);
+            $description = str_replace("(State)",$state_nam,$description_url);
             $meta_title = str_replace("(State)",$state_nam,$row['meta_title']);
             $meta_description = str_replace("(State)",$state_nam,$row['meta_description']);
             $h1 = str_replace("(State)",$state_nam,$row['h1']);
