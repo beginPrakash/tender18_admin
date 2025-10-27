@@ -330,6 +330,11 @@ if (!empty($_SESSION['error'])) {
                                     <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($services_per == '1') ? 'checked' : '';?> name="user_permis['services']">
                                     <label class="form-check-label">Services</label>
                                 </div>
+                                <div class="col-lg-3">
+                                    <?php $gem_agency_per = _get_user_perby_role($_GET['id'],'gem_agency',$con); ?>
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" <?php echo ($gem_agency_per == '1') ? 'checked' : '';?> name="user_permis['gem_agency']">
+                                    <label class="form-check-label">Tender Bidding Agencies</label>
+                                </div>
                             </div>
                             
                             

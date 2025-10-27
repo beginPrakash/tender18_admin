@@ -279,6 +279,10 @@ if (!empty($_SESSION['error'])) {
                                     <input class="form-check-input multi_check" type="checkbox" value="1" checked="" name="user_permis['services']">
                                     <label class="form-check-label">Services</label>
                                 </div>
+                                <div class="col-lg-3">
+                                    <input class="form-check-input multi_check" type="checkbox" value="1" name="user_permis['gem_agency']">
+                                    <label class="form-check-label">Tender Bidding Agencies</label>
+                                </div>
                             </div>
                         </div>    
                         <div class="col-xxl-12 col-md-12">
