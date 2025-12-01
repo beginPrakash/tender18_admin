@@ -3,8 +3,9 @@
 <?php $pages = 'live-tenders'; ?>
 <?php include '../includes/header.php' ?>
 <?php
-if (isset($_GET['id'])) {
-    $tend_data = mysqli_query($con, "SELECT * FROM `tenders_live` where id='" . $_GET['id'] . "'");
+if (isset($_POST['te_id'])) {
+    $tes_id = $_POST['te_id'];
+    $tend_data = mysqli_query($con, "SELECT * FROM `tenders_live` where id='" . $tes_id . "'");
     $tend_result = mysqli_num_rows($tend_data);
     
     if ($tend_result == 1) {
@@ -13,7 +14,7 @@ if (isset($_GET['id'])) {
             $del = mysqli_query($con, "DELETE FROM `tenders_all` where ref_no='" . $ref_no . "'");
         }
     }
-    $del = mysqli_query($con, "DELETE FROM `tenders_live` where id='" . $_GET['id'] . "'");
+    $del = mysqli_query($con, "DELETE FROM `tenders_live` where id='" . $tes_id . "'");
     $status = true;
     if ($status) {
         $_SESSION['success'] = 'Deleted successfully.';
@@ -43,7 +44,7 @@ if (isset($_POST['multi_selection_ids'])) {
         }
     }
 }
-if (isset($_GET['move'])) {
+if (isset($_POST['move'])) {
     //echo "come";die();
     $move = mysqli_query($con, "INSERT INTO `tenders_archive` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at)
     SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at 
@@ -183,7 +184,13 @@ if (!empty($_SESSION['error'])) {
     </div>
 </div>
 <!-- end page title -->
+<form id="postForm" method="POST" action="" style="display:none;">
+    <input type="hidden" name="te_id" id="te_id" value="">
+</form>
 
+<form id="movepostForm" method="POST" action="" style="display:none;">
+    <input type="hidden" name="move"value="">
+</form>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
@@ -250,7 +257,7 @@ if (!empty($_SESSION['error'])) {
                         <h5 class="card-title btn w-100 bg-danger text-white" id="multiple_delete">Multiple Delete</h5>
                     </div>
                     <div class="col col-2 float-end">
-                        <a href="<?php echo ADMIN_URL; ?>live-tenders/index.php?move=true" class="move" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center-01">
+                        <a href="#" class="move" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center-01">
                             <h5 class="card-title btn w-100 bg-primary text-white">Move to Archive Tenders</h5>
                         </a>
                     </div>
@@ -364,7 +371,7 @@ if (!empty($_SESSION['error'])) {
                                     <td class="action_element">
                                         <div class="d-flex align-items-center">
                                             <a href="<?php echo ADMIN_URL; ?>live-tenders/edit-tender.php?id=<?php echo $data['id']; ?>"><i style="font-size: 20px;" class="ri-pencil-fill text-success"></i></a> &nbsp | &nbsp
-                                            <a href="<?php echo ADMIN_URL; ?>live-tenders/index.php?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
+                                            <a href="#"  data-teid="<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -389,7 +396,7 @@ if (!empty($_SESSION['error'])) {
                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                                                     Close
                                                 </button>
-                                                <a href="javascript:void(0);" class="btn btn-danger">Delete</a>
+                                                <a href="javascript:void(0);" class="btn btn-danger" onclick="document.getElementById('postForm').submit(); return false;">Delete</a>
                                             </div>
                                         </div>
                                     </div>
@@ -413,7 +420,7 @@ if (!empty($_SESSION['error'])) {
                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                                                     Close
                                                 </button>
-                                                <a href="javascript:void(0);" class="btn btn-danger">Move</a>
+                                                <a href="javascript:void(0);" class="btn btn-danger" onclick="document.getElementById('movepostForm').submit(); return false;">Move</a>
                                             </div>
                                         </div>
                                     </div>
@@ -522,10 +529,11 @@ if (!empty($_SESSION['error'])) {
 <?php include '../includes/footer.php';  ?>
 
 <script>
+    var te_url = "<?php echo ADMIN_URL; ?>live-tenders/index.php";
     $('.action_element a.delete').click(function(e) {
         e.preventDefault();
-        var url = $(this).attr('href');
-        $('.bs-example-modal-center a.btn.btn-danger').prop('href', url);
+        var te_id=$(this).attr('data-teid');
+        $('#te_id').val(te_id);
     });
 
     $('.card-header a.move').click(function(e) {
