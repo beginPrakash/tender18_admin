@@ -1,0 +1,243 @@
+[04-Jan-2026 05:33:31 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:33:31 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:33:31 UTC] PHP Fatal error:  require(): Failed opening required 'elastic_client.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:42:39 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:42:39 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:42:39 UTC] PHP Fatal error:  require(): Failed opening required 'elastic_client.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:43:18 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:43:18 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:43:18 UTC] PHP Fatal error:  require(): Failed opening required 'elastic_client.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:46:37 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:46:37 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:46:37 UTC] PHP Fatal error:  require(): Failed opening required 'elastic_client.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:47:20 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:47:20 UTC] PHP Warning:  require(elastic_client.php): failed to open stream: No such file or directory in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 05:47:20 UTC] PHP Fatal error:  require(): Failed opening required 'elastic_client.php' (include_path='.:/opt/alt/php73/usr/share/pear') in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php on line 3
+[04-Jan-2026 13:53:19 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:53:40 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:09 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:11 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:11 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:11 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:11 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:11 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:11 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:12 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:30 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:44 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:46 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:47 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:47 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:54:53 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require_once('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:37 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:38 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:38 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:39 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:39 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:39 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:51 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:58 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:56:59 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:57:00 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:57:01 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 13:57:01 UTC] PHP Fatal error:  Uncaught Error: Call to undefined function str_contains() in /home/tender18/dev.tender18.com/elasticsearch/config.php:44
+Stack trace:
+#0 /home/tender18/dev.tender18.com/elasticsearch/elastic_client.php(6): require_once()
+#1 /home/tender18/dev.tender18.com/elasticsearch/all-tenders/create_index.php(3): require('/home/tender18/...')
+#2 {main}
+  thrown in /home/tender18/dev.tender18.com/elasticsearch/config.php on line 44
+[04-Jan-2026 19:46:22 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:49:01 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:49:38 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:49:41 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:50:36 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:50:45 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:08 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:09 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:09 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:09 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:10 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:10 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:10 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:10 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:10 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:11 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:12 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:12 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:13 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:14 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:51:29 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 19:52:42 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 20:09:16 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[04-Jan-2026 20:09:19 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68

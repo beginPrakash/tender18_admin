@@ -1,4 +1,6 @@
 <?php include '../includes/authentication.php';
+include '../../elasticsearch/new-tenders/index_sync.php';
+include '../../elasticsearch/all-tenders/index_sync.php';
 ?>
 <?php $pages = 'tenders'; ?>
 <?php include '../includes/header.php' ?>
@@ -14,6 +16,9 @@ if (!empty($_GET['id'])) {
 
 <?php
 if (isset($_POST['submit'])) {
+    $index = ES_INDEXES['ALL'];
+    $post_index = ES_INDEXES['NEW'];
+
     $tenderID = $_POST['tenderID'];
     $title = mysqli_real_escape_string($con, $_POST['title']);
     $tender_id = $_POST['tender_id'];
@@ -44,6 +49,8 @@ if (isset($_POST['submit'])) {
 
     $q1 = "UPDATE `tenders_posts` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `id`='$tenderID'";
     $sql1 = mysqli_query($con, $q1);
+    // Sync new tenders(tenders_posts) with ES
+    sync_new_tender_by_id($tenderID, $post_index);
     $tend_data = mysqli_query($con, "SELECT * FROM `tenders_posts` where id='" . $tenderID . "'");
     $tend_result = mysqli_num_rows($tend_data);
 
@@ -53,8 +60,16 @@ if (isset($_POST['submit'])) {
             if(!empty($ref_no)){
                 $q2 = "UPDATE `tenders_all` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `ref_no`='$ref_no'";
                 $sql2 = mysqli_query($con, $q2);
+
+                // Sync all tenders(tenders_all) with ES
+                $getId = mysqli_query($con, "SELECT id FROM tenders_all WHERE ref_no='$ref_no'");
+                $row = mysqli_fetch_assoc($getId);
+                $updated_id = $row['id'];
+                if($updated_id) {
+                    sync_tender_by_id($updated_id, $index);    
+                }
             }
-           }
+        }
     }
     // var_dump($q1);
     // die();

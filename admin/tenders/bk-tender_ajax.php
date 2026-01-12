@@ -1,8 +1,8 @@
 <?php
 
 include '../includes/authentication.php';
-include '../../elasticsearch/all-tenders/index_sync.php';
-include '../../elasticsearch/new-tenders/index_sync.php';
+
+
 
 error_reporting(0);
 
@@ -16,8 +16,7 @@ require '../PHPExcel/Classes/PHPExcel.php';
 
 $newFileName = $_POST['filename'];
 
-$new_tenders_index = ES_INDEXES['NEW'];
-$all_india_tenders_index = ES_INDEXES['ALL'];
+
 
 // Now you can process the Excel file using PHPExcel
 
@@ -525,22 +524,10 @@ for ($i = 1; $i < count($results); $i++) {
 
         $sql1 = mysqli_query($con, $q1);
 
-        // Sync with new tenders
-        $new_tender_inserted_id = mysqli_insert_id($con);
-        if ($new_tender_inserted_id > 0) {
-            sync_new_tender_by_id($new_tender_inserted_id, $new_tenders_index);
-        }
-
         //save data in all tenders table
         $all1 = "INSERT INTO tenders_all(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "')";
 
         $all1 = mysqli_query($con, $all1);
-
-        // Sync with all tenders
-        $insertedId = mysqli_insert_id($con);
-        if ($insertedId > 0) {
-            sync_tender_by_id($insertedId, $all_india_tenders_index);
-        }
 
         $ref = "UPDATE settings SET value = '" . $tender_ref_no . "' WHERE `key` = 'last_ref_id'";
         $ref1 = mysqli_query($con, $ref);

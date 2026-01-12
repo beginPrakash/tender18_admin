@@ -1,4 +1,5 @@
 <?php include '../includes/authentication.php';
+include '../../elasticsearch/live-tenders/index_sync.php';
 ?>
 <?php $pages = 'live-tenders'; ?>
 <?php include '../includes/header.php' ?>
@@ -14,6 +15,8 @@ if (!empty($_GET['id'])) {
 
 <?php
 if (isset($_POST['submit'])) {
+    $live_index = ES_INDEXES['LIVE'];
+
     $tenderID = $_POST['tenderID'];
     $title = mysqli_real_escape_string($con, $_POST['title']);
     $tender_id = $_POST['tender_id'];
@@ -47,7 +50,9 @@ if (isset($_POST['submit'])) {
     // var_dump($q1);
     // die();
     $sql1 = mysqli_query($con, $q1);
-
+    
+    // Sync live tenders(tenders_live) with ES
+    sync_live_tender_by_id($tenderID, $live_index);
     $status = true;
     if ($status) {
         $_SESSION['success'] = 'Updated successfully.';
