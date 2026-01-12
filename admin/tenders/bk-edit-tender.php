@@ -1,16 +1,13 @@
 <?php include '../includes/authentication.php';
-include '../../elasticsearch/archive-tenders/index_sync.php';
-
-$archive_tenders_index = ES_INDEXES['ARCHIVE'];
 ?>
-<?php $pages = 'archive-tenders'; ?>
+<?php $pages = 'tenders'; ?>
 <?php include '../includes/header.php' ?>
 
 <?php
 if (!empty($_GET['id'])) {
     $id = $_GET['id'];
 } else {
-    echo "<script>window.location.href='" . ADMIN_URL . "/archive-tenders/index.php';</script>";
+    echo "<script>window.location.href='" . ADMIN_URL . "/tenders/index.php';</script>";
     die();
 }
 ?>
@@ -45,13 +42,23 @@ if (isset($_POST['submit'])) {
     $opening_date = date("Y-m-d", $timestamp2);
 
 
-    $q1 = "UPDATE `tenders_archive` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `id`='$tenderID'";
-        // Sync archive tenders(tenders_archive) with ES
-        sync_archive_tender_by_id($tenderID, $archive_tenders_index);
+    $q1 = "UPDATE `tenders_posts` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `id`='$tenderID'";
+    $sql1 = mysqli_query($con, $q1);
+    $tend_data = mysqli_query($con, "SELECT * FROM `tenders_posts` where id='" . $tenderID . "'");
+    $tend_result = mysqli_num_rows($tend_data);
 
+    if ($tend_result == 1) {
+        while ($row = mysqli_fetch_assoc($tend_data)) {
+            $ref_no = $row['ref_no'];
+            if(!empty($ref_no)){
+                $q2 = "UPDATE `tenders_all` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `ref_no`='$ref_no'";
+                $sql2 = mysqli_query($con, $q2);
+            }
+           }
+    }
     // var_dump($q1);
     // die();
-    $sql1 = mysqli_query($con, $q1);
+    
 
     $status = true;
     if ($status) {
@@ -71,7 +78,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/archive-tenders/index.php';
+                        window.location.href='" . ADMIN_URL . "/tenders/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -86,7 +93,7 @@ if (!empty($_SESSION['error'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/archive-tenders/index.php';
+                        window.location.href='" . ADMIN_URL . "/tenders/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -133,7 +140,7 @@ $state = "";
 $department = "";
 $tender_type = "";
 
-$banner_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where id='" . $id . "'");
+$banner_data = mysqli_query($con, "SELECT * FROM `tenders_posts` where id='" . $id . "'");
 $banner_result = mysqli_num_rows($banner_data);
 if ($banner_result == 1) {
     while ($row = mysqli_fetch_assoc($banner_data)) {
@@ -249,7 +256,7 @@ if ($banner_result == 1) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="documents" class="form-label">Documents: <span class="text-danger">*</span></label>
-                                <textarea rows="5" name="documents" class="form-control" id="documents"><?php echo htmlspecialcode_generator($documents); ?></textarea>
+                                <textarea rows="5" name="documents" class="form-control" id="documents"><?php echo $documents; ?></textarea>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">

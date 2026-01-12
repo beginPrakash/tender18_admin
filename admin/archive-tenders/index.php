@@ -1,20 +1,33 @@
 <?php include '../includes/authentication.php';
+include '../../elasticsearch/elastic_client.php';
+
+$index = ES_INDEXES['ALL'];
+$archive_tenders_index = ES_INDEXES['ARCHIVE'];
 ?>
 <?php $pages = 'archive-tenders'; ?>
 <?php include '../includes/header.php' ?>
 <?php
-if (isset($_POST['te_id'])) {
-    $tes_id = $_POST['te_id'];
-    $tend_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where id='" . $tes_id . "'");
+if (isset($_GET['id'])) {
+    $tend_data = mysqli_query($con, "SELECT * FROM `tenders_archive` where id='" . $_GET['id'] . "'");
     $tend_result = mysqli_num_rows($tend_data);
     
     if ($tend_result == 1) {
         while ($row = mysqli_fetch_assoc($tend_data)) {
             $ref_no = $row['ref_no'];
+            
+            // Delete with elasticsearch
+            $getId = mysqli_query($con, "SELECT id FROM tenders_all WHERE ref_no='$ref_no'");
+            $row = mysqli_fetch_assoc($getId);
+            $deleted_id = $row['id'];
+            if($deleted_id) {
+                es_delete_document($index, $deleted_id);
+            }
+
             $del = mysqli_query($con, "DELETE FROM `tenders_all` where ref_no='" . $ref_no . "'");
         }
     }
-    $del = mysqli_query($con, "DELETE FROM `tenders_archive` where id='" . $tes_id . "'");
+    $del = mysqli_query($con, "DELETE FROM `tenders_archive` where id='" . $_GET['id'] . "'");
+    es_delete_document($archive_tenders_index, $_GET['id']);
     $status = true;
     if ($status) {
         $_SESSION['success'] = 'Deleted successfully.';
@@ -32,10 +45,20 @@ if (isset($_POST['multi_selection_ids'])) {
         if ($tend_result == 1) {
             while ($row = mysqli_fetch_assoc($tend_data)) {
                 $ref_no = $row['ref_no'];
+
+                // Delete with elasticsearch
+                $getId = mysqli_query($con, "SELECT id FROM tenders_all WHERE ref_no='$ref_no'");
+                $row = mysqli_fetch_assoc($getId);
+                $deleted_id = $row['id'];
+                if($deleted_id) {
+                    es_delete_document($index, $deleted_id);
+                }
+                
                 $del = mysqli_query($con, "DELETE FROM `tenders_all` where ref_no='" . $ref_no . "'");
             }
         }
         $del = mysqli_query($con, "DELETE FROM `tenders_archive` where id='" . $delID . "'");
+        es_delete_document($archive_tenders_index, $delID);
         $status = true;
         if ($status) {
             $_SESSION['success'] = 'Deleted successfully.';
@@ -162,10 +185,6 @@ if (!empty($_SESSION['error'])) {
         </div>
     </div>
 </div>
-
-<form id="postForm" method="POST" action="" style="display:none;">
-    <input type="hidden" name="te_id" id="te_id" value="">
-</form>
 <!-- end page title -->
 
 <div class="row">
@@ -343,7 +362,7 @@ if (!empty($_SESSION['error'])) {
                                     <td class="action_element">
                                         <div class="d-flex align-items-center">
                                             <a href="<?php echo ADMIN_URL; ?>archive-tenders/edit-tender.php?id=<?php echo $data['id']; ?>"><i style="font-size: 20px;" class="ri-pencil-fill text-success"></i></a> &nbsp | &nbsp
-                                            <a href="#" data-teid="<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
+                                            <a href="<?php echo ADMIN_URL; ?>archive-tenders/index.php?id=<?php echo $data['id']; ?>" class="delete" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -368,7 +387,7 @@ if (!empty($_SESSION['error'])) {
                                                 <button type="button" class="btn btn-light" data-bs-dismiss="modal">
                                                     Close
                                                 </button>
-                                                <a href="javascript:void(0);" class="btn btn-danger" onclick="document.getElementById('postForm').submit(); return false;">Delete</a>
+                                                <a href="javascript:void(0);" class="btn btn-danger">Delete</a>
                                             </div>
                                         </div>
                                     </div>
@@ -476,11 +495,10 @@ if (!empty($_SESSION['error'])) {
 <?php include '../includes/footer.php';  ?>
 
 <script>
-    var te_url = "<?php echo ADMIN_URL; ?>archive-tenders/index.php";
     $('.action_element a.delete').click(function(e) {
         e.preventDefault();
-        var te_id=$(this).attr('data-teid');
-        $('#te_id').val(te_id);
+        var url = $(this).attr('href');
+        $('.bs-example-modal-center a.btn.btn-danger').prop('href', url);
     });
 </script>
 

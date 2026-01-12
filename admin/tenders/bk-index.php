@@ -1,21 +1,5 @@
 <?php include '../includes/authentication.php';
-include '../../elasticsearch/all-tenders/index_sync.php';
-include '../../elasticsearch/live-tenders/index_sync.php';
-include '../../elasticsearch/archive-tenders/bulk_index_by_ids.php';
-include '../../elasticsearch/live-tenders/bulk_index_by_ids.php';
 
-$index = ES_INDEXES['ALL'];
-$new_tenders_index = ES_INDEXES['NEW'];
-$live_tenders_index = ES_INDEXES['LIVE'];
-$archive_tenders_index = ES_INDEXES['ARCHIVE'];
-// $result = bulk_archive_tenders_by_ids(
-//     [15361718, 15361719, 15361720, 15361721],
-//     $archive_tenders_index
-// );
-
-// echo "<pre>";
-// print_r($result);
-// die();
 ?>
 
 <?php $pages = 'tenders'; ?>
@@ -42,21 +26,13 @@ if (isset($_POST['te_id'])) {
 
             $ref_no = $row['ref_no'];
 
-            // Delete with elasticsearch
-            $getId = mysqli_query($con, "SELECT id FROM tenders_all WHERE ref_no='$ref_no'");
-            $row = mysqli_fetch_assoc($getId);
-            $deleted_id = $row['id'];
-            if($deleted_id) {
-                es_delete_document($index, $deleted_id);
-            }
-
             $del = mysqli_query($con, "DELETE FROM `tenders_all` where ref_no='" . $ref_no . "'");
 
         }
 
     }
+
     $del = mysqli_query($con, "DELETE FROM `tenders_posts` where id='" . $tes_id . "'");
-    es_delete_document($new_tenders_index, $tes_id);
 
     $status = true;
 
@@ -94,21 +70,13 @@ if (isset($_POST['multi_selection_ids'])) {
 
                 $ref_no = $row['ref_no'];
 
-                // Delete with elasticsearch
-                $getId = mysqli_query($con, "SELECT id FROM tenders_all WHERE ref_no='$ref_no'");
-                $row = mysqli_fetch_assoc($getId);
-                $deleted_id = $row['id'];
-                if($deleted_id) {
-                    es_delete_document($index, $deleted_id);
-                }
-
                 $del = mysqli_query($con, "DELETE FROM `tenders_all` where ref_no='" . $ref_no . "'");
+
             }
 
         }
 
         $del = mysqli_query($con, "DELETE FROM `tenders_posts` where id='" . $delID . "'");
-        es_delete_document($new_tenders_index, $delID);
 
         $status = true;
 
@@ -130,101 +98,100 @@ if (isset($_GET['move'])) {
 
     //echo "come";die();
 
-    // Step-1: Get tenders_posts IDs
-    $post_ids = [];
-    $tenders_posts_res = mysqli_query($con, "SELECT id FROM tenders_posts");
-    while ($row = mysqli_fetch_assoc($tenders_posts_res)) {
-        $post_ids[] = (int)$row['id'];
-    }
-
-    // Step-2: Insert into tenders_live
     $move = mysqli_query($con, "INSERT INTO `tenders_live` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at)
+
     SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at 
+
     FROM `tenders_posts`;");
 
+
+
+
+
     $status = true;
+
     if ($status) {
+
         if ($move) {
+
             $affected_rows = mysqli_affected_rows($con);
+
             if ($affected_rows > 0) {
-                // Step-3: Get tenders_live IDs
-                $live_ids = [];
-                $res = mysqli_query($con, "SELECT id FROM tenders_live WHERE created_at >= NOW() - INTERVAL 20 MINUTE;");
-                while ($row = mysqli_fetch_assoc($res)) {
-                    $live_ids[] = (int)$row['id'];
-                }
-                
-                // Step-4: Bulk index live ES
-                bulk_live_tenders_by_ids($live_ids, $live_tenders_index);
-
-                // Step-5: Bulk delete from ES NEW
-                es_bulk_delete_by_ids($post_ids, $new_tenders_index);
-
-                // Step-6: Truncate from tenders_posts
-                if (!empty($post_ids)) {
-                    mysqli_query($con, "TRUNCATE TABLE `tenders_posts`;");
-                }
 
                 $_SESSION['success'] = 'Moved successfully.';
+
             } else {
+
                 $_SESSION['error'] = 'No records moved.';
+
             }
+
         }
+
     } else {
+
         $_SESSION['error'] = 'Something went wrong.';
+
     }
+
+    
+
+    $trun = mysqli_query($con, "TRUNCATE TABLE `tenders_posts`");  
+
 }
+
+
 
 if (isset($_GET['amove'])) {
 
     //echo "come";die();
+
     $c_date = date('Y-m-d');
 
-    // Step-1: Get tenders_posts IDs
-    $post_ids = [];
-    $tenders_posts_res = mysqli_query($con, "SELECT id FROM tenders_posts WHERE due_date < '$c_date'");
-    while ($row = mysqli_fetch_assoc($tenders_posts_res)) {
-        $post_ids[] = (int)$row['id'];
-    }
 
-    // Step-2: Insert into tenders_archive
+
     $amove = mysqli_query($con, "INSERT INTO `tenders_archive` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at)
+
     SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at 
+
     FROM `tenders_posts` where due_date < '$c_date'");
 
+
+
     $status = true;
+
     if ($status) {
+
         if ($amove) {
+
             $affected_rows = mysqli_affected_rows($con);
+
             if ($affected_rows > 0) {
-                // Step-3: Get tenders_archive IDs
-                $archive_ids = [];
-                $res = mysqli_query($con, "SELECT id FROM tenders_archive WHERE created_at >= NOW() - INTERVAL 20 MINUTE;");
-                while ($row = mysqli_fetch_assoc($res)) {
-                    $archive_ids[] = (int)$row['id'];
-                }
-
-                // Step-4: Bulk index archive ES
-                bulk_archive_tenders_by_ids($archive_ids, $archive_tenders_index);
-                
-
-                // Step-5: Bulk delete from ES NEW
-                es_bulk_delete_by_ids($post_ids, $new_tenders_index);
-                
-                // Step-6: Delete from tenders_posts
-                if (!empty($post_ids)) {
-                    mysqli_query($con, "DELETE FROM tenders_posts WHERE id IN (" . implode(',', $post_ids) . ")");
-                }
 
                 $_SESSION['success'] = 'Moved successfully.';
+
             } else {
+
                 $_SESSION['error'] = 'No records moved.';
+
             }
+
         }
+
     } else {
+
         $_SESSION['error'] = 'Something went wrong.';
+
     }
+
+    
+
+    $trun = mysqli_query($con, "DELETE FROM `tenders_posts` where due_date < '$c_date'");  
+
 }
+
+
+
 ?>
 
 <?php

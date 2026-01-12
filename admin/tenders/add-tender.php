@@ -1,4 +1,6 @@
 <?php include '../includes/authentication.php';
+// include '../../elasticsearch/all-tenders/index_sync.php';
+// $index = ES_INDEXES['ALL'];
 ?>
 <?php $pages = 'tenders'; ?>
 <?php include '../includes/header.php' ?>
@@ -36,6 +38,12 @@ if (isset($_POST['submit'])) {
     // var_dump($q1);
     // die();
     $sql1 = mysqli_query($con, $q1);
+
+    // sync with elasticsearch
+    // $insertedId = mysqli_insert_id($con);
+    // if ($insertedId > 0) {
+    //     sync_tender_by_id($insertedId, $index);
+    // }
 
     $status = true;
     if ($status) {
