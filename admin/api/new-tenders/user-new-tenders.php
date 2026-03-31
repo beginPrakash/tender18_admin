@@ -304,9 +304,9 @@ function get_results($con, $postData)
 
         if (!empty($keywords)) {
 
-            $keywords = explode(',', $keywords);
+            $keywordse = explode(',', $keywords);
 
-            foreach ($keywords as $keyword) {
+            foreach ($keywordse as $keyword) {
 
                 $keyword_arr = explode(' ', $keyword);
 

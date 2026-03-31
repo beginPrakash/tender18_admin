@@ -7,13 +7,20 @@ use PHPMailer\PHPMailer\Exception;
 require '../PHPMailer/vendor/autoload.php';
 function highlightSearchTerm($text, $searchTerm)
         {
-            // $highlightedTerm = "<b>$searchTerm</b>";
-            // return str_ireplace($searchTerm, $highlightedTerm, $text);
-    
-            $highlightMarkup = '<strong style=color:#cb192d;margin-right:2px;>';
-            $closingHighlightMarkup = '</strong>';
-            $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
-            return $highlightedText;
+            if (empty($searchTerm)) {
+                return $text;
+            }
+        
+            $escapedTerm = preg_quote($searchTerm, '/');
+        
+            $highlightStart = '<strong style=color:#cb192d;margin-right:2px;>';
+            $highlightEnd   = '</strong>';
+        
+            return preg_replace(
+                "/(?![^<]*>)($escapedTerm)/i",
+                $highlightStart . '$1' . $highlightEnd,
+                $text
+            );
         }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $ids = isset($_POST['ids']) ? $_POST['ids'] : '';

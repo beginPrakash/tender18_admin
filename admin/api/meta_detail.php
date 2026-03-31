@@ -124,6 +124,8 @@ function get_results($con, $postData)
             }else{
                 $keyw_data = mysqli_query($con, "SELECT * FROM `keyword_meta_content` where id = 1 ");
             }
+        }else{
+             $keyw_data = mysqli_query($con, "SELECT * FROM `keyword_meta_content` where id = 1 ");
         }
         $keyw_result = mysqli_num_rows($keyw_data);
         if ($keyw_result == 1) {

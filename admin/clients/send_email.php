@@ -1,4 +1,4 @@
-<?php
+s<?php
 include '../includes/connection.php';
 include '../includes/functions.php';
 use PHPMailer\PHPMailer\PHPMailer;
@@ -28,15 +28,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $from_name = $row['from_name'];
             }
         }
-        function highlightSearchTerm($text, $searchTerm)
+       function highlightSearchTerm($text, $searchTerm)
         {
-            // $highlightedTerm = "<b>$searchTerm</b>";
-            // return str_ireplace($searchTerm, $highlightedTerm, $text);
-    
-            $highlightMarkup = '<strong style=color:#cb192d;margin-right:2px;>';
-            $closingHighlightMarkup = '</strong>';
-            $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
-            return $highlightedText;
+            if (empty($searchTerm)) {
+                return $text;
+            }
+        
+            $escapedTerm = preg_quote($searchTerm, '/');
+        
+            $highlightStart = '<strong style=color:#cb192d;margin-right:2px;>';
+            $highlightEnd   = '</strong>';
+        
+            return preg_replace(
+                "/(?![^<]*>)($escapedTerm)/i",
+                $highlightStart . '$1' . $highlightEnd,
+                $text
+            );
         }
 
         
@@ -536,7 +543,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $mail->isHTML(true); // Set email format to HTML
                                 $mail->Subject = "=?UTF-8?B?'".base64_encode($subject)."'?=";
                                 $mail->Body = $template;
-                                //print_r($mail);exit;
+                               // print_r($mail);exit;
                                 // Send the email
                                 
                                 //if ($tender_result > 0) {

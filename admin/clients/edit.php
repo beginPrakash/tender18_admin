@@ -158,6 +158,7 @@ if (isset($_POST['submit'])) {
                 $filter_city = mysqli_real_escape_string($con, $_POST['filter_city']);
                 $filter_state = mysqli_real_escape_string($con, $_POST['filter_state']);
                 $filter_tender_value = mysqli_real_escape_string($con, $_POST['filter_tender_value']);
+                $filter_tender_min_value = mysqli_real_escape_string($con, $_POST['filter_tender_min_value']);
                 $filter_agency = mysqli_real_escape_string($con, $_POST['filter_agency']);
                 $filter_department = mysqli_real_escape_string($con, $_POST['filter_department']);
                 $filter_type = mysqli_real_escape_string($con, $_POST['filter_type']);
@@ -172,9 +173,9 @@ if (isset($_POST['submit'])) {
                 $expired_date = date("Y-m-d", $timestamp2);
 
                 if(!empty($is_view_document)){
-                    $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date', custom_care_number='$custom_care_number', tech_person_name='$tech_person_name', tech_person_number='$tech_person_number', email_ids='$email_ids', mail_type='$mail_type', is_view_document='$is_view_document' where user_id='$user_id' and user_unique_id='$unique_code'";
+                    $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_tender_min_value='$filter_tender_min_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date', custom_care_number='$custom_care_number', tech_person_name='$tech_person_name', tech_person_number='$tech_person_number', email_ids='$email_ids', mail_type='$mail_type', is_view_document='$is_view_document' where user_id='$user_id' and user_unique_id='$unique_code'";
                 }else{
-                    $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date', custom_care_number='$custom_care_number', tech_person_name='$tech_person_name', tech_person_number='$tech_person_number', email_ids='$email_ids', mail_type='$mail_type' where user_id='$user_id' and user_unique_id='$unique_code'";
+                    $q1 = "UPDATE `users` SET company_name='$company_name', customer_name='$customer_name', alt_email='$alt_email', mobile_number='$mobile_number', alt_mobile='$alt_mobile', whatsapp_alert_no='$whatsapp_alert_no', `address`='$address', `state`='$state', `status`='$status', keywords='$keywords', words='$words', not_used_keywords='$not_used_keywords', all_filters='$all_filters', filter_city='$filter_city', filter_state='$filter_state', filter_tender_value='$filter_tender_value', filter_tender_min_value='$filter_tender_min_value', filter_agency='$filter_agency', filter_department='$filter_department', filter_type='$filter_type', `start_date`='$start_date', duration='$duration', expired_date='$expired_date', custom_care_number='$custom_care_number', tech_person_name='$tech_person_name', tech_person_number='$tech_person_number', email_ids='$email_ids', mail_type='$mail_type' where user_id='$user_id' and user_unique_id='$unique_code'";
                 }
                     $sql1 = mysqli_query($con, $q1);
             }
@@ -869,8 +870,15 @@ if (!empty($_SESSION['error'])) {
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_tender_value" class="form-label">Filter Tender Value :</label>
+                                <label for="filter_tender_value" class="form-label">Filter Tender Max Value :</label>
                                 <input type="text" name="filter_tender_value" value="<?php echo htmlspecialcode_generator($fetch_users['filter_tender_value']); ?>" placeholder=" " class="form-control" id="filter_tender_value">
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-12 col-md-12 hidden_fields">
+                            <div class="col-md-6">
+                                <label for="filter_tender_min_value" class="form-label">Filter Tender Min Value :</label>
+                                <input type="text" name="filter_tender_min_value" value="<?php echo htmlspecialcode_generator($fetch_users['filter_tender_min_value']); ?>" placeholder=" " class="form-control" id="filter_tender_min_value">
                             </div>
                         </div>
 

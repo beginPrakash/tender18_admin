@@ -4,6 +4,23 @@
 <?php include '../includes/header.php';?>
 
 <?php
+// Pagination Utils START
+function pageUrl($baseUrl, $params, $page) {
+    $params['page_no'] = $page;
+    return $baseUrl . '?' . http_build_query($params);
+}
+
+if (!empty($_GET['upload_date'])) {
+    $baseParams['upload_date'] = $_GET['upload_date'];
+}
+
+if (!empty($_GET['search_term'])) {
+    $baseParams['search_term'] = $_GET['search_term'];
+}
+
+$baseUrl = ADMIN_URL . 'cms_customer/index.php';
+// Pagination Utils END
+
 $cmscust_per = _get_user_perby_role($_SESSION['user_id'],'cms_customer',$con);
 
 if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){ 
@@ -16,6 +33,53 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
     echo "<script>
             window.location.href='../index.php';
             </script>";
+}
+
+if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
+    $_SESSION['page_limit'] = $_GET['page-limit'];
+}
+
+if (isset($_GET['search_term']) && !empty($_GET['search_term']) && isset($_GET['upload_date']) && !empty($_GET['upload_date'])) {
+    $search = $_GET['search_term'];
+    $upload_date = urldecode($_GET['upload_date']);
+    $arr = explode(' to ', $upload_date);
+    if (count($arr) === 2) {
+
+        $fromDate = DateTime::createFromFormat('d M, Y', trim($arr[0]));
+        $toDate   = DateTime::createFromFormat('d M, Y', trim($arr[1]));
+
+        if ($fromDate && $toDate) {
+            $from = $fromDate->format('Y-m-d 00:00:00');
+            $to   = $toDate->format('Y-m-d 23:59:59');
+            
+            $condition = "where (customer_id like '%$search%' or customer_name like '%$search%' or company_name like '%$search%' or email_ids like '%$search%' or created_at like '%$search%') and created_at BETWEEN '" . $from . "' AND '" . $to . "'";
+        }
+    }
+} else if (isset($_GET['search_term']) && !empty($_GET['search_term'])) {
+    $search = $_GET['search_term'];
+    $upload_date = "";
+    $condition = "where (customer_id like '%$search%' or customer_name like '%$search%' or company_name like '%$search%' or email_ids like '%$search%' or created_at like '%$search%')";
+} else if (!empty($_GET['upload_date'])) {
+
+    $upload_date = urldecode($_GET['upload_date']);
+    $arr = explode(' to ', $upload_date);
+
+    if (count($arr) === 2) {
+
+        $fromDate = DateTime::createFromFormat('d M, Y', trim($arr[0]));
+        $toDate   = DateTime::createFromFormat('d M, Y', trim($arr[1]));
+
+        if ($fromDate && $toDate) {
+            $from = $fromDate->format('Y-m-d 00:00:00');
+            $to   = $toDate->format('Y-m-d 23:59:59');
+
+            $condition = "WHERE created_at BETWEEN '$from' AND '$to'";
+        }
+    }
+} else {
+    $search = "";
+    $upload_date = "";
+    $condition = "";
 }
 
 if (isset($_GET['id'])) {
@@ -45,7 +109,7 @@ if (!empty($_SESSION['success'])) {
     echo "
              <script>
                      setTimeout(function(){
-                        window.location.href='" . ADMIN_URL . "/cms_customer/index.php';
+                        //window.location.href='" . ADMIN_URL . "/cms_customer/index.php';
                          document.querySelector('.msg_box').remove();
                      }, 3000);
                  
@@ -86,39 +150,63 @@ if (!empty($_SESSION['error'])) {
     </div>
 </div>
 <!-- end page title -->
-<?php
- if (isset($_GET['upload_date']) && !empty($_GET['upload_date'])) {
-    $upload_date = $_GET['upload_date'];
-    $arr = explode(' to ', $upload_date);
-    $from = date('Y-m-d 00:00:00', strtotime($arr[0]));
-    $to = date('Y-m-d 23:59:59', strtotime($arr[1]));
-    $condition = "where created_at BETWEEN '" . $from . "' AND '" . $to . "'";
-} else {
-    $upload_date = "";
-    $condition = "";
-}
-?>
 <div class="row">
     <div class="col-lg-12">
         <div class="card">
             
             <div class="card-header">
-                
-              
                 <button type="button" onclick="dataSelected()" class="card-title float-start btn bg-success text-white mb-0">Send Email</button>
                 <div class="col col-8 filter_upload" style="float:right">
                     <form class="d-flex align-items-center">
                         <label for="upload_date" class="form-label text-nowrap mx-2">Select Date :</label>
+                        <?php if (isset($_GET['search_term']) && !empty($_GET['search_term'])) { ?>
+                            <input type="hidden" name="search_term" value="<?php echo $_GET['search_term']; ?>">
+                        <?php } ?>
                         <input type="text" name="upload_date" class="form-control flatpickr-input" data-provider="flatpickr" data-date-format="d M, Y" data-range-date="true"  data-default-date="<?php echo $upload_date; ?>" readonly="readonly" id="upload_date">
                         <button type="submit" class="btn btn-primary mx-2">Filter</button>
                     </form>
                 </div>    
             </div>
-            <div class="card-body">
+            <div class="card-body dataTables_wrapper pt-0">
             <form id="deleteForm" method="POST" action="send_email.php">
                 <input type="hidden" name="ids" id="ids">
+                <input type="hidden" name="upload_date" id="upload_date" value="<?php echo $upload_date; ?>">
+                <input type="hidden" name="search_term" id="search_term" value="<?php echo $_GET['search_term']; ?>">
+                <input type="hidden" name="page_no" id="page_no" value="<?php echo $_GET['page_no']; ?>">
             </form>
-                <table id="example_table" class="table table-bordered dt-responsive nowrap table-striped align-middle" style="width: 100%">
+
+            <div id="example_filter" class="dataTables_filter">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-6">
+                            <div class="dataTables_length d-flex align-items-center h-100" id="example_length">
+                                <form>
+                                    <label>Show <select name="page-limit" aria-controls="example" onchange="this.form.submit()" class="form-select form-select-sm">
+                                            <option value="10" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 10) { echo "selected"; } ?>>10</option>
+                                            <option value="25" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 25) { echo "selected"; } ?>>25</option>
+                                            <option value="50" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 50) { echo "selected"; } ?>>50</option>
+                                            <option value="100" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 100) { echo "selected"; } ?>>100</option>
+                                        </select>
+                                        entries
+                                    </label>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-12 col-md-6">
+                            <form class="mb-3 d-flex gap-2 justify-content-end">
+                                <?php if (isset($_GET['upload_date']) && !empty($_GET['upload_date'])) { ?>
+                                    <input type="hidden" name="upload_date" value="<?php echo $_GET['upload_date']; ?>">
+                                <?php } ?>
+                                <label> Search: <input type="search" name="search_term" value="<?php echo $search; ?>" class="form-control form-control" placeholder="" aria-controls="example">
+                                </label>
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+                <table id="example_table" class="table table-bordered dt-responsive dataTable nowrap table-striped align-middle" style="width: 100%;">
                     <thead>
                         <tr>
                             <th><input type="checkbox" name="check_all" class="check_all"></th>
@@ -132,29 +220,49 @@ if (!empty($_SESSION['error'])) {
                     </thead>
                     <tbody>
                         <?php
-                        $query = '';
-                        if (!empty($ftype)) {
-                            $query = "where type='$ftype'";
+                         if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit'])) {
+                            $limit = $_SESSION['page_limit'];
+                        } else {
+                            $limit = 10;
                         }
-                       
-                        $tenders_data = mysqli_query($con, "SELECT * FROM `cms_customer` $condition order by `customer_id` ASC");
-                      
+
+                        $total_query = mysqli_fetch_array(mysqli_query($con, "SELECT COUNT(*) FROM `cms_customer` $condition order by `customer_id` ASC "))[0];
+                        $total = ceil($total_query / $limit);
+                        $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
+                        $offset = ($page * $limit) - $limit;
+
+                        $tenders_data = mysqli_query($con, "SELECT * FROM `cms_customer` $condition order by `customer_id` ASC LIMIT $offset, $limit");
                         $tenders_result = mysqli_num_rows($tenders_data);
+
+                        if ($limit > $total_query) {
+                            $limit = $total_query;
+                        }
+
+
+                        // $query = '';
+                        // if (!empty($ftype)) {
+                        //     $query = "where type='$ftype'";
+                        // }
+                       
+                        // $tenders_data = mysqli_query($con, "SELECT * FROM `cms_customer` $condition order by `customer_id` ASC");
+                      
+                        // $tenders_result = mysqli_num_rows($tenders_data);
                         if ($tenders_result > 0) {
-                            $i = 1;
+                            $i = ($offset + 1);
                             foreach ($tenders_data as $data) {
                             ?>
-                                <tr>
+                                <tr class="<?php if ($i % 2 == 0) { echo "even";} else { echo "odd"; } ?>">
                                     <th scope="row"><input type="checkbox" name="row-check" class="row-check" value="<?php echo $data['id']; ?>"></th>
                                     <td><?php echo $data['customer_id']; ?></td>
                                     <td><?php echo htmlspecialcode_generator($data['customer_name']); ?></td>
-                                    <td><?php echo $data['company_name']; ?></td>
-                                    <td><?php echo $data['email_ids']; ?></td>
+                                    <td style="word-break: break-word; overflow-wrap: break-word; white-space: normal; max-width: 300px;"><?php echo $data['company_name']; ?></td>
+                                    <td style="word-break: break-word; overflow-wrap: break-word; white-space: normal; max-width: 300px;"><?php echo $data['email_ids']; ?></td>
                                     <td><?php echo date('M d,Y',strtotime($data['created_at'])); ?></td>
-                                    <td class="action_element">
-                                       
+                                    <td>
+                                        <div class="d-flex align-items-center">
                                             <a href="<?php echo ADMIN_URL; ?>cms_customer/view.php?id=<?php echo $data['id']; ?>"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a>
                                             &nbsp | &nbsp<a href="<?php echo ADMIN_URL; ?>cms_customer/index.php?id=<?php echo $data['id']; ?>" class="delete remove-item-btn" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center"><i style="font-size: 20px;" class="ri-delete-bin-fill text-danger delete_btn" data-url="<?php echo ADMIN_URL; ?>cms_customer/index.php?id=<?php echo $data['id']; ?>"></i></a>
+                                        </div>    
                                     </td>
                                 </tr>
                             <?php $i++;
@@ -167,6 +275,66 @@ if (!empty($_SESSION['error'])) {
                        
                     </tbody>
                 </table>
+                <div class="row">
+                    <div class="col-sm-12 col-md-5">
+                        <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing 
+                            <?php if ($tenders_result > 0) { echo ($offset + 1); } else { echo "0"; } ?> to <?php echo ($page * $limit); ?> of <?php echo $total_query; ?> entries</div>
+                    </div>
+                    <div class="col-sm-12 col-md-7">
+                       <?php
+                        if ($total > 1) {
+                            // display the "previous" link
+                            $customer_id_params = $_GET['id'];
+                            $data = '<div class="dataTables_paginate paging_simple_numbers">';
+                            $data .= '<ul class="pagination">';
+                            if ($page > 1) {
+                                $data .= '<li class="paginate_button page-item previous"><a class="page-link" href="'. pageUrl($baseUrl, $baseParams, $page - 1) .'">Previous</a></li>';
+                            }
+                            // display the "previous" link
+                            if ($page == 2) {
+                                $data .= '<li class="paginate_button page-item"><a href="'. pageUrl($baseUrl, $baseParams, 1) .'" class="page-link">' . ($page - 1) . '</a></li>';
+                            }
+                            // display the first page link
+                            if ($page > 2) {
+                                $data .= '<li class="paginate_button page-item"><a href="'. pageUrl($baseUrl, $baseParams, 1) .'" class="page-link">1</a></li>';
+                                // add an ellipsis to indicate skipped pages
+                                if ($page > 3) {
+                                    $data .= '<li class="paginate_button page-item"><a class="ellipsis page-link" style="pointer-events: none;">...</a></li>';
+                                }
+                            }
+                            // display up to 3 pages before the current page
+                            for ($i = max(2, $page - 2); $i < $page; $i++) {
+                                $data .= '<li class="paginate_button page-item"><a href="'. pageUrl($baseUrl, $baseParams, $i) .'" class="page-link">' . $i . '</a></li>';
+                            }
+                            // display the current page number
+                            $data .= '<li class="paginate_button page-item active"><a class="page-link" style="pointer-events: none;">' . $page . '</a></li>';
+                            // display up to 3 pages after the current page
+                            for ($i = $page + 1; $i <= min($total - 1, $page + 2); $i++) {
+                                $data .= '<li class="paginate_button page-item"><a href="'. pageUrl($baseUrl, $baseParams, $i) .'" class="page-link">' . $i . '</a></li>';
+                            }
+                            // display the last page link
+                            if ($page < $total - 1) {
+                                // add an ellipsis to indicate skipped pages
+                                if ($page < $total - 2) {
+                                    $data .= '<li class="paginate_button page-item"><a class="ellipsis page-link" style="pointer-events: none;">...</a></li>';
+                                }
+                                $data .= '<li class="paginate_button page-item"><a href="'. pageUrl($baseUrl, $baseParams, $total) .'" class="page-link">' . $total . '</a></li>';
+                            }
+                            // display the "next" link
+                            if ($page == $total - 1) {
+                                $data .= '<li class="paginate_button page-item"><a href="'. pageUrl($baseUrl, $baseParams, $page + 1) .'" class="page-link">' . ($total) . '</a></li>';
+                            }
+                            // display the "next" link
+                            if ($page < $total) {
+                                $data .= '<li class="paginate_button page-item next"><a class="page-link" href="'. pageUrl($baseUrl, $baseParams, $page + 1) .'">Next</i></a></li>';
+                            }
+                            $data .= '</ul></div>';
+                            echo $data;
+                        }
+                        ?>
+                    </div>
+
+                </div>
             </div>
         </div>
     </div>
@@ -197,37 +365,6 @@ if (!empty($_SESSION['error'])) {
                         </div>
 
 <?php include '../includes/footer.php';  ?>
-
-<script>
-    $(document).ready(function () {
-
-    // Get saved page and page length
-    const savedPage = parseInt(localStorage.getItem('dt-page') || 0);
-    const savedLength = parseInt(localStorage.getItem('dt-length') || 30);
-
-    // Initialize DataTable with saved options
-    const table = $('#example_table').DataTable({
-      pageLength: savedLength,
-      displayStart: savedPage * savedLength,
-      columnDefs: [
-            { orderable: false, targets: 0 } // Disable ordering on the first column (index 0)
-        ],
-    });
-
-    // Store page number on page change
-    $('#example_table').on('page.dt', function () {
-      const info = table.page.info();
-      localStorage.setItem('dt-page', info.page);
-    });
-
-    // Store selected length on change
-    $('#example_table').on('length.dt', function (e, settings, len) {
-      localStorage.setItem('dt-length', len);
-      localStorage.setItem('dt-page', 0); // Reset page to 0 when length changes
-    });
-});
-    
-</script>
 
 <script>
     //copy text

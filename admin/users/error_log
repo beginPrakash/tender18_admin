@@ -1,0 +1,222 @@
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 3
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 4
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 5
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 6
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 7
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 8
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 9
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 10
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 11
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 12
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 13
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 14
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 15
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 16
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 17
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 18
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 19
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 20
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 21
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 22
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 23
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 24
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 25
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 26
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 27
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 28
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 29
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 30
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 31
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 32
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 33
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 34
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 35
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 36
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 37
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 38
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 39
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 72
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 82
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 92
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 102
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 112
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 122
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 132
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 142
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 152
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 162
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 172
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 182
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 192
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 202
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 212
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 222
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 233
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 243
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 253
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 263
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 282
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 292
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 303
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 314
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 324
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 334
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 344
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 354
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 364
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 374
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 384
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 394
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_name in /home/tender18/public_html/admin/includes/header.php on line 103
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/users/index.php on line 6
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/users/index.php on line 8
+[05-Jan-2026 10:16:27 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/users/index.php on line 8
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 3
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 4
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 5
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 6
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 7
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 8
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 9
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 10
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 11
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 12
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 13
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 14
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 15
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 16
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 17
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 18
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 19
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 20
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 21
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 22
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 23
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 24
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 25
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 26
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 27
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 28
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 29
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 30
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 31
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 32
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 33
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 34
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 35
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 36
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 37
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 38
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/includes/sidebar.php on line 39
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 72
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 82
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 92
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 102
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 112
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 122
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 132
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 142
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 152
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 162
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 172
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 182
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 192
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 202
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 212
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 222
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 233
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 243
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 253
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 263
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 282
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 292
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 303
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 314
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 324
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 334
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 344
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 354
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 364
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 374
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 384
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/includes/sidebar.php on line 394
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_name in /home/tender18/public_html/admin/includes/header.php on line 103
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: user_id in /home/tender18/public_html/admin/users/index.php on line 6
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, bool given in /home/tender18/public_html/admin/includes/functions.php on line 97
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/users/index.php on line 8
+[19-Jan-2026 17:58:23 Asia/Kolkata] PHP Notice:  Undefined index: role in /home/tender18/public_html/admin/users/index.php on line 8

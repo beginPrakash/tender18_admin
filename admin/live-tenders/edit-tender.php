@@ -1,5 +1,6 @@
 <?php include '../includes/authentication.php';
 include '../../elasticsearch/live-tenders/index_sync.php';
+include '../../elasticsearch/all-tenders/index_sync.php';
 ?>
 <?php $pages = 'live-tenders'; ?>
 <?php include '../includes/header.php' ?>
@@ -15,6 +16,7 @@ if (!empty($_GET['id'])) {
 
 <?php
 if (isset($_POST['submit'])) {
+    $index = ES_INDEXES['ALL'];
     $live_index = ES_INDEXES['LIVE'];
 
     $tenderID = $_POST['tenderID'];
@@ -53,6 +55,37 @@ if (isset($_POST['submit'])) {
     
     // Sync live tenders(tenders_live) with ES
     sync_live_tender_by_id($tenderID, $live_index);
+
+    // Sync all tenders(tenders_all) with ES
+    $live_tenders_sql = "SELECT ref_no FROM tenders_live WHERE id = ? LIMIT 1";
+    $live_tenders_stmt = mysqli_prepare($con, $live_tenders_sql);
+    if (!$live_tenders_stmt) {
+        return [
+            'error' => 'prepare_failed',
+            'msg'   => mysqli_error($con)
+        ];
+    }
+
+    mysqli_stmt_bind_param($live_tenders_stmt, 'i', $tenderID);
+    mysqli_stmt_execute($live_tenders_stmt);
+    $live_tenders_res = mysqli_stmt_get_result($live_tenders_stmt);
+    $live_tenders_row = mysqli_fetch_assoc($live_tenders_res);
+    mysqli_stmt_close($live_tenders_stmt);
+
+    if(!empty($live_tenders_row['ref_no'])){
+        $q2 = "UPDATE `tenders_all` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `ref_no`='".$live_tenders_row['ref_no']."'";
+        $sql2 = mysqli_query($con, $q2);
+
+        // Sync all tenders(tenders_all) with ES
+        $getId = mysqli_query($con, "SELECT id FROM tenders_all WHERE ref_no='".$live_tenders_row['ref_no']."'");
+        $row = mysqli_fetch_assoc($getId);
+        $updated_id = $row['id'];
+        if($updated_id) {
+            sync_tender_by_id($updated_id, $index);    
+        }
+    }
+    
+    
     $status = true;
     if ($status) {
         $_SESSION['success'] = 'Updated successfully.';

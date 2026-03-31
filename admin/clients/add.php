@@ -103,6 +103,7 @@ if (isset($_POST['submit'])) {
         $filter_city = mysqli_real_escape_string($con, $_POST['filter_city']);
         $filter_state = mysqli_real_escape_string($con, $_POST['filter_state']);
         $filter_tender_value = mysqli_real_escape_string($con, $_POST['filter_tender_value']);
+        $filter_tender_min_value = mysqli_real_escape_string($con, $_POST['filter_tender_min_value']);
         $filter_agency = mysqli_real_escape_string($con, $_POST['filter_agency']);
         $filter_department = mysqli_real_escape_string($con, $_POST['filter_department']);
         $filter_type = mysqli_real_escape_string($con, $_POST['filter_type']);
@@ -117,8 +118,8 @@ if (isset($_POST['submit'])) {
         $timestamp2 = strtotime($expired_date);
         $expired_date = date("Y-m-d", $timestamp2);
 
-        $newDataCol = ", company_name, customer_name, alt_email, mobile_number, alt_mobile, whatsapp_alert_no, address, state, status, keywords, words, not_used_keywords, all_filters, filter_city, filter_state, filter_tender_value, filter_agency, filter_department, filter_type, start_date, duration, expired_date, custom_care_number, tech_person_name, tech_person_number,email_ids,mail_type,is_view_document,client_type";
-        $newDataVal = ", '$company_name', '$customer_name', '$alt_email', '$mobile_number', '$alt_mobile', '$whatsapp_alert_no', '$address', '$state', '$status', '$keywords', '$words', '$not_used_keywords', '$all_filters', '$filter_city', '$filter_state', '$filter_tender_value', '$filter_agency', '$filter_department', '$filter_type', '$start_date', '$duration', '$expired_date', '$custom_care_number', '$tech_person_name', '$tech_person_number', '$email_ids', '$mail_type','$is_view_document','$client_type'";
+        $newDataCol = ", company_name, customer_name, alt_email, mobile_number, alt_mobile, whatsapp_alert_no, address, state, status, keywords, words, not_used_keywords, all_filters, filter_city, filter_state, filter_tender_value, filter_tender_min_value, filter_agency, filter_department, filter_type, start_date, duration, expired_date, custom_care_number, tech_person_name, tech_person_number,email_ids,mail_type,is_view_document,client_type";
+        $newDataVal = ", '$company_name', '$customer_name', '$alt_email', '$mobile_number', '$alt_mobile', '$whatsapp_alert_no', '$address', '$state', '$status', '$keywords', '$words', '$not_used_keywords', '$all_filters', '$filter_city', '$filter_state', '$filter_tender_value', '$filter_tender_min_value','$filter_agency', '$filter_department', '$filter_type', '$start_date', '$duration', '$expired_date', '$custom_care_number', '$tech_person_name', '$tech_person_number', '$email_ids', '$mail_type','$is_view_document','$client_type'";
     } else {
         $newDataCol = "";
         $newDataVal = "";
@@ -767,8 +768,15 @@ if (!empty($_SESSION['error'])) {
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_tender_value" class="form-label">Filter Tender Value :</label>
+                                <label for="filter_tender_value" class="form-label">Filter Tender Max Value :</label>
                                 <input type="text" name="filter_tender_value" placeholder=" " class="form-control" id="filter_tender_value">
+                            </div>
+                        </div>
+
+                        <div class="col-xxl-12 col-md-12 hidden_fields">
+                            <div class="col-md-6">
+                                <label for="filter_tender_min_value" class="form-label">Filter Tender Min Value :</label>
+                                <input type="text" name="filter_tender_min_value" placeholder=" " class="form-control" id="filter_tender_min_value">
                             </div>
                         </div>
 

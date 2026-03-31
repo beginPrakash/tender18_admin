@@ -138,8 +138,8 @@ if (isset($_GET['move'])) {
     }
 
     // Step-2: Insert into tenders_live
-    $move = mysqli_query($con, "INSERT INTO `tenders_live` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at)
-    SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at 
+    $move = mysqli_query($con, "INSERT INTO `tenders_live` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, updated_at,tender_related_keywords)
+    SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, updated_at,tender_related_keywords 
     FROM `tenders_posts`;");
 
     $status = true;
@@ -149,7 +149,8 @@ if (isset($_GET['move'])) {
             if ($affected_rows > 0) {
                 // Step-3: Get tenders_live IDs
                 $live_ids = [];
-                $res = mysqli_query($con, "SELECT id FROM tenders_live WHERE created_at >= NOW() - INTERVAL 20 MINUTE;");
+                // $res = mysqli_query($con, "SELECT id FROM tenders_live WHERE created_at >= NOW() - INTERVAL 20 MINUTE;");
+                $res = mysqli_query($con, "SELECT id FROM tenders_live WHERE created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY");
                 while ($row = mysqli_fetch_assoc($res)) {
                     $live_ids[] = (int)$row['id'];
                 }
@@ -188,8 +189,8 @@ if (isset($_GET['amove'])) {
     }
 
     // Step-2: Insert into tenders_archive
-    $amove = mysqli_query($con, "INSERT INTO `tenders_archive` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at)
-    SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, created_at, updated_at 
+    $amove = mysqli_query($con, "INSERT INTO `tenders_archive` (title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, updated_at,tender_related_keywords)
+    SELECT title, tender_id, ref_no, agency_type, due_date, tender_value, description, pincode, publish_date, tender_fee, tender_emd, documents, city, state, department, tender_type, opening_date, updated_at,tender_related_keywords 
     FROM `tenders_posts` where due_date < '$c_date'");
 
     $status = true;
@@ -199,7 +200,8 @@ if (isset($_GET['amove'])) {
             if ($affected_rows > 0) {
                 // Step-3: Get tenders_archive IDs
                 $archive_ids = [];
-                $res = mysqli_query($con, "SELECT id FROM tenders_archive WHERE created_at >= NOW() - INTERVAL 20 MINUTE;");
+                // $res = mysqli_query($con, "SELECT id FROM tenders_archive WHERE created_at >= NOW() - INTERVAL 20 MINUTE;");
+                $res = mysqli_query($con, "SELECT id FROM tenders_archive WHERE created_at >= CURDATE() AND created_at < CURDATE() + INTERVAL 1 DAY");
                 while ($row = mysqli_fetch_assoc($res)) {
                     $archive_ids[] = (int)$row['id'];
                 }
