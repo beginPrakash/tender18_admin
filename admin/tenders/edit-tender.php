@@ -31,6 +31,7 @@ if (isset($_POST['submit'])) {
     $tender_fee = $_POST['tender_fee'];
     $tender_emd = $_POST['tender_emd'];
     $documents = $_POST['documents'];
+    $tender_related_keywords = $_POST['tender_related_keywords'];
     $opening_date = $_POST['opening_date'];
     $city = $_POST['city'];
     $state = $_POST['state'];
@@ -47,7 +48,7 @@ if (isset($_POST['submit'])) {
     $opening_date = date("Y-m-d", $timestamp2);
 
 
-    $q1 = "UPDATE `tenders_posts` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `id`='$tenderID'";
+    $q1 = "UPDATE `tenders_posts` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `tender_related_keywords`='$tender_related_keywords',`opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `id`='$tenderID'";
     $sql1 = mysqli_query($con, $q1);
     // Sync new tenders(tenders_posts) with ES
     sync_new_tender_by_id($tenderID, $post_index);
@@ -58,7 +59,7 @@ if (isset($_POST['submit'])) {
         while ($row = mysqli_fetch_assoc($tend_data)) {
             $ref_no = $row['ref_no'];
             if(!empty($ref_no)){
-                $q2 = "UPDATE `tenders_all` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `ref_no`='$ref_no'";
+                $q2 = "UPDATE `tenders_all` SET `title`='$title', `tender_id`='$tender_id', `agency_type`='$agency_type', `due_date`='$due_date', `tender_value`='$tender_value', `description`='$description', `pincode`='$pincode', `publish_date`='$publish_date', `tender_fee`='$tender_fee', `tender_emd`='$tender_emd', `documents`='$documents', `tender_related_keywords`='$tender_related_keywords', `opening_date`='$opening_date', `city`='$city', `state`='$state', `department`='$department', `tender_type`='$tender_type' WHERE `ref_no`='$ref_no'";
                 $sql2 = mysqli_query($con, $q2);
 
                 // Sync all tenders(tenders_all) with ES
@@ -149,6 +150,7 @@ $publish_date = "";
 $tender_fee = "";
 $tender_emd = "";
 $documents = "";
+$tender_related_keywords = "";
 $opening_date = "";
 $city = "";
 $state = "";
@@ -171,6 +173,7 @@ if ($banner_result == 1) {
         $tender_fee = $row['tender_fee'];
         $tender_emd = $row['tender_emd'];
         $documents = $row['documents'];
+        $tender_related_keywords = $row['tender_related_keywords'];
         $opening_date = $row['opening_date'];
         $city = $row['city'];
         $state = $row['state'];
@@ -274,6 +277,14 @@ if ($banner_result == 1) {
                                 <textarea rows="5" name="documents" class="form-control" id="documents"><?php echo $documents; ?></textarea>
                             </div>
                         </div>
+
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="tender_related_keywords" class="form-label">Tender Related Keywords:</label>
+                                <textarea rows="5" name="tender_related_keywords" class="form-control" id="tender_related_keywords"><?php echo $tender_related_keywords; ?></textarea>
+                            </div>
+                        </div>
+
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="department" class="form-label">Department: <span class="text-danger">*</span></label>

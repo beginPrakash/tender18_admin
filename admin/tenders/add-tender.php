@@ -18,6 +18,7 @@ if (isset($_POST['submit'])) {
     $tender_fee = $_POST['tender_fee'];
     $tender_emd = $_POST['tender_emd'];
     $documents = $_POST['documents'];
+    $tender_related_keywords = $_POST['tender_related_keywords'];
     $opening_date = $_POST['opening_date'];
     $city = $_POST['city'];
     $state = $_POST['state'];
@@ -33,7 +34,7 @@ if (isset($_POST['submit'])) {
     $timestamp2 = strtotime($opening_date);
     $opening_date = date("Y-m-d", $timestamp2);
 
-    $q1 = "INSERT INTO tenders_posts(`title`, `tender_id`, `agency_type`, `due_date`, `tender_value`, `description`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `opening_date`, `city`, `state`, `department`, `tender_type`) VALUES ('$title', '$tender_id', '$agency_type', '$due_date', '$tender_value', '$description', '$pincode', '$publish_date', '$tender_fee', '$tender_emd', '$documents', '$opening_date', '$city', '$state', '$department', '$tender_type')";
+    $q1 = "INSERT INTO tenders_posts(`title`, `tender_id`, `agency_type`, `due_date`, `tender_value`, `description`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`,`tender_related_keywords`, `opening_date`, `city`, `state`, `department`, `tender_type`) VALUES ('$title', '$tender_id', '$agency_type', '$due_date', '$tender_value', '$description', '$pincode', '$publish_date', '$tender_fee', '$tender_emd', '$documents', '$tender_related_keywords', '$opening_date', '$city', '$state', '$department', '$tender_type')";
 
     // var_dump($q1);
     // die();
@@ -199,6 +200,15 @@ if (!empty($_SESSION['error'])) {
                                 <textarea rows="5" name="documents" class="form-control" id="documents"></textarea>
                             </div>
                         </div>
+
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="tender_related_keywords" class="form-label">Tender Related Keywords:</label>
+                                <textarea rows="5" name="tender_related_keywords" class="form-control" id="tender_related_keywords"></textarea>
+                            </div>
+                        </div>
+
+
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
                                 <label for="department" class="form-label">Department: <span class="text-danger">*</span></label>

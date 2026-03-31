@@ -102,6 +102,108 @@ if (isset($_GET['id'])) {
                             <td><a href="<?php echo ADMIN_URL; ?>meta-content/keywords-content-individual/index.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
                         </tr>
                         
+                        <tr>
+                            <th scope="row">11</th>
+                            <td>Agency- State Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/agency-state-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">12</th>
+                            <td>Agency- City Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/agency-city-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">13</th>
+                            <td>Agency- Department (Source) Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/agency-source-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">14</th>
+                            <td>Keyword- State Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/keyword-state-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">15</th>
+                            <td>Keyword- City Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/keyword-city-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">16</th>
+                            <td>Keyword- Agency Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/keyword-agency-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">17</th>
+                            <td>Keyword- Department (Source) Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/keyword-source-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">18</th>
+                            <td>City - Department (Source) Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/city-source-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">19</th>
+                            <td>State - Department (Source) Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/state-source-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">20</th>
+                            <td>Tender Type - State Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tendertype-state-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">21</th>
+                            <td>Tender Type - City Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tendertype-city-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">22</th>
+                            <td>Tender Type - Agency Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tendertype-agency-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">23</th>
+                            <td>Tender Type – Department (Souce) Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tendertype-source-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+                        
+                        <tr>
+                            <th scope="row">24</th>
+                            <td>Tender Type – Keyword Tenders Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tendertype-keyword-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">25</th>
+                            <td>Tender Detail City Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-city-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">26</th>
+                            <td>Tender Detail State Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-state-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">27</th>
+                            <td>Tender Detail Agency Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-agency-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

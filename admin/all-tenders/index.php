@@ -1,13 +1,109 @@
 <?php include '../includes/authentication.php';
-?>
-<?php $pages = 'all-tenders'; ?>
-<?php include '../includes/header.php' ?>
+include '../../elasticsearch/elastic_client.php';
+include '../../elasticsearch/elastic_utils.php';
+$index = ES_INDEXES['ALL'];
 
-<?php
+
+function get_month_year_list(){
+    $start    = '2022-01-01';
+    $end      = date('Y-m-d',strtotime('+1 year'));
+    $getRangeYear   = range(gmdate('Y', strtotime($start)), gmdate('Y', strtotime($end)));
+    $month = date('n');
+    $cyear = date('Y');
+    if (count($getRangeYear) > 0) {
+        rsort($getRangeYear);
+        $count = 1;
+        $scount = 100;
+        foreach($getRangeYear as $key => $val){
+            if((($month >= 1 && $month <= 12) && $cyear==$val) || ($val<=$cyear)):
+                if($val==$cyear && ($month >= 1 && $month <= 12)):
+                    $result[$count]['label'] = 'Jan to June '.$val;
+                    $result[$count]['value'] = '01-01-'.$val.'/30-06-'.$val;
+                elseif($val!=$cyear || ($month >= 1 && $month <= 12)):
+                    $result[$count]['label'] = 'Jan to June '.$val;
+                    $result[$count]['value'] = '01-01-'.$val.'/30-06-'.$val;
+                endif;
+            endif;
+            if((($month >= 7 && $month <= 12) && $cyear==$val) || ($val<=$cyear)):
+                if($val==$cyear && ($month >= 7 && $month <= 12)):
+                    $result[$scount]['label'] = 'July to Dec '.$val;
+                    $result[$scount]['value'] = '01-07-'.$val.'/31-12-'.$val;
+                elseif($val!=$cyear || ($month >= 7 && $month <= 12)):
+                    $result[$scount]['label'] = 'July to Dec '.$val;
+                    $result[$scount]['value'] = '01-07-'.$val.'/31-12-'.$val;
+                endif;
+            endif;
+            $count++;
+            $scount++;
+            
+        }
+        $result = array_values($result);
+    }else {
+        $result = [];
+    }
+    return $result;
+}
+
+$get_month_list = get_month_year_list();
+$latest_date = $get_month_list[0]['value'];
+
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
     $_SESSION['page_limit'] = $_GET['page-limit'];
 }
+
+$page = $_GET['page_no'] ?? 1;
+$size = $_SESSION['page_limit'] ?? 10;
+
+
+$result = get_results($con, $index, $page, $size, $latest_date);
+
+function get_results($con, $index, $page, $size, $latest_date)
+{
+    $search = $_GET['search_term'];
+    if(isset($_GET['due_date']) && !empty($_GET['due_date'])) {
+        $due_date = $_GET['due_date'];    
+    } else {
+        $due_date = $latest_date;
+    }
+    
+    $arr = explode('/', $due_date);
+    $from = date('Y-m-d', strtotime($arr[0]));
+    $to = date('Y-m-d', strtotime($arr[1]));
+
+    // return $con;
+    $start_date = $from;
+    $end_date = $to;
+
+    $filter_keyword = $search ?? null;
+    
+    $filters = [
+        'keyword' => $search ?? null,
+        'start_date' => $start_date,
+        'end_date' => $end_date
+    ];
+
+    $body = build_elastic_admin_query($filters, $page, $size);
+    // echo "<pre>"; print_r($body); die;
+
+    $resp = es_search($index, $body);
+    $total_query = isset($resp['body']['hits']['total']['value']) ? (int)$resp['body']['hits']['total']['value'] : 0; 
+    $total = ceil($total_query / $size);
+    $data = isset($resp['body']['hits']['hits']) ? $resp['body']['hits']['hits'] : array();
+
+    if (isset($data) && count($data) > 0) {
+        $result = [
+            'total' => $total_query,
+            'data'  => $data
+        ];
+    } else {
+        $result = [];
+    }
+
+    return $result;
+}
 ?>
+<?php $pages = 'all-tenders'; ?>
+<?php include '../includes/header.php' ?>
 
 <?php
 if (!empty($_SESSION['success'])) {
@@ -56,50 +152,7 @@ if (!empty($_SESSION['error'])) {
         width: 30%;
     }
 </style>
-<?php
-    function get_month_year_list(){
-        $start    = '2022-01-01';
-        $end      = date('Y-m-d',strtotime('+1 year'));
-        $getRangeYear   = range(gmdate('Y', strtotime($start)), gmdate('Y', strtotime($end)));
-        $month = date('n');
-        $cyear = date('Y');
-        if (count($getRangeYear) > 0) {
-            rsort($getRangeYear);
-            $count = 1;
-            $scount = 100;
-            foreach($getRangeYear as $key => $val){
-                if((($month >= 1 && $month <= 12) && $cyear==$val) || ($val<=$cyear)):
-                    if($val==$cyear && ($month >= 1 && $month <= 12)):
-                        $result[$count]['label'] = 'Jan to June '.$val;
-                        $result[$count]['value'] = '01-01-'.$val.'/30-06-'.$val;
-                    elseif($val!=$cyear || ($month >= 1 && $month <= 12)):
-                        $result[$count]['label'] = 'Jan to June '.$val;
-                        $result[$count]['value'] = '01-01-'.$val.'/30-06-'.$val;
-                    endif;
-                endif;
-                if((($month >= 7 && $month <= 12) && $cyear==$val) || ($val<=$cyear)):
-                    if($val==$cyear && ($month >= 7 && $month <= 12)):
-                        $result[$scount]['label'] = 'July to Dec '.$val;
-                        $result[$scount]['value'] = '01-07-'.$val.'/31-12-'.$val;
-                    elseif($val!=$cyear || ($month >= 7 && $month <= 12)):
-                        $result[$scount]['label'] = 'July to Dec '.$val;
-                        $result[$scount]['value'] = '01-07-'.$val.'/31-12-'.$val;
-                    endif;
-                endif;
-                $count++;
-                $scount++;
-                
-            }
-            $result = array_values($result);
-        }else {
-            $result = [];
-        }
-        return $result;
-    }
 
-    $get_month_list = get_month_year_list();
-    $latest_date = $get_month_list[0]['value'];
-?>
 <!-- start page title -->
 <div class="row">
     <div class="col-12">
@@ -114,33 +167,6 @@ if (!empty($_SESSION['error'])) {
     <div class="col-lg-12">
         <div class="card">
             <?php
-            //print_r($_GET);exit;
-            if (isset($_GET['search_term']) && !empty($_GET['search_term']) && isset($_GET['due_date']) && !empty($_GET['due_date'])) {
-                $search = $_GET['search_term'];
-                $due_date = $_GET['due_date'];
-                $arr = explode('/', $due_date);
-                $from = date('Y-m-d 00:00:00', strtotime($arr[0]));
-                $to = date('Y-m-d 00:00:00', strtotime($arr[1]));
-                $condition = "where (title like '%$search%' or ref_no like '%$search%' or tender_id like '%$search%' or city like '%$search%' or state like '%$search%') and due_date BETWEEN '" . $from . "' AND '" . $to . "'";
-            } else if (isset($_GET['search_term']) && !empty($_GET['search_term']) && empty($_GET['due_date'])) {
-                $search = $_GET['search_term'];
-                $due_date = "";
-                $condition = "where (title like '%$search%' or ref_no like '%$search%' or tender_id like '%$search%' or city like '%$search%' or state like '%$search%')";
-            } else if (isset($_GET['due_date']) && !empty($_GET['due_date']) && empty($_GET['search_term'])) {
-                $search = "";
-                $due_date = $_GET['due_date'];
-                $arr = explode('/', $due_date);
-                $from = date('Y-m-d 00:00:00', strtotime($arr[0]));
-                $to = date('Y-m-d 00:00:00', strtotime($arr[1]));
-                $condition = "where due_date BETWEEN '" . $from . "' AND '" . $to . "'";
-            } else {
-                $arr = explode('/', $latest_date);
-                $search = "";
-                $due_date = $latest_date;
-                $from = date('Y-m-d 00:00:00', strtotime($arr[0]));
-                $to = date('Y-m-d 00:00:00', strtotime($arr[1]));
-                $condition = "where due_date BETWEEN '" . $from . "' AND '" . $to . "'";
-            }
             ?>
             <div class="card-header">
                
@@ -154,18 +180,10 @@ if (!empty($_SESSION['error'])) {
                                     <label>
                                         Show
                                         <select name="page-limit" aria-controls="example" onchange="this.form.submit()" class="form-select form-select-sm">
-                                            <option value="10" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 10) {
-                                                                    "selected";
-                                                                } ?>>10</option>
-                                            <option value="25" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 25) {
-                                                                   "selected";
-                                                                } ?>>25</option>
-                                            <option value="50" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 50) {
-                                                                   "selected";
-                                                                } ?>>50</option>
-                                            <option value="100" <?php if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit']) && $_SESSION['page_limit'] == 100) {
-                                                                   "selected";
-                                                                } ?>>100</option>
+                                            <option value="10" <?= (isset($_SESSION['page_limit']) && $_SESSION['page_limit'] == 10) ? 'selected' : '' ?>>10</option>
+                                            <option value="25" <?= (isset($_SESSION['page_limit']) && $_SESSION['page_limit'] == 25) ? 'selected' : '' ?>>25</option>
+                                            <option value="50" <?= (isset($_SESSION['page_limit']) && $_SESSION['page_limit'] == 50) ? 'selected' : '' ?>>50</option>
+                                            <option value="100" <?= (isset($_SESSION['page_limit']) && $_SESSION['page_limit'] == 100) ? 'selected' : '' ?>>100</option>
                                         </select>
                                         entries
                                     </label>
@@ -188,7 +206,7 @@ if (!empty($_SESSION['error'])) {
                                     </select>
                                 </label>
                                 <label>
-                                    <input type="search" name="search_term" value="<?php echo $search; ?>" class="form-control" placeholder="" aria-controls="example">
+                                    <input type="search" name="search_term" value="<?php echo $_GET['search_term'] ?? ''; ?>" class="form-control" placeholder="" aria-controls="example">
                                 </label>
                                 <button type="submit" class="btn btn-primary">Search</button>
                             </form>
@@ -212,36 +230,25 @@ if (!empty($_SESSION['error'])) {
                     </thead>
                     <tbody>
                         <?php
-                        if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit'])) {
-                            $limit = $_SESSION['page_limit'];
-                        } else {
-                            $limit = 10;
-                        }
-                        $total_query = mysqli_fetch_array(mysqli_query($con, "SELECT COUNT(*) FROM `tenders_all` $condition order by `due_date` DESC "))[0];
-                        // print_r($total_query);
-                        $total = ceil($total_query / $limit);
-                        $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
-                        $offset = ($page * $limit) - $limit;
+                            $page = isset($page) ? abs((int) $page) : 1;
+                            $offset = ($page * $size) - $size;
+                            if (isset($result['total']) && $size > $result['total']) {
+                                $size = $result['total'];
+                            }
+                            $total = ceil($result['total'] / $size);
 
-                        $tenders_data = mysqli_query($con, "SELECT * FROM `tenders_all` $condition order by `id` DESC LIMIT $offset, $limit");
 
-                        $tenders_result = mysqli_num_rows($tenders_data);
-
-                        if ($limit > $total_query) {
-                            $limit = $total_query;
-                        }
-
-                        if ($tenders_result > 0) {
-                            $i = ($offset + 1);
-                            foreach ($tenders_data as $data) {
-                                
-                        ?>
+                            if (!empty($result['data']) && $result['data'] > 0) {
+                                $i = ($offset + 1);
+                                foreach ($result['data'] as $source) {
+                                $data = $source['_source'];
+                            ?>
                                 <tr class="<?php if ($i % 2 == 0) {
                                                 echo "even";
                                             } else {
                                                 echo "odd";
                                             } ?>">
-                                    <th scope="row" class="table_body" data-id="<?php echo $data['id']; ?>"><?php echo $i; ?></th>
+                                    <th scope="row" class="table_body" data-id="<?php echo $source['_id']; ?>"><?php echo $i; ?></th>
                                     <td width="300"><?php echo (strlen(htmlspecialcode_generator($data['title'])) > 30 ? substr(htmlspecialcode_generator($data['title']), 0, 30) . "..." : htmlspecialcode_generator($data['title'])); ?></td>
                                     <td><?php echo $data['ref_no']; ?></td>
                                     <td><?php echo $data['tender_id']; ?></td>
@@ -252,7 +259,7 @@ if (!empty($_SESSION['error'])) {
                                     <td width="200"><?php echo date("M d, Y h:i:s A", strtotime($data['created_at'])); ?></td>
                                     <td class="action_element">
                                         <div class="d-flex align-items-center">
-                                            <a href="<?php echo ADMIN_URL; ?>all-tenders/view.php?id=<?php echo $data['id']; ?>"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a>
+                                            <a href="<?php echo ADMIN_URL; ?>all-tenders/view.php?id=<?php echo $source['_id']; ?>"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a>
                                         </div>
                                     </td>
                                 </tr>
@@ -268,11 +275,7 @@ if (!empty($_SESSION['error'])) {
                 </table>
                 <div class="row">
                     <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing <?php if ($tenders_result > 0) {
-                                                                                                                    echo ($offset + 1);
-                                                                                                                } else {
-                                                                                                                    echo "0";
-                                                                                                                } ?> to <?php echo ($page * $limit); ?> of <?php echo $total_query; ?> entries</div>
+                        <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing <?php if (isset($result['data']) && $result['data'] > 0) { echo ($offset + 1); } else { echo "0"; } ?> to <?php echo ($page * $size); ?> of <?php echo $result['total']; ?> entries</div>
                     </div>
                     <div class="col-sm-12 col-md-7">
                         <?php

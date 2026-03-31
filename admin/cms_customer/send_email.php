@@ -540,14 +540,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     }
                 endif;   
             }
+
+            // Pagination Utils START
+            function pageUrl($baseUrl, $params) {
+                return $baseUrl . '?' . http_build_query($params);
+            }
+
+            if (!empty($_POST['upload_date'])) {
+                $baseParams['upload_date'] = $_POST['upload_date'];
+            }
+
+            if (!empty($_POST['search_term'])) {
+                $baseParams['search_term'] = $_POST['search_term'];
+            }
+
+            if (!empty($_POST['page_no'])) {
+                $baseParams['page_no'] = $_POST['page_no'];
+            }
+
+            $baseUrl = ADMIN_URL . 'cms_customer/index.php';
+            // Pagination Utils END
            
             if($mcount > 0){
+                 $baseParams['st'] = 1;
                 echo "<script>
-                window.location.href='" . ADMIN_URL . "cms_customer/index.php?st=1';
+                window.location.href='" . pageUrl($baseUrl, $baseParams) . "';
                 </script>";
             }else{
+                $baseParams['st'] = 0;
                 echo "<script>
-            window.location.href='" . ADMIN_URL . "cms_customer/index.php?st=0';
+            window.location.href='" . pageUrl($baseUrl, $baseParams) . "';
             </script>";
             }
         }
