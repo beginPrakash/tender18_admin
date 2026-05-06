@@ -204,6 +204,12 @@ if (isset($_GET['id'])) {
                             <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-agency-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
                         </tr>
 
+                        <tr>
+                            <th scope="row">28</th>
+                            <td>Tender Detail Keyword Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-keyword-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

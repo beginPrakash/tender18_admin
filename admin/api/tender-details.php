@@ -668,10 +668,18 @@ function get_results($con, $postData)
                     $tender_related_keywords = explode(',',$row['tender_related_keywords']);
                 }
                 $related_key_array = [];
+                //get tenderdetail keyword meta content
+                $keyw_sql = "SELECT content FROM tender_detail_content WHERE type = 'keyword'";
+                $result_keywmeta = mysqli_query($con, $keyw_sql);
+                $row_keywmeta = mysqli_fetch_assoc($result_keywmeta);
+
+
                 if(!empty($tender_related_keywords) && count($tender_related_keywords) > 0){
                     foreach($tender_related_keywords as $key => $val){
+                        $keywordmeta = str_replace("(Keyword)",$val,$row_keywmeta['content']);
                         $related_key_array[$key]['keywords'] = $val;
                         $related_key_array[$key]['keywords_url'] = str_replace(' ', '-', $val).'-tenders';
+                        $related_key_array[$key]['keywords_meta'] = $keywordmeta;
                     }
                 }
 
@@ -861,10 +869,19 @@ function get_results($con, $postData)
                     $tender_related_keywords = explode(',',$row['tender_related_keywords']);
                 }
                 $related_key_array = [];
+
+                //get tenderdetail city meta content
+                $keyw_sql = "SELECT content FROM tender_detail_content WHERE type = 'keyword'";
+                $result_keywmeta = mysqli_query($con, $keyw_sql);
+                $row_keywmeta = mysqli_fetch_assoc($result_keywmeta);
+
+
                 if(!empty($tender_related_keywords) && count($tender_related_keywords) > 0){
                     foreach($tender_related_keywords as $key => $val){
+                        $keywordmeta = str_replace("(Keyword)",$val,$row_keywmeta['content']);
                         $related_key_array[$key]['keywords'] = $val;
                         $related_key_array[$key]['keywords_url'] = str_replace(' ', '-', $val).'-tenders';
+                        $related_key_array[$key]['keywords_meta'] = $keywordmeta;
                     }
                 }
 
