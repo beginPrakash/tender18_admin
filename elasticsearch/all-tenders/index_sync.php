@@ -16,7 +16,7 @@ function sync_tender_by_id($id, $index) {
 
     global $con;
 
-    $sql = "SELECT ref_no, department, city, state, pincode, title, description, agency_type, publish_date, due_date, tender_value, tender_fee, tender_emd FROM tenders_all WHERE id = ? LIMIT 1";
+    $sql = "SELECT ref_no, tender_id, department, tender_type, city, state, pincode, title, description, agency_type, publish_date, due_date, tender_value, tender_fee, tender_emd, created_at, tenders FROM tenders_all WHERE id = ? LIMIT 1";
 
     $stmt = mysqli_prepare($con, $sql);
     if (!$stmt) {
@@ -45,9 +45,19 @@ function sync_tender_by_id($id, $index) {
         ? substr($row['due_date'], 0, 10)
         : null;
 
+    $openingDate = !empty($row['opening_date'])
+        ? substr($row['opening_date'], 0, 10)
+        : null;
+
+    $createdAt = !empty($row['created_at'])
+        ? date('Y-m-d H:i:s', strtotime($row['created_at']))
+        : null;            
+
     $doc = [
         'ref_no'        => $row['ref_no'],
+        'tender_id'     => $row['tender_id'],
         'department'    => $row['department'],
+        'tender_type'   => $row['tender_type'],
         'city'          => $row['city'],
         'state'         => $row['state'],
         'pincode'       => $row['pincode'],
@@ -58,7 +68,10 @@ function sync_tender_by_id($id, $index) {
         'due_date'      => $dueDate,
         'tender_value'  => (float)$row['tender_value'],
         'tender_fee'    => (float)$row['tender_fee'],
-        'tender_emd'    => (float)$row['tender_emd']
+        'tender_emd'    => (float)$row['tender_emd'],
+        'opening_date'  => $openingDate,
+        'tenders'       => $row['tenders'],
+        'created_at'    => $createdAt
     ];
 
     // Use numeric ID (recommended)

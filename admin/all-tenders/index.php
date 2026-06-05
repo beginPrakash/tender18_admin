@@ -259,7 +259,7 @@ if (!empty($_SESSION['error'])) {
                                     <td width="200"><?php echo date("M d, Y h:i:s A", strtotime($data['created_at'])); ?></td>
                                     <td class="action_element">
                                         <div class="d-flex align-items-center">
-                                            <a href="<?php echo ADMIN_URL; ?>all-tenders/view.php?id=<?php echo $data['ref_no']; ?>"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a>
+                                            <a href="<?php echo ADMIN_URL; ?>all-tenders/view.php?id=<?php echo $source['_id']; ?>"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a>
                                         </div>
                                     </td>
                                 </tr>

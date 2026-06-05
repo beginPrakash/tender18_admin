@@ -8,7 +8,7 @@ $mapping = array(
     'settings' => array(
         'analysis' => array(
             'analyzer' => array(
-                'default' => array('type' => 'standard')
+                'default' => array('type' => 'english')
             )
         )
     ),
@@ -65,6 +65,7 @@ $mapping = array(
             // tender for general-maintenance jairani school road...
             'title' => array(
                 'type' => 'text',
+                'analyzer' => 'english',
                 'fields' => array(
                     'keyword' => array(
                         'type' => 'keyword',
@@ -123,6 +124,12 @@ $mapping = array(
             // https://bidplus.gem.gov.in/showbidDocument/5607007
             'documents' => array(
                 'type' => 'text'
+            ),
+
+            // 2024-01-18 17:45:06
+            'created_at' => array(
+                'type'   => 'date',
+                'format' => 'yyyy-MM-dd HH:mm:ss||epoch_millis'
             ),
         )
     )

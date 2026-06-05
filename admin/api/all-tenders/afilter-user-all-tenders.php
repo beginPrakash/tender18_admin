@@ -46,7 +46,7 @@ function get_results($con, $index, $postData)
     $user_unique_id = $postData['user_unique_id'];
     $token = $postData['token'];
 
-    $sql = "SELECT keywords, words, not_used_keywords, filter_city, filter_state, filter_tender_min_value, filter_tender_value, filter_agency, filter_department, filter_type FROM users WHERE user_unique_id = ? AND token = ? LIMIT 1";
+    $sql = "SELECT keywords, words, not_used_keywords, filter_city, filter_state, filter_tender_value, filter_agency, filter_department, filter_type FROM users WHERE user_unique_id = ? AND token = ? LIMIT 1";
 
     $stmt = mysqli_prepare($con, $sql);
     mysqli_stmt_bind_param($stmt, 'ss', $user_unique_id, $token);
@@ -60,8 +60,8 @@ function get_results($con, $index, $postData)
         'not_used_keywords' => [],
         'city'              => [],
         'state'             => [],
-        'tender_value_from' => 0,
-        'tender_value_to'   => null,
+        'tender_value_to'   => 0,
+        'tender_value'      => null,
         'agency'            => [],
         'department'        => [],
         'type'              => [],
@@ -74,9 +74,9 @@ function get_results($con, $index, $postData)
             'not_used_keywords' => normalize_filters_array($row['not_used_keywords']),
             'city'              => normalize_filters_array($row['filter_city']),
             'state'             => normalize_filters_array($row['filter_state']),
-            'tender_value_from' => $row['filter_tender_min_value'],
-            'tender_value_to'   => $row['filter_tender_value'],
-            'agency'            => normalize_filters_array($row['filter_agency'], false),
+            'tender_value_to'   => 0,
+            'tender_value'      => $row['filter_tender_value'],
+            'agency'            => normalize_filters_array($row['filter_agency']),
             'department'        => normalize_filters_array($row['filter_department']),
             'type'              => normalize_filters_array($row['filter_type']),
         ];
@@ -102,8 +102,8 @@ function get_results($con, $index, $postData)
         'ref_no' => $postData['ref_no'] ?? null,
         'tender_id' => $postData['tender_id'] ?? null,
         'due_date' => $postData['due_date'] ?? null,
-        'tender_value_from' => prefer($postData['tender_value_from'] ?? null, $userFilters['tender_value_from'] ?? null, 0),
         'tender_value_to'   => prefer($postData['tender_value_to'] ?? null, $userFilters['tender_value_to'] ?? null, 0),
+        'tender_value'      => prefer($postData['tender_value'] ?? null, $userFilters['tender_value'] ?? null, 0),
         'keyword' => prefer(null, $userFilters['keywords']),
         'words' => prefer(null, $userFilters['words']),
         'not_used_keywords' => $userFilters['not_used_keywords'] ?? [],
@@ -113,7 +113,8 @@ function get_results($con, $index, $postData)
         'department' => prefer($postData['department'] ?? [], $userFilters['department'], []),
         'tender_type' => prefer($postData['type'] ?? [], $userFilters['type'], []),
         'start_date' => $start_date,
-        'end_date' => $end_date
+        'end_date' => $end_date,
+        'all-india-tenders' => true
     ];
     
     $page = $postData['page_no'] ?? 1;
@@ -231,6 +232,7 @@ function get_results($con, $index, $postData)
 
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
             $result['tenders'][$count]['dep_type'] = $row['department'];
+            $result['tenders'][$count]['tenders'] = $row['tenders'];
             $count++;
         }
     } else {

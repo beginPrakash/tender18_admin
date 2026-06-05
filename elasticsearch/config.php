@@ -15,13 +15,13 @@ $ES_HOSTS = [
 /* ------------------ INDEX MAP ------------------ */
 $ES_INDEXES = [
     'dev' => [
-        'ALL'      => 'tenders',
+        'ALL'      => 'tenders_dev',
         'LIVE'     => 'tenders_live_dev',
         'ARCHIVE'  => 'tenders_archive_dev',
         'NEW'      => 'tenders_new_dev'
     ],
     'prod' => [
-        'ALL'      => 'tenders_prod',
+        'ALL'      => 'tenders_prod', // tenders_prod_v2
         'LIVE'     => 'tenders_live_prod',
         'ARCHIVE'  => 'tenders_archive_prod',
         'NEW'      => 'tenders_new_prod'
