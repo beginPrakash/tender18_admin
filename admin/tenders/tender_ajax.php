@@ -1,8 +1,8 @@
 <?php
 
 include '../includes/authentication.php';
-include '../../elasticsearch/all-tenders/sync_by_data.php';
-include '../../elasticsearch/new-tenders/sync_by_data.php';
+include '../../elasticsearch/all-tenders/index_sync.php';
+include '../../elasticsearch/new-tenders/index_sync.php';
 
 error_reporting(0);
 
@@ -179,225 +179,103 @@ for ($i = 1; $i < count($results); $i++) {
     }
 
 
+// Escape once only
+$tender_city    = mysqli_real_escape_string($con, $tender_city);
+$tender_state   = mysqli_real_escape_string($con, $tender_state);
+$tender_pincode = mysqli_real_escape_string($con, $tender_pincode);
 
-    if (!empty($tender_city) && !empty($tender_state) && !empty($tender_pincode)) {
+if (!empty($tender_pincode)) {
 
-        $tenders_data = mysqli_query($con, "SELECT state,city FROM `tender_zipcodes` where `zipcode`='" . $tender_pincode . "' LIMIT 1");
+    // 1️⃣ Try by ZIPCODE (fastest if indexed)
+    $sql = "SELECT city, state 
+            FROM tender_zipcodes 
+            WHERE zipcode = '$tender_pincode' 
+            LIMIT 1";
 
-        $tenders_result = mysqli_num_rows($tenders_data);
+    $result = mysqli_query($con, $sql);
 
-        if ($tenders_result > 0) {
+    if ($result && $row = mysqli_fetch_assoc($result)) {
 
-            $data = mysqli_fetch_assoc($tenders_data);
+        $tender_city  = $row['city'];
+        $tender_state = $row['state'];
 
-            $tender_city = $data['city'];
+        mysqli_free_result($result);
 
-            $tender_state = $data['state'];
-        } else {
+    } else {
 
-            $tenders_data2 = mysqli_query($con, "SELECT state FROM `tender_zipcodes` where `city`='" . $tender_city . "' LIMIT 1");
+        mysqli_free_result($result);
 
-            $tenders_result2 = mysqli_num_rows($tenders_data2);
+        // 2️⃣ If zipcode not found → try by CITY
+        if (!empty($tender_city)) {
 
-            if ($tenders_result2 > 0) {
+            $sql2 = "SELECT state 
+                     FROM tender_zipcodes 
+                     WHERE city = '$tender_city' 
+                     LIMIT 1";
 
-                $data = mysqli_fetch_assoc($tenders_data2);
+            $result2 = mysqli_query($con, $sql2);
 
+            if ($result2 && $row2 = mysqli_fetch_assoc($result2)) {
+
+                $tender_state   = $row2['state'];
                 $tender_pincode = "";
 
-                $tender_state = $data['state'];
             } else {
-
                 $error_print_status = true;
             }
 
-            mysqli_free_result($tenders_data2);
-        }
+            mysqli_free_result($result2);
 
-        mysqli_free_result($tenders_data);
-
-        $tender_city = $tender_city;
-
-        $tender_state = $tender_state;
-    }
-
-
-
-    if (!empty($tender_city) && empty($tender_state) && !empty($tender_pincode)) {
-
-        $tenders_data = mysqli_query($con, "SELECT state,city FROM `tender_zipcodes` where `zipcode`='" . $tender_pincode . "' LIMIT 1");
-
-        $tenders_result = mysqli_num_rows($tenders_data);
-
-        if ($tenders_result > 0) {
-
-            $data = mysqli_fetch_assoc($tenders_data);
-
-            $tender_city = $data['city'];
-
-            $tender_state = $data['state'];
         } else {
-
-            $tenders_data2 = mysqli_query($con, "SELECT state FROM `tender_zipcodes` where `city`='" . $tender_city . "' LIMIT 1");
-
-            $tenders_result2 = mysqli_num_rows($tenders_data2);
-
-            if ($tenders_result2 > 0) {
-
-                $data = mysqli_fetch_assoc($tenders_data2);
-
-                $tender_pincode = "";
-
-                $tender_state = $data['state'];
-            } else {
-
-                $error_print_status = true;
-            }
-
-            mysqli_free_result($tenders_data2);
-        }
-
-        mysqli_free_result($tenders_data);
-
-        $tender_city = $tender_city;
-
-        $tender_state = $tender_state;
-    }
-
-
-
-    if (!empty($tender_city) && empty($tender_pincode) && !empty($tender_state)) {
-
-        $tender_city = $tender_city;
-
-        $tenders_data = mysqli_query($con, "SELECT state FROM `tender_zipcodes` where `city`='" . $tender_city . "' LIMIT 1");
-
-        $tenders_result = mysqli_num_rows($tenders_data);
-
-        if ($tenders_result > 0) {
-
-            $data = mysqli_fetch_assoc($tenders_data);
-
-            $tender_pincode = "";
-
-            $tender_state = $data['state'];
-        } else {
-
             $error_print_status = true;
         }
-
-        mysqli_free_result($tenders_data);
-
-        $tender_state = $tender_state;
     }
 
+}
+elseif (!empty($tender_city)) {
 
+    // 3️⃣ Only city provided
+    $sql3 = "SELECT state 
+             FROM tender_zipcodes 
+             WHERE city = '$tender_city' 
+             LIMIT 1";
 
-    if (empty($tender_city) && !empty($tender_state) && !empty($tender_pincode)) {
+    $result3 = mysqli_query($con, $sql3);
 
-        $tenders_data = mysqli_query($con, "SELECT city,state FROM `tender_zipcodes` where `zipcode`='" . $tender_pincode . "' LIMIT 1");
+    if ($result3 && $row3 = mysqli_fetch_assoc($result3)) {
 
-        $tenders_result = mysqli_num_rows($tenders_data);
+        $tender_state   = $row3['state'];
+        $tender_pincode = "";
 
-        if ($tenders_result > 0) {
-
-            $data = mysqli_fetch_assoc($tenders_data);
-
-            $tender_city = $data['city'];
-
-            $tender_state = $data['state'];
-        } else {
-
-            $error_print_status = true;
-        }
-
-        mysqli_free_result($tenders_data);
-
-        $tender_city = $tender_city;
-
-        $tender_state = $tender_state;
+    } else {
+        $error_print_status = true;
     }
 
+    mysqli_free_result($result3);
 
+}
+elseif (!empty($tender_state)) {
 
-    if (empty($tender_city) && empty($tender_state) && !empty($tender_pincode)) {
+    // 4️⃣ Only state provided
+    $sql4 = "SELECT state 
+             FROM tender_zipcodes 
+             WHERE state = '$tender_state' 
+             LIMIT 1";
 
-        $tenders_data = mysqli_query($con, "SELECT state,city FROM `tender_zipcodes` where `zipcode`='" . $tender_pincode . "' LIMIT 1");
+    $result4 = mysqli_query($con, $sql4);
 
-        $tenders_result = mysqli_num_rows($tenders_data);
-
-        if ($tenders_result > 0) {
-
-            $data = mysqli_fetch_assoc($tenders_data);
-
-            $tender_city = $data['city'];
-
-            $tender_state = $data['state'];
-        } else {
-
-            $error_print_status = true;
-        }
-
-        mysqli_free_result($tenders_data);
-
-        $tender_city = $tender_city;
-
-        $tender_state = $tender_state;
+    if (!$result4 || !mysqli_fetch_assoc($result4)) {
+        $error_print_status = true;
     }
 
+    mysqli_free_result($result4);
 
+}
+else {
 
-    if (!empty($tender_city) && empty($tender_pincode) && empty($tender_state)) {
+    $error_print_status = true;
 
-        $tender_city = $tender_city;
-
-        $tenders_data = mysqli_query($con, "SELECT state FROM `tender_zipcodes` where `city`='" . $tender_city . "' LIMIT 1");
-
-        $tenders_result = mysqli_num_rows($tenders_data);
-
-        if ($tenders_result > 0) {
-
-            $data = mysqli_fetch_assoc($tenders_data);
-
-            $tender_pincode = "";
-
-            $tender_state = $data['state'];
-        } else {
-
-            $error_print_status = true;
-        }
-
-        mysqli_free_result($tenders_data);
-
-        $tender_state = $tender_state;
-    }
-
-
-
-    if (empty($tender_city) && empty($tender_pincode) && !empty($tender_state)) {
-
-        $tenders_data = mysqli_query($con, "SELECT state FROM `tender_zipcodes` where `state`='" . $tender_state . "' LIMIT 1" );
-
-        $tenders_result = mysqli_num_rows($tenders_data);
-
-        if ($tenders_result > 0) {
-
-            $data = mysqli_fetch_assoc($tenders_data);
-
-            $tender_pincode = "";
-
-            $tender_city = "";
-
-            $tender_state = $data['state'];
-        } else {
-
-            $error_print_status = true;
-        }
-
-        mysqli_free_result($tenders_data);
-
-        $tender_state = $tender_state;
-    }
+}
 
 
 
@@ -481,68 +359,29 @@ for ($i = 1; $i < count($results); $i++) {
 
 
 
-
     if (!$error_print_status && !$error_print_status1) {
 
         $tender_ref_no = $tender_ref_no + 1;
 
-        $q1 = "INSERT INTO tenders_posts(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`,`tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "','".$tender_related_keywords."')";
+        $q1 = "INSERT INTO tenders_posts(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`,`tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "','" . $tender_related_keywords . "')";
 
         $sql1 = mysqli_query($con, $q1);
 
         // Sync with new tenders
         $new_tender_inserted_id = mysqli_insert_id($con);
         if ($new_tender_inserted_id > 0) {
-            $row_data = [
-                'title'         => $tender_title,
-                'tender_id'     => $tender_id,
-                'ref_no'        => $tender_ref_no,
-                'agency_type'   => $tender_agency,
-                'due_date'      => $due_date,
-                'tender_value'  => $tender_value,
-                'pincode'       => $tender_pincode,
-                'publish_date'  => $publish_date,
-                'tender_fee'    => $tender_fee,
-                'tender_emd'    => $tender_emd,
-                'documents'     => $documents,
-                'city'          => $tender_city,
-                'state'         => $tender_state,
-                'department'    => $tender_department,
-                'description'   => $boq_title,
-                'tender_type'   => $tender_type,
-                'opening_date'  => $opening_date 
-            ];
-            sync_new_tender_by_id($new_tender_inserted_id, $row_data, $new_tenders_index);
+            sync_new_tender_by_id($new_tender_inserted_id, $new_tenders_index);
         }
 
         //save data in all tenders table
-        $all1_query = "INSERT INTO tenders_all(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`,`tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "','".$tender_related_keywords."')";
+        $all1_query = "INSERT INTO tenders_all(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`, `tenders`, `tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "', 'new', '" . $tender_related_keywords . "')";
 
         $all1_result = mysqli_query($con, $all1_query);
 
         // Sync with all tenders
         $insertedId = mysqli_insert_id($con);
         if ($insertedId > 0) {
-            $all_row_data = [
-                'ref_no'        => $tender_ref_no,
-                'tender_id'     => $tender_id,
-                'department'    => $tender_department,
-                'tender_type'   => $tender_type,
-                'city'          => $tender_city,
-                'state'         => $tender_state,
-                'pincode'       => $tender_pincode,
-                'title'         => $tender_title,
-                'description'   => $boq_title,
-                'agency_type'   => $tender_agency,
-                'publish_date'  => $publish_date,
-                'due_date'      => $due_date,
-                'tender_value'  => $tender_value,
-                'tender_fee'    => $tender_fee,
-                'tender_emd'    => $tender_emd,
-                'opening_date'  => $opening_date,
-                'created_at'    => date('Y-m-d H:i:s')
-            ];
-            sync_tender_by_id($insertedId, $all_row_data, $all_india_tenders_index);
+            sync_tender_by_id($insertedId, $all_india_tenders_index);
         }
 
         mysqli_query($con, "UPDATE settings SET value = '$tender_ref_no' WHERE `key`='last_ref_id'");

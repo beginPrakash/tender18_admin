@@ -149,8 +149,13 @@ function get_results($con, $postData)
         $result['meta']['title'] = $meta_arr['title'];
         $result['meta']['description'] = $meta_arr['description'];
         $result['meta']['keywords'] = $meta_arr['keywords'];
-        $result['meta']['h1'] = $meta_arr['h1'];
-        $result['meta']['content'] = $meta_arr['content'];
+
+        // Highlight in h1 and content
+        $h1 = highlight_keywords_in_text($meta_arr['h1'], $metaState);
+        $content = highlight_keywords_in_text($meta_arr['content'], $metaState);
+
+        $result['meta']['h1'] = $h1;
+        $result['meta']['content'] = $content;
         $result['meta']['label'] = $metaState;
     }else{
         $result['meta']['title'] = '';
@@ -166,8 +171,13 @@ function get_results($con, $postData)
         $result['dept_meta']['title'] = $deptmeta_arr['title'];
         $result['dept_meta']['description'] = $deptmeta_arr['description'];
         $result['dept_meta']['keywords'] = $deptmeta_arr['keywords'];
-        $result['dept_meta']['h1'] = $deptmeta_arr['h1'];
-        $result['dept_meta']['content'] = $deptmeta_arr['content'];
+        
+        // Highlight in h1 and content
+        $h1 = highlight_keywords_in_text($deptmeta_arr['h1'], $metaDepartment);
+        $content = highlight_keywords_in_text($deptmeta_arr['content'], $metaDepartment);
+
+        $result['dept_meta']['h1'] = $h1;
+        $result['dept_meta']['content'] = $content;
         $result['dept_meta']['label'] = $deptmeta_arr['name'];
     }else{
         $result['dept_meta']['title'] = '';
@@ -190,6 +200,11 @@ function get_results($con, $postData)
         $h1_final = str_replace("(short_form)",$short_form,$h1);
         $content = str_replace("(ag_name)",$ag_name,$agmeta_arr['content']);
         $final_content = str_replace("(short_form)",$short_form,$content);
+
+        // Highlight in h1 and content
+        $h1_final = highlight_keywords_in_text($h1_final, $ag_name);
+        $final_content = highlight_keywords_in_text($final_content, $ag_name);
+        
         $result['agency_meta']['title'] = $final_title;
         $result['agency_meta']['description'] = $final_description;
         $result['agency_meta']['keywords'] = $keywords;
@@ -213,6 +228,11 @@ function get_results($con, $postData)
         $keywords = str_replace("(City)",$metaCity,$citymeta_arr['keywords']);
         $h1 = str_replace("(City)",$metaCity,$citymeta_arr['h1']);
         $content = str_replace("(City)",$metaCity,$citymeta_arr['content']);
+
+        // Highlight in h1 and content
+        $h1 = highlight_keywords_in_text($h1, $metaCity);
+        $content = highlight_keywords_in_text($content, $metaCity);
+        
         $result['city_meta']['title'] = $final_title;
         $result['city_meta']['description'] = $final_description;
         $result['city_meta']['keywords'] = $keywords;
@@ -236,6 +256,11 @@ function get_results($con, $postData)
         $keywords = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['keywords']);
         $h1 = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['h1']);
         $content = str_replace("(Keyword)",$metaKeyword,$keymeta_arr['content']);
+
+        // Highlight in h1 and content
+        $h1 = highlight_keywords_in_text($h1, $metaKeyword);
+        $content = highlight_keywords_in_text($content, $metaKeyword);
+
         $result['keyword_meta']['title'] = $final_title;
         $result['keyword_meta']['description'] = $final_description;
         $result['keyword_meta']['keywords'] = $keywords;

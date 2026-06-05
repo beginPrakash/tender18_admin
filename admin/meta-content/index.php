@@ -210,6 +210,18 @@ if (isset($_GET['id'])) {
                             <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-keyword-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
                         </tr>
 
+                        <tr>
+                            <th scope="row">29</th>
+                            <td>Home Page Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/homepage-meta-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">29</th>
+                            <td>Tender Detail Page Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-page-meta-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
                     </tbody>
                 </table>
             </div>

@@ -12,7 +12,11 @@ function es_request($method, $path, $body = null) {
     $ch = curl_init($url);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_CUSTOMREQUEST, $method);
-    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json', 'Connection: keep-alive']);
+    curl_setopt($ch, CURLOPT_TCP_KEEPALIVE, 1);
+    curl_setopt($ch, CURLOPT_TCP_KEEPIDLE, 30);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 3);   // fail fast if ES unreachable
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);          // max 30s for the full request
     if (!is_null($body)) {
         // If body is already a string (bulk API), send raw; otherwise json-encode
         if (is_string($body)) {

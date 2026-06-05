@@ -44,7 +44,8 @@ function get_results($con, $index, $postData)
         'department' => $postData['department'] ?? [],
         'tender_type' => $postData['type'] ?? [],
         'start_date' => $start_date,
-        'end_date' => $end_date
+        'end_date' => $end_date,
+        'all-india-tenders' => true
     ];
 
     $page = $postData['page_no'] ?? 1;
@@ -162,6 +163,7 @@ function get_results($con, $index, $postData)
 
             $result['tenders'][$count]['whatsapp_no'] = $whatsapp_no;
             $result['tenders'][$count]['dep_type'] = $row['department'];
+            $result['tenders'][$count]['tenders'] = $row['tenders'];
             $count++;
         }
     } else {

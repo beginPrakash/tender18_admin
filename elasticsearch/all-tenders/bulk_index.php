@@ -24,10 +24,10 @@ while (true) {
 
     $sql = "
         SELECT 
-            id, ref_no, tender_id, department, city, state, pincode,
+            id, ref_no, tender_id, department, tender_type, city, state, pincode,
             title, description, agency_type,
             publish_date, due_date,
-            tender_value, tender_fee, tender_emd, documents, opening_date
+            tender_value, tender_fee, tender_emd, documents, opening_date, created_at
         FROM tenders_all
         ORDER BY id ASC
         LIMIT ?, ?
@@ -69,11 +69,16 @@ while (true) {
             ? substr($row['opening_date'], 0, 10)
             : null;
 
+        $createdAt = !empty($row['created_at'])
+            ? date('Y-m-d H:i:s', strtotime($row['created_at']))
+            : null;            
+
         // Document body
         $bulk[] = json_encode([
             'ref_no'        => $row['ref_no'],
             'tender_id'     => $row['tender_id'],
             'department'    => $row['department'],
+            'tender_type'   => $row['tender_type'],
             'city'          => $row['city'],
             'state'         => $row['state'],
             'pincode'       => $row['pincode'],
@@ -86,7 +91,8 @@ while (true) {
             'tender_fee'    => (float)$row['tender_fee'],
             'tender_emd'    => (float)$row['tender_emd'],
             'documents'     => $row['documents'],
-            'opening_date'  => $openingDate 
+            'opening_date'  => $openingDate,
+            'created_at'    => $createdAt
         ]);
 
         $totalIndexed++;

@@ -1,0 +1,2 @@
+[24-May-2026 17:50:51 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/dev.tender18.com/admin/includes/connection.php on line 7
+[24-May-2026 18:03:27 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/dev.tender18.com/admin/includes/connection.php on line 7

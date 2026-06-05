@@ -241,3 +241,7 @@ Stack trace:
 [04-Jan-2026 19:52:42 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
 [04-Jan-2026 20:09:16 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
 [04-Jan-2026 20:09:19 Asia/Kolkata] PHP Notice:  Undefined variable: index in /home/tender18/dev.tender18.com/elasticsearch/all-tenders/index_sync.php on line 68
+[02-Feb-2026 18:33:41 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[25-Feb-2026 05:05:55 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[23-Mar-2026 15:28:03 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[23-Mar-2026 16:36:41 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
