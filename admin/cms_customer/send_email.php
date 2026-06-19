@@ -1,6 +1,7 @@
 <?php
 include '../includes/connection.php';
 include '../includes/functions.php';
+include_once '../../elasticsearch/elastic_utils.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\SMTP;
 use PHPMailer\PHPMailer\Exception;
@@ -343,67 +344,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             $result_title = "";
                             
-                            if (!empty($keywords) && !empty($words)) {
-                                $highlightedResult = $row['title'];
-                                foreach ($words as $word) {
-                                    $highlightedResult = highlightSearchTerm($highlightedResult, $word);
-                                }
-                              
-                                foreach ($keywords as $keyword) {
-                                    $keyword_arr = explode(' ', $keyword);
-                                   
-                                    foreach ($keyword_arr as $key) {
-                                        if($key != ''){
-                                        $highlightedResult = highlightSearchTerm($highlightedResult, $key);
-                                        }
-                                    }
-                                }
-                               
-                                $result_title = htmlspecialcode_generator($highlightedResult);
-                          
-                            } else if (!empty($keywords)) {
-                            
-                                $highlightedResult = $row['title'];
-                                foreach ($keywords as $keyword) {
-                                    $keyword_arr = explode(' ', $keyword);
-                                    foreach ($keyword_arr as $key) {
-                                        if($key != ''){
-                                        $highlightedResult = highlightSearchTerm($highlightedResult, $key);
-                                        }
-                                    }
-                                }
-                                $result_title = htmlspecialcode_generator($highlightedResult);
-                            } else if (!empty($words)) {
-                                $highlightedResult = $row['title'];
-                                foreach ($words as $word) {
-                                    $highlightedResult = highlightSearchTerm($highlightedResult, $word);
-                                }
-                                $result_title = htmlspecialcode_generator($highlightedResult);
-                            } else {
-                                $result_title = htmlspecialcode_generator($row['title']);
+                                        $highlightedResult = $row['title'];
+                            if (!empty($keywords)) {
+                                $highlightedResult = highlight_all_keywords($highlightedResult, $keywords, '<strong style=color:#cb192d;margin-right:3px;>', '</strong>');
                             }
-
-                            $highlightedResult = $result_title;
+                            if (!empty($words)) {
+                                $highlightedResult = highlight_all_keywords($highlightedResult, $words, '<strong style=color:#cb192d;margin-right:3px;>', '</strong>');
+                            }
                             if (!empty($filter_keyword)) {
-                                $keyword_arr = [];
-                                foreach ($filter_keyword as $keyword) {
-                                    $keyword_arr_new = explode(' ', $keyword);
-                                    foreach ($keyword_arr_new as $key) {
-                                        $keyword_arr[] = $key;
-                                    }
-                                }
-                                usort($keyword_arr, function ($a, $b) {
-                                    $lengthComparison = strlen($b) - strlen($a);
-                                    if ($lengthComparison !== 0) {
-                                        return $lengthComparison;
-                                    }
-                                    return strcmp($a, $b);
-                                });
-                                // print_r($keyword_arr);
-                                foreach ($keyword_arr as $keyword) {
-                                    $highlightedResult = highlightSearchTerm($highlightedResult, $keyword);
-                                }
+                                $highlightedResult = highlight_all_keywords($highlightedResult, $filter_keyword, '<strong style=color:#cb192d;margin-right:3px;>', '</strong>');
                             }
+                            $result_title = htmlspecialcode_generator($highlightedResult);
                           
                             $dep_type = "";
                             $dep_text = "";

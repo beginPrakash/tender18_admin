@@ -164,28 +164,7 @@ function get_results($con, $index, $postData)
                 $filter_keyword = [$filter_keyword];
             }
            
-            if (!empty($filter_keyword)) {
-                $keyword_arr = [];
-                foreach ($filter_keyword as $keyword) {
-                    $keyword_arr_new = explode(' ', $keyword);
-                    foreach ($keyword_arr_new as $key) {
-                        if(!empty($key)):
-                            $keyword_arr[] = $key;
-                        endif;
-                    }
-                }
-                usort($keyword_arr, function ($a, $b) {
-                    $lengthComparison = strlen($b) - strlen($a);
-                    if ($lengthComparison !== 0) {
-                        return $lengthComparison;
-                    }
-                    return strcmp($a, $b);
-                });
-                 
-                foreach ($keyword_arr as $keyword) {
-                    $highlightedResult = highlight_search_term($highlightedResult, $keyword);
-                }
-            }
+            $highlightedResult = highlight_all_keywords($highlightedResult, $filter_keyword);
 
             $result['tenders'][$count]['title'] = htmlspecialcode_generator($highlightedResult);
             $result['tenders'][$count]['city'] = $city;

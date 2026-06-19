@@ -51,7 +51,7 @@ $state = "";
 $department = "";
 $tender_type = "";
 
-$banner_data = mysqli_query($con, "SELECT * FROM `tenders_all` where ref_no='" . $id . "'");
+$banner_data = mysqli_query($con, "SELECT * FROM `tenders_all` where id='" . $id . "'");
 $banner_result = mysqli_num_rows($banner_data);
 if ($banner_result == 1) {
     while ($row = mysqli_fetch_assoc($banner_data)) {

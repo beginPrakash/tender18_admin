@@ -144,8 +144,8 @@ $terms_details_result = mysqli_num_rows($terms_details_data);
                                         </div>
                                         <div class="col-md-6 mt-3">
                                             <label for="terms_details_description" class="form-label">Description : <span class="text-danger">*</span></label>
-                                            <textarea name="terms_details_description[]" rows="5" class="form-control d-none" id="terms_details_description"><?php echo htmlspecialcode_generator($terms_details_description); ?></textarea>
-                                            <div class="ckeditor-classic-total ckeditor-classic-<?php echo $count; ?>"><?php echo htmlspecialcode_generator($terms_details_description); ?></div>
+                                            <textarea name="terms_details_description[]" rows="5" class="form-control d-none" id="terms_details_description"><?php echo html_entity_decode($terms_details_description, ENT_QUOTES);?></textarea>
+                                            <div class="ckeditor-classic-total ckeditor-classic-<?php echo $count; ?>"><?php echo html_entity_decode($terms_details_description, ENT_QUOTES);?></div>
                                         </div>
                                     </div>
                                 </div>

@@ -8,7 +8,7 @@ $mapping = array(
     'settings' => array(
         'analysis' => array(
             'analyzer' => array(
-                'default' => array('type' => 'standard')
+                'default' => array('type' => 'english')
             )
         )
     ),

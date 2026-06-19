@@ -240,13 +240,210 @@ if (!function_exists('buildKeywordPriority')) {
     }
 }
 
-function highlight_search_term($text, $searchTerm)
-{
-    $highlightMarkup = '<b>';
-    $closingHighlightMarkup = '</b>';
-    $highlightedText = preg_replace("/({$searchTerm})/i", $highlightMarkup . '$1' . $closingHighlightMarkup, $text);
-    return $highlightedText;
+function highlight_get_stem_pattern($word) {
+    $word = strtolower(trim($word));
+    // If the word has non-alphanumeric characters, just quote it and return
+    if (!preg_match('/^[a-z0-9]+$/i', $word)) {
+        return preg_quote($word, '/');
+    }
+    
+    // Short words: match literally
+    if (strlen($word) <= 2) {
+        return preg_quote($word, '/');
+    }
+    
+    // Common endings/suffixes list for matching in text
+    $suffixes = '(?:e|s|es|ed|ing|er|ers|est|y|ly|ment|ness|able|ible|al|ive|ion|tion|ation|ies)?';
+
+    // Normalize common endings of the search term to get the base stem
+    $stem = $word;
+    $endsInYOrI = false;
+    $lastConsonant = '';
+
+    // If word ends in "sses" -> "ss"
+    if (preg_match('/sses$/', $stem)) {
+        $stem = preg_replace('/sses$/', 'ss', $stem);
+    }
+    // If word ends in "ies" -> "i"
+    elseif (preg_match('/ies$/', $stem)) {
+        $stem = preg_replace('/ies$/', 'i', $stem);
+        $endsInYOrI = true;
+    }
+    // If word ends in "s" (but not "ss") -> remove "s"
+    elseif (preg_match('/[^s]s$/', $stem)) {
+        $stem = preg_replace('/s$/', '', $stem);
+    }
+
+    // Strip trailing "ed" or "ing"
+    if (preg_match('/ed$/', $stem)) {
+        $stem = preg_replace('/ed$/', '', $stem);
+    } elseif (preg_match('/ing$/', $stem)) {
+        $stem = preg_replace('/ing$/', '', $stem);
+    }
+
+    // Strip trailing "y" and mark that it can be y or i
+    if (preg_match('/y$/', $stem)) {
+        $stem = preg_replace('/y$/', '', $stem);
+        $endsInYOrI = true;
+    } elseif (preg_match('/i$/', $stem)) {
+        $stem = preg_replace('/i$/', '', $stem);
+        $endsInYOrI = true;
+    }
+
+    // Strip trailing "e" (but only if remaining stem is > 2 chars, to avoid empty/short stems)
+    if (preg_match('/e$/', $stem) && strlen($stem) > 3) {
+        $stem = preg_replace('/e$/', '', $stem);
+    }
+
+    // Check for double consonants at the end (e.g., "runn" -> "run")
+    if (preg_match('/([bdfglmnprst])\1$/', $stem, $matches)) {
+        $lastConsonant = $matches[1];
+        $stem = substr($stem, 0, -1);
+    } elseif (preg_match('/([bdfglmnprst])$/', $stem, $matches)) {
+        $lastConsonant = $matches[1];
+    }
+
+    // If the resulting stem is too short, fall back to literal match
+    if (strlen($stem) < 2) {
+        return preg_quote($word, '/');
+    }
+
+    // Build the regex pattern
+    if ($endsInYOrI) {
+        $pattern = preg_quote($stem, '/') . '[iy]' . $suffixes;
+    } elseif (!empty($lastConsonant)) {
+        $stemWithoutLast = substr($stem, 0, -1);
+        $pattern = preg_quote($stemWithoutLast, '/') . preg_quote($lastConsonant, '/') . '{1,2}' . $suffixes;
+    } else {
+        $pattern = preg_quote($stem, '/') . $suffixes;
+    }
+
+    return $pattern;
 }
+
+function highlight_search_term($text, $searchTerm, $highlightMarkup = '<b>', $closingHighlightMarkup = '</b>')
+{
+    if (empty($searchTerm)) {
+        return $text;
+    }
+    
+    // Generate English stemming-aware regex pattern for the search term, allowing trailing alphanumeric chars
+    $stemPattern = highlight_get_stem_pattern($searchTerm);
+    $regex = '/\b(' . $stemPattern . '[a-z0-9]*)\b/iu';
+
+    // Split the HTML into alternating tokens:
+    //   odd-indexed  = HTML tags  (<...>)  — leave untouched
+    //   even-indexed = text nodes          — apply highlighting
+    $parts = preg_split('/(<[^>]+>)/s', $text, -1, PREG_SPLIT_DELIM_CAPTURE);
+
+    $result = '';
+    $inHighlightTag = false;
+    foreach ($parts as $i => $part) {
+        if ($i % 2 === 1) {
+            // HTML tag — pass through unchanged
+            $result .= $part;
+            
+            // Track if we are inside a tag matching our highlightMarkup (e.g. <b> or <strong...>)
+            if (preg_match('/^<(?:b|strong)\b/i', $part)) {
+                $inHighlightTag = true;
+            } elseif (preg_match('/^<\/(?:b|strong)>/i', $part)) {
+                $inHighlightTag = false;
+            }
+        } else {
+            // Plain text node
+            if ($inHighlightTag) {
+                $result .= $part;
+            } else {
+                $result .= preg_replace($regex, $highlightMarkup . '$1' . $closingHighlightMarkup, $part);
+            }
+        }
+    }
+
+    return $result;
+}
+
+function highlight_all_keywords($text, $keywords, $markup = '<b>', $closingMarkup = '</b>')
+{
+    if (empty($text) || empty($keywords)) {
+        return $text;
+    }
+
+    // Ensure array
+    $inputs = is_array($keywords) ? $keywords : [$keywords];
+
+    // Normalize comma-separated lists
+    $flat_keywords = [];
+    foreach ($inputs as $input) {
+        if (is_string($input)) {
+            $split = explode(',', $input);
+            foreach ($split as $s) {
+                $s = trim($s);
+                if ($s !== '') {
+                    $flat_keywords[] = $s;
+                }
+            }
+        } else {
+            $flat_keywords[] = $input;
+        }
+    }
+    $flat_keywords = array_values(array_unique($flat_keywords));
+
+    // For each multi-word phrase keyword, check if ALL its words match the text (stemmed).
+    $valid_words = [];
+    
+    foreach ($flat_keywords as $phrase) {
+        $phrase = trim($phrase);
+        if ($phrase === '') continue;
+
+        // Clean punctuation for matching words
+        $cleanPhrase = preg_replace('/[^\p{L}\p{N}\s]/u', ' ', $phrase);
+        $words = array_values(array_filter(array_map('trim', explode(' ', $cleanPhrase))));
+        if (empty($words)) continue;
+
+        // If it's a multi-word phrase, check if ALL words match the text (taking stemming into account)
+        $phrase_matches = true;
+        $textWithoutTags = strip_tags($text);
+        foreach ($words as $word) {
+            $stemPattern = highlight_get_stem_pattern($word);
+            // Allow word boundary on left, and trailing characters on right
+            if (!preg_match('/\b(' . $stemPattern . '[a-z0-9]*)\b/iu', $textWithoutTags)) {
+                $phrase_matches = false;
+                break;
+            }
+        }
+
+        // If the phrase matches fully, we add all its individual words to the highlight list
+        if ($phrase_matches) {
+            foreach ($words as $word) {
+                if (!in_array($word, $valid_words)) {
+                    $valid_words[] = $word;
+                }
+            }
+        }
+    }
+
+    if (empty($valid_words)) {
+        return $text;
+    }
+
+    // Sort valid words longest first to prevent sub-string highlight conflicts
+    usort($valid_words, function ($a, $b) {
+        $lengthComparison = strlen($b) - strlen($a);
+        if ($lengthComparison !== 0) {
+            return $lengthComparison;
+        }
+        return strcmp($a, $b);
+    });
+
+    // Run highlight_search_term for each valid word
+    $highlighted = $text;
+    foreach ($valid_words as $word) {
+        $highlighted = highlight_search_term($highlighted, $word, $markup, $closingMarkup);
+    }
+
+    return $highlighted;
+}
+
 
 function normalize_filters_array($value, $toLower = true)
 {
@@ -1498,7 +1695,7 @@ function build_elastic_admin_query(array $filters, int $page = 1, int $size = 10
     if (!empty($filters['start_date']) && !empty($filters['end_date'])) {
         $filter[] = [
             'range' => [
-                'due_date' => [
+                'publish_date' => [
                     'gte' => $filters['start_date'],
                     'lte' => $filters['end_date']
                 ]
@@ -1567,7 +1764,7 @@ function build_elastic_admin_query(array $filters, int $page = 1, int $size = 10
         $sort[] = ['_score' => ['order' => 'desc']];
     } else {
         // No keyword: default sort
-        $sort[] = ['due_date' => ['order' => 'desc']];
+        $sort[] = ['publish_date' => ['order' => 'desc']];
     }
 
     /* ---------- Build BOOL query ---------- */

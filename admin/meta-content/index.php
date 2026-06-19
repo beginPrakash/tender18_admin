@@ -217,9 +217,27 @@ if (isset($_GET['id'])) {
                         </tr>
 
                         <tr>
-                            <th scope="row">29</th>
+                            <th scope="row">30</th>
                             <td>Tender Detail Page Meta Content</td>
                             <td><a href="<?php echo ADMIN_URL; ?>meta-content/tenderdetail-page-meta-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">31</th>
+                            <td>State Tab Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/state-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">32</th>
+                            <td>Department Tab Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/department-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
+                        </tr>
+
+                        <tr>
+                            <th scope="row">32</th>
+                            <td>Sample Tender Tab Meta Content</td>
+                            <td><a href="<?php echo ADMIN_URL; ?>meta-content/sampletender-content.php"><i style="font-size: 20px;" class="ri-eye-fill text-success"></i></a></td>
                         </tr>
 
                     </tbody>
