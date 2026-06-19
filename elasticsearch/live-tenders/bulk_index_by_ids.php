@@ -33,7 +33,7 @@ function bulk_live_tenders_by_ids($ids, $index, $chunkSize = 1000): array
 
         $sql = "SELECT id, title, tender_id, ref_no, agency_type, due_date, tender_value,
                    pincode, publish_date, tender_fee, tender_emd, documents,
-                   city, state, department, description, tender_type, opening_date
+                   city, state, department, description, tender_type, opening_date, created_at
             FROM tenders_live
             WHERE id IN ($placeholders)";
 
@@ -74,7 +74,8 @@ function bulk_live_tenders_by_ids($ids, $index, $chunkSize = 1000): array
                 'state'         => $row['state'],
                 'department'    => $row['department'],
                 'description'   => $row['description'],
-                'tender_type'   => $row['tender_type']
+                'tender_type'   => $row['tender_type'],
+                'created_at'    => !empty($row['created_at']) ? substr($row['created_at'], 0, 10) : null
             ]);
 
             $totalIndexed++;

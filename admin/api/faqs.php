@@ -66,7 +66,7 @@ function get_results($con)
 
             $result['details'][$count]['title'] = htmlspecialcode_generator($row['title']);
 
-            $result['details'][$count]['description'] = htmlspecialcode_generator($row['description']);
+            $result['details'][$count]['description'] = $row['description'];
 
             $count++;
 
@@ -92,7 +92,7 @@ if ($result === null) {
 
 } else {
 
-    echo json_encode(array("status" => " success", "data" => $result));
+    echo json_encode(array("status" => " success", "data" => $result),ENT_QUOTES);
 
 }
 

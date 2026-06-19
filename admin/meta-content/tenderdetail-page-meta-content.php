@@ -38,7 +38,7 @@ if (isset($_POST['btnInsert'])) {
 
     $sql1 = mysqli_query($con, $q1);
 
-    $query_delete2 = mysqli_query($con, "DELETE FROM `faq_meta`");
+    $query_delete2 = mysqli_query($con, "DELETE FROM `faq_meta` where type='tender_detail'");
     $terms_details_title = $_POST['terms_details_title'];
     $terms_details_description = $_POST['terms_details_description'];
     foreach ($terms_details_title as $key => $title) {
@@ -242,8 +242,8 @@ if ($header_result == 1) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6 meta-blocks" data-id="1">
                                 <label for="content" class="form-label">Content : <span class="text-danger">*</span></label>
-                                <textarea rows="3" name="content" class="form-control mb-4 d-none" id="content"><?php echo htmlspecialcode_generator($content); ?></textarea>
-                                <div class="ckeditor-classic-total ckeditor-meta-1"><?php echo htmlspecialcode_generator($content); ?></div>
+                                <textarea rows="3" name="content" class="form-control mb-4 d-none" id="content"><?php echo html_entity_decode($content, ENT_QUOTES); ?></textarea>
+                                <div class="ckeditor-classic-total ckeditor-meta-1"><?php echo html_entity_decode($content, ENT_QUOTES); ?></div>
                             </div>
                         </div>
 
@@ -270,8 +270,8 @@ if ($header_result == 1) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6 meta-blocks" data-id="2">
                                 <label for="tab_description" class="form-label">Tab 1 Description : <span class="text-danger">*</span></label>
-                                <textarea rows="5" name="tab_description" class="form-control d-none" id="tab_description"><?php echo $tab_description; ?></textarea>
-                                <div class="ckeditor-classic-total ckeditor-meta-2"><?php echo $tab_description; ?></div>
+                                <textarea rows="5" name="tab_description" class="form-control d-none" id="tab_description"><?php echo html_entity_decode($tab_description, ENT_QUOTES, 'UTF-8');?></textarea>
+                                <div class="ckeditor-classic-total ckeditor-meta-2"><?php echo html_entity_decode($tab_description, ENT_QUOTES, 'UTF-8');?></div>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -283,8 +283,8 @@ if ($header_result == 1) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6 meta-blocks" data-id="3">
                                 <label for="tab_description2" class="form-label">Tab 2 Description : <span class="text-danger">*</span></label>
-                                <textarea rows="5" name="tab_description2" class="form-control d-none" id="tab_description2"><?php echo $tab_description2; ?></textarea>
-                                <div class="ckeditor-classic-total ckeditor-meta-3"><?php echo $tab_description2; ?></div>
+                                <textarea rows="5" name="tab_description2" class="form-control d-none" id="tab_description2"><?php echo html_entity_decode($tab_description2, ENT_QUOTES, 'UTF-8');?></textarea>
+                                <div class="ckeditor-classic-total ckeditor-meta-3"><?php echo html_entity_decode($tab_description2, ENT_QUOTES, 'UTF-8');?></div>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -296,8 +296,8 @@ if ($header_result == 1) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6 meta-blocks" data-id="4">
                                 <label for="tab_description3" class="form-label">Tab 3 Description : <span class="text-danger">*</span></label>
-                                <textarea rows="5" name="tab_description3" class="form-control d-none" id="tab_description3"><?php echo $tab_description3; ?></textarea>
-                                <div class="ckeditor-classic-total ckeditor-meta-4"><?php echo $tab_description3; ?></div>
+                                <textarea rows="5" name="tab_description3" class="form-control d-none" id="tab_description3"><?php echo html_entity_decode($tab_description3, ENT_QUOTES, 'UTF-8');?></textarea>
+                                <div class="ckeditor-classic-total ckeditor-meta-4"><?php echo html_entity_decode($tab_description3, ENT_QUOTES, 'UTF-8');?></div>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -309,8 +309,8 @@ if ($header_result == 1) {
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6 meta-blocks" data-id="5">
                                 <label for="tab_description4" class="form-label">Tab 4 Description : <span class="text-danger">*</span></label>
-                                <textarea rows="5" name="tab_description4" class="form-control d-none" id="tab_description4"><?php echo $tab_description4; ?></textarea>
-                                <div class="ckeditor-classic-total ckeditor-meta-5"><?php echo $tab_description4; ?></div>
+                                <textarea rows="5" name="tab_description4" class="form-control d-none" id="tab_description4"><?php echo html_entity_decode($tab_description4, ENT_QUOTES, 'UTF-8');?></textarea>
+                                <div class="ckeditor-classic-total ckeditor-meta-5"><?php echo html_entity_decode($tab_description4, ENT_QUOTES, 'UTF-8');?></div>
                             </div>
                         </div>
 
@@ -362,8 +362,8 @@ if ($header_result == 1) {
                                                 </div>
                                                 <div class="col-md-6 mt-3">
                                                     <label for="terms_details_description" class="form-label">Description : <span class="text-danger">*</span></label>
-                                                    <textarea name="terms_details_description[]" rows="5" class="form-control d-none" id="terms_details_description"><?php echo htmlspecialcode_generator($terms_details_description); ?></textarea>
-                                                    <div class="ckeditor-classic-total ckeditor-classic-<?php echo $count; ?>"><?php echo htmlspecialcode_generator($terms_details_description); ?></div>
+                                                    <textarea name="terms_details_description[]" rows="5" class="form-control d-none" id="terms_details_description"><?php echo html_entity_decode($terms_details_description, ENT_QUOTES);?></textarea>
+                                                    <div class="ckeditor-classic-total ckeditor-classic-<?php echo $count; ?>"><?php echo html_entity_decode($terms_details_description, ENT_QUOTES);?></div>
                                                 </div>
                                             </div>
                                         </div>

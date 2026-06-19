@@ -26,7 +26,7 @@ while (true) {
     |--------------------------------------------------------------------------
     | Get matching records from tenders_all + tenders_posts
     |--------------------------------------------------------------------------
-    | If tender_id exists in tenders_posts table,
+    | If ref_no exists in tenders_posts table,
     | then update ES field "tenders" => "new"
     |--------------------------------------------------------------------------
     */
@@ -34,10 +34,10 @@ while (true) {
     $sql = "
         SELECT 
             ta.id,
-            ta.tender_id
+            ta.ref_no
         FROM tenders_all ta
         INNER JOIN tenders_posts tp 
-            ON tp.tender_id = ta.tender_id
+            ON tp.ref_no = ta.ref_no
         ORDER BY ta.id ASC
         LIMIT ?, ?
     ";
