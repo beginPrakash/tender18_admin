@@ -35,8 +35,15 @@ function get_results($con)
         }
     }
 
-
-    $faq_data = mysqli_query($con, "SELECT * FROM `faq_meta` where `type`= '$type' order by id desc");
+    if($type=='gem_reg'){
+        $faq_data = mysqli_query($con, "SELECT * FROM `gem_reg_faq_section` order by id desc");
+    }elseif($type=='faq_page'){
+        $faq_data = mysqli_query($con, "SELECT * FROM `faq_page_details` order by id desc");
+    }
+    else{
+        $faq_data = mysqli_query($con, "SELECT * FROM `faq_meta` where `type`= '$type' order by id desc");
+    }
+    
 
     $faq_result = mysqli_num_rows($faq_data);
 
