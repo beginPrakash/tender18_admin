@@ -85,13 +85,38 @@ function get_results($con, $postData)
 
             }
 
+            $blog_id = $row['id'];
+
             $result['main']['title'] = htmlspecialcode_generator($row['title']);
 
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
 
-            $result['main']['meta_description'] = strip_tags(substr($row['description'], 0, 300));
+            $result['main']['meta_title'] = $row['meta_title'];
+
+            $result['main']['meta_description'] = $row['meta_description'];
 
             $result['main']['blog_image'] = $blog_image;
+
+            $result['meta']['faq_main_title'] = $row['faq_main_title'];
+
+            $faq_data = mysqli_query($con, "SELECT * FROM `blog_service_faq_meta` where `type`= 'blog' and `blog_service_id`= '$blog_id' order by id desc");
+
+            $faq_result = mysqli_num_rows($faq_data);
+
+            if ($faq_result > 0) {
+
+                $count = 0;
+
+                while ($row = mysqli_fetch_assoc($faq_data)) {
+
+                    $result['faqs'][$count]['faq_id'] = $row['id'];
+                    $result['faqs'][$count]['title'] = $row['title'];
+                    $result['faqs'][$count]['description'] =$row['description'];
+                    $count++;
+                }
+            }else{
+                $result['faqs'] = [];
+            }
 
             $main_title = $row['main_title'];
 

@@ -105,6 +105,15 @@ function get_results($con, $postData)
             }elseif($type == 'department_page'){
                 $search = array("(Source)");
                 $replace = array($source);
+            }elseif($type == 'gem_state_page'){
+                $search = array("(State)");
+                $replace = array($state);
+            }elseif($type == 'gem_city_page'){
+                $search = array("(City)");
+                $replace = array($city);
+            }elseif($type == 'bidding_agencies'){
+                $search = array("(Agency)");
+                $replace = array($agency);
             }elseif(!empty($state) && !empty($agency) && ($type == 'agency-state' || $type == 'state-agency')){
                 $search = array("(ag_name)", "(State)", "(Agency) ");
                 $replace = array($agency, $state, $agency);
@@ -177,6 +186,15 @@ function get_results($con, $postData)
         }elseif($type == 'department_page'){
             $search = array("(Source)");
             $replace = array($source);
+        }elseif($type == 'gem_state_page'){
+            $search = array("(State)");
+            $replace = array($state);
+        }elseif($type == 'gem_city_page'){
+            $search = array("(City)");
+            $replace = array($city);
+        }elseif($type == 'bidding_agencies'){
+            $search = array("(Agency)");
+            $replace = array($agency);
         }elseif(!empty($state) && !empty($agency) && ($type == 'agency-state' || $type == 'state-agency')){
             $search = array("(ag_name)", "(State)", "(Agency)");
             $replace = array($agency, $state, $agency);

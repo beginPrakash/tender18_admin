@@ -334,11 +334,16 @@ if ($header_result == 1) {
         myArray.push(pieces);
 
         var create_td_cnt = $('.create_td').length;
-        $('.link_arr').val(JSON.stringify(myArray));
-        
-        $('.link_table tr:last').after('<tr class="create_td"><td class="tsd_linktitle_'+create_td_cnt+'">'+link_title+'</td><td class="tsd_linkurl_'+create_td_cnt+'">'+link_url+'</td><td><a href="javascript:void(0);" class="remove_btn" data-indexid="'+create_td_cnt+'"><i class="ri-delete-bin-5-fill remove"></i></a> <a href="javascript:void(0);" class="edit_btn" data-indexid="'+create_td_cnt+'"><i class="ri-pencil-fill"></i></a></td></tr>');
-        $('.link_title').val('');
-        $('.link_url').val('');
+        if(create_td_cnt < 10){
+            $('.link_arr').val(JSON.stringify(myArray));
+            
+            $('.link_table tr:last').after('<tr class="create_td"><td class="tsd_linktitle_'+create_td_cnt+'">'+link_title+'</td><td class="tsd_linkurl_'+create_td_cnt+'">'+link_url+'</td><td><a href="javascript:void(0);" class="remove_btn" data-indexid="'+create_td_cnt+'"><i class="ri-delete-bin-5-fill remove"></i></a> <a href="javascript:void(0);" class="edit_btn" data-indexid="'+create_td_cnt+'"><i class="ri-pencil-fill"></i></a></td></tr>');
+            $('.link_title').val('');
+            $('.link_url').val('');
+        }else{
+            alert('you are add only 10 links.');
+            return false;
+        }
 
     });
 

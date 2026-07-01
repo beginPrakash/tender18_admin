@@ -46,9 +46,16 @@ if (isset($_GET['id'])) {
     <div class="col-lg-12">
         <div class="card">
             <div class="card-header">
-                <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>footer_links/add.php">
-                    <h5 class="card-title float-end btn bg-success text-white">Add New Footer Link</h5>
-                </a>
+                <?php 
+                $selected='';
+                $fetching_data = mysqli_query($con, "SELECT * FROM footer_links ORDER BY id DESC");
+                $total = mysqli_num_rows($fetching_data);
+                if($total < 4){
+                    ?>
+                        <a class="dropdown-item fs-sm" href="<?php echo ADMIN_URL; ?>footer_links/add.php">
+                            <h5 class="card-title float-end btn bg-success text-white" {{$selected}}>Add New Footer Link</h5>
+                        </a>
+                <?php } ?>
                 <!-- <h5 class="card-title mb-0">Basic Datatables</h5> -->
             </div>
             <div class="card-body">
