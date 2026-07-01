@@ -47,6 +47,7 @@ if (isset($_POST['submit'])) {
 
     $con_desc = preg_replace('/(<a\s+[^>]*)(\w+)="([^"]*)"/', '$1$2=$3', $description);
     $con_desc =mysqli_real_escape_string($con, $con_desc);
+    $faq_main_title = mysqli_real_escape_string($con, $_POST['faq_main_title']);
 
     if (!empty($filename)) {
         $filevalue =  $newfilename;
@@ -54,9 +55,25 @@ if (isset($_POST['submit'])) {
         $filevalue = '';
     }
     $created_by = $_SESSION['user_id']; 
-        $q = "INSERT INTO services(`title`, `description`, `service_image`, `created_by`,`h1`,`meta_title`,`meta_description`) VALUES ('$title', '$con_desc', '$filevalue',$created_by,'$h1','$meta_title','$meta_description')";
+        $q = "INSERT INTO services(`title`, `description`, `service_image`, `created_by`,`h1`,`meta_title`,`meta_description`,`faq_main_title`) VALUES ('$title', '$con_desc', '$filevalue',$created_by,'$h1','$meta_title','$meta_description','$faq_main_title')";
 
         $sql = mysqli_query($con, $q);
+        if ($sql) {
+            $last_id = mysqli_insert_id($con);
+            $terms_details_title = $_POST['terms_details_title'];
+            $terms_details_description = $_POST['terms_details_description'];
+            foreach ($terms_details_title as $key => $title) {
+                if (!empty($title)) {
+                    $title = mysqli_real_escape_string($con, $title);
+                    $desc = mysqli_real_escape_string($con, $terms_details_description[$key]);
+                    $q = "INSERT INTO blog_service_faq_meta(`blog_service_id`,`title`, `description`,`type`) VALUES ('$last_id','$title', '$desc','service')";
+                    $sql = mysqli_query($con, $q);
+                }
+            }
+        }
+
+
+    
 
         if ($sql) {
             $_SESSION['success'] = 'Service created successfully.';
@@ -154,6 +171,31 @@ if (!empty($_SESSION['error'])) {
                             </div>
                         </div>
 
+                        <div class="card-header">
+
+                            <h4 class="card-title mb-0">FAQ's Section</h4>
+
+                        </div>
+                        <div class="card-body">
+                            <div class="row gy-4">
+                                <div class="col-xxl-12 col-md-12">
+                                    <div class="col-md-6">
+                                        <label for="faq_main_title" class="form-label">FAQ Section Main Title : <span class="text-danger">*</span></label>
+                                        <input type="text" name="faq_main_title" placeholder="Enter Title" class="form-control" id="faq_main_title" value="">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="ps-3">
+                            <button class="btn btn-success mt-3" id="add_terms_details" type="button">Add more</button>
+                            <div class="card-body details_banner_section terms_details">
+                                <div class="row gy-4">
+                                </div>
+                            </div>
+                        </div>
+                
+
                         <div class="col-lg-12">
                             <div class="text-start">
                                 <button type="submit" class="btn btn-primary" name="submit">Submit</button>
@@ -191,6 +233,45 @@ $(document).ready(function() {
                 if (data != "")
                     $(this).parent().find('textarea').val(data);
             });
+        });
+
+        $("#add_terms_details").click(function() {
+            if ($(".details-block.terms_details").length < 100) {
+                var i = $(".details-block.terms_details:last-child").attr('data-id');
+                if ($(".details-block.terms_details:last-child").length > 0) {
+                    i = parseInt(i);
+                } else {
+                    i = 0;
+                }
+                i = i + 1;
+                var html = '<div class="details-block terms_details col-xxl-12 col-md-12 mt-4" data-id="' + i + '"><div class="row"><div class="col-xxl-12 col-md-12 bg-light pt-3 pb-4 ps-2 pe-2"><i class="ri-delete-bin-5-fill remove"></i><div class="row"><div class="col-md-6 mt-3"><label for="terms_details_title" class="form-label">Title : <span class="text-danger">*</span></label><input type="text" name="terms_details_title[]" class="form-control" id="terms_details_title"></div><div class="col-md-6 mt-3"><label for="terms_details_description" class="form-label">Description : <span class="text-danger">*</span></label><textarea name="terms_details_description[]" class="form-control d-none" rows="5" id="terms_details_description"></textarea><div class="ckeditor-classic-total ckeditor-classic-' + i + '"></div></div></div></div></div></div>';
+
+                $(".details_banner_section.terms_details .row.gy-4").append(html);
+
+                ClassicEditor.create(document.querySelector(".ckeditor-classic-" + i))
+                    .then(function(c) {
+                        c.ui.view.editable.element.style.height = "200px";
+                    })
+                    .catch(function(c) {
+                        console.error(c);
+                    });
+            }
+        });
+        
+
+        $(document).on('click', ".details-block.terms_details .remove", function() {
+            $(this).parent().parent().remove();
+        });
+
+        $('.details-block.terms_details').each(function(i, obj) {
+            var count = $(this).attr("data-id");
+            ClassicEditor.create(document.querySelector(".ckeditor-classic-" + count))
+                .then(function(c) {
+                    c.ui.view.editable.element.style.height = "200px";
+                })
+                .catch(function(c) {
+                    console.error(c);
+                });
         });
 
 });
