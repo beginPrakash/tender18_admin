@@ -62,11 +62,15 @@ function get_results($con, $postData)
 
         while ($row = mysqli_fetch_assoc($faq_data)) {
 
-            $ag_name = ucfirst($tender_arr['agency_type']);
+            $ag_name = $tender_arr['agency_type'];
+            $ag_name = ucwords(str_replace("-", " ",$ag_name));
             $keywords = $tender_arr['tender_related_keywords'];
-            $state = ucfirst($tender_arr['state']);
-            $city = ucfirst($tender_arr['city']);
-            $tend_title = $tender_arr['title'];
+            $keyword = ucwords(str_replace("-", " ",$keyword));
+            $state = $tender_arr['state'];
+            $state = ucwords(str_replace("-", " ",$state));
+            $city = $tender_arr['city'];
+            $city = ucwords(str_replace("-", " ",$city));
+            $tend_title = ucwords($tender_arr['title']);
             $search = array("(Agency)", "(Keywords)", "(State)", "(City)", "(Title)");
             $replace = array($ag_name, $keywords, $state, $city, $tend_title);
 
@@ -82,10 +86,14 @@ function get_results($con, $postData)
 
 
     if(!empty($meta_arr) && !empty($tender_arr)){
-        $ag_name = ucfirst($tender_arr['agency_type']);
+        $ag_name = $tender_arr['agency_type'];
+        $ag_name = ucwords(str_replace("-", " ",$ag_name));
         $keywords = $tender_arr['tender_related_keywords'];
-        $state = ucfirst($tender_arr['state']);
-        $city = ucfirst($tender_arr['city']);
+        $keyword = ucwords(str_replace("-", " ",$keyword));
+        $state = $tender_arr['state'];
+        $state = ucwords(str_replace("-", " ",$state));
+        $city = $tender_arr['city'];
+        $city = ucwords(str_replace("-", " ",$city));
         $tend_title = $tender_arr['title'];
         $search = array("(Agency)", "(Keywords)", "(State)", "(City)", "(Title)");
         $replace = array($ag_name, $keywords, $state, $city, $tend_title);
