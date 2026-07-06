@@ -30,10 +30,15 @@ function get_results($con, $postData)
 {
 
     $city = $postData['city'] ?? '';
+    $city = ucwords(str_replace("-", " ",$city));
     $state = $postData['state'] ?? '';
+    $state = ucwords(str_replace("-", " ",$state));
     $source = $postData['department'] ?? '';
+    $source = ucwords(str_replace("-", " ",$source));
     $agency = $postData['agency'] ?? '';
+    $agency = ucwords(str_replace("-", " ",$agency));
     $keyword = $postData['keyword'] ?? '';
+    $keyword = ucwords(str_replace("-", " ",$keyword));
     $metaTenderType = $postData['tendertype'] ?? '';
     $type = $postData['type'] ?? '';
     $meta_arr = [];

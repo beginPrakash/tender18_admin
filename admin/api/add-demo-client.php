@@ -53,7 +53,7 @@ function get_results($con, $postData)
     $pass = $postData['password'];
     $inquiry_url = mysqli_real_escape_string($con, $postData['inquiry_url']);
 
-    $banner_data = mysqli_query($con, "SELECT * FROM `demo_client` where email_id='" . $email_id . "'");
+    $banner_data = mysqli_query($con, "SELECT * FROM `users` where users_email='" . $email_id . "'");
     $banner_result = mysqli_num_rows($banner_data);
 
     $mai_data = mysqli_query($con, "SELECT * FROM `smtp_management` where id = 1");
@@ -122,8 +122,23 @@ function get_results($con, $postData)
     if ($banner_result != 0) {
         $result['message'] = "Email already exists";
     }else{
-        $q1 = "INSERT INTO demo_client(`name`,`company_name`, `email_id`, `phone_no`, `state`,`keywords`,`password`) VALUES ('$name', '$company_name', '$email_id', '$phone_no', '$state','$keywords','$pass')";
-        mysqli_query($con, $q1);
+        // $q1 = "INSERT INTO demo_client(`name`,`company_name`, `email_id`, `phone_no`, `state`,`keywords`,`password`) VALUES ('$name', '$company_name', '$email_id', '$phone_no', '$state','$keywords','$pass')";
+        // mysqli_query($con, $q1);
+
+        $string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+        $files =  substr(str_shuffle($string), 0, 8);
+        $unique_code = time() . $files;
+        $passc = md5(trim($postData['password']));
+        $start_date = $postData['start_date'];
+        $duration = $postData['duration'];
+        $expired_date = $postData['expired_date'];
+
+        $start_date = date("Y-m-d");
+        $expired_date = date("Y-m-d", strtotime('+30 days'));
+
+        $q1 = "INSERT INTO users(users_name, company_name, users_email ,users_password, user_role, user_unique_id, client_type, mail_type,customer_name,mobile_number,state,status,keywords,is_view_document,start_date,expired_date,duration) VALUES ('$email_id','$company_name', '$email_id', '$passc', 'user', '$unique_code','democlient','link','$name','$phone_no','$state','DemoClient','$keywords','no','$start_date','$expired_date','1')";
+     
+        $sql1 = mysqli_query($con, $q1);
 
         $url = "https://t18cms.tender18.com/wp-json/myapi/v1/add-product";
 
