@@ -3,19 +3,19 @@ require_once dirname(__DIR__) . '/elastic_client.php';
 require_once dirname(__DIR__, 2) . '/admin/includes/connection.php';
 
 /**
- * Delete records from MySQL 'tenders_all' table based on created_at range.
+ * Delete records from MySQL 'tenders_archive' table based on created_at range.
  * 
  * @param string $start_date Format: YYYY-MM-DD HH:MM:SS or YYYY-MM-DD
  * @param string $end_date   Format: YYYY-MM-DD HH:MM:SS or YYYY-MM-DD
  * @return int Number of deleted MySQL rows
  */
-function delete_all_tender_mysql_records_by_range($start_date, $end_date) {
+function delete_archive_tender_mysql_records_by_range($start_date, $end_date) {
     global $con;
     if (!$con) {
         throw new Exception("MySQL database connection not available.");
     }
 
-    $sql = "DELETE FROM tenders_all WHERE created_at >= ? AND created_at <= ?";
+    $sql = "DELETE FROM tenders_archive WHERE created_at >= ? AND created_at <= ?";
     $stmt = mysqli_prepare($con, $sql);
     if (!$stmt) {
         throw new Exception("MySQL prepare error: " . mysqli_error($con));
@@ -30,14 +30,14 @@ function delete_all_tender_mysql_records_by_range($start_date, $end_date) {
 }
 
 /**
- * Delete records from Elasticsearch 'ALL' tenders index based on created_at range.
+ * Delete records from Elasticsearch 'ARCHIVE' tenders index based on created_at range.
  * 
  * @param string $start_date Format: YYYY-MM-DD HH:MM:SS
  * @param string $end_date   Format: YYYY-MM-DD HH:MM:SS
  * @return array Response from Elasticsearch
  */
-function delete_all_tender_es_records_by_range($start_date, $end_date) {
-    $index = ES_INDEXES['ALL'];
+function delete_archive_tender_es_records_by_range($start_date, $end_date) {
+    $index = ES_INDEXES['ARCHIVE'];
     $path = $index . '/_delete_by_query';
     
     $body = [
@@ -55,15 +55,15 @@ function delete_all_tender_es_records_by_range($start_date, $end_date) {
 }
 
 /**
- * Delete records from BOTH MySQL ('tenders_all') and Elasticsearch ('ALL' index) based on created_at range.
+ * Delete records from BOTH MySQL ('tenders_archive') and Elasticsearch ('ARCHIVE' index) based on created_at range.
  * 
  * @param string $start_date Format: YYYY-MM-DD HH:MM:SS
  * @param string $end_date   Format: YYYY-MM-DD HH:MM:SS
  * @return array Combined result with ES response and MySQL deleted count
  */
-function delete_all_tender_records_by_range($start_date, $end_date) {
-    $es_res = delete_all_tender_es_records_by_range($start_date, $end_date);
-    $mysql_deleted = delete_all_tender_mysql_records_by_range($start_date, $end_date);
+function delete_archive_tender_records_by_range($start_date, $end_date) {
+    $es_res = delete_archive_tender_es_records_by_range($start_date, $end_date);
+    $mysql_deleted = delete_archive_tender_mysql_records_by_range($start_date, $end_date);
 
     return [
         'status' => $es_res['status'] ?? 200,

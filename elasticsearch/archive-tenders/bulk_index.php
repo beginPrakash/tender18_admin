@@ -16,8 +16,8 @@ if (!$con) {
     die('MySQL connect error: ' . mysqli_connect_error());
 }
 
-$batchSize   = 1000;
-$offset      = 0;
+$batchSize   = 10000;
+$offset      = 11730000;
 $totalIndexed = 0;
 
 while (true) {

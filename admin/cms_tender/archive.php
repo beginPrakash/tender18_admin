@@ -389,7 +389,7 @@ function highlightSearchTerm($text, $searchTerm)
                     }
                 }
                 ?>
-                <form id="deleteForm" method="POST" action="send_email.php">
+                <form id="deleteForm" method="POST" action="archivesend_email.php">
                     <input type="hidden" name="ids" id="ids">
                     <input type="hidden" name="cust_from_email" value="<?php echo $cust_from_email; ?>">
                     <input type="hidden" name="cust_reply_email" value="<?php echo $cust_reply_email; ?>">

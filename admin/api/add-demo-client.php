@@ -85,7 +85,7 @@ function get_results($con, $postData)
     $message .= '<b>State :</b> ' . htmlspecialcode_generator($state) . '<br>';
     $message .= '<b>Keywords :</b> ' . htmlspecialcode_generator($keywords) . '<br>';
     $message .= '';
-    $subject = 'Sample Tender';
+    $subject = 'Free Trial';
 
     $mail = new PHPMailer(true);
     try {
@@ -118,9 +118,11 @@ function get_results($con, $postData)
         //echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
     }
 
-    
+     $r= null;
     if ($banner_result != 0) {
-        $result['message'] = "Email already exists";
+        $result = null;
+       
+        $r['message'] = "Email already exists";
     }else{
         // $q1 = "INSERT INTO demo_client(`name`,`company_name`, `email_id`, `phone_no`, `state`,`keywords`,`password`) VALUES ('$name', '$company_name', '$email_id', '$phone_no', '$state','$keywords','$pass')";
         // mysqli_query($con, $q1);
@@ -136,7 +138,7 @@ function get_results($con, $postData)
         $start_date = date("Y-m-d");
         $expired_date = date("Y-m-d", strtotime('+30 days'));
 
-        $q1 = "INSERT INTO users(users_name, company_name, users_email ,users_password, user_role, user_unique_id, client_type, mail_type,customer_name,mobile_number,state,status,keywords,is_view_document,start_date,expired_date,duration) VALUES ('$email_id','$company_name', '$email_id', '$passc', 'user', '$unique_code','democlient','link','$name','$phone_no','$state','DemoClient','$keywords','no','$start_date','$expired_date','1')";
+        $q1 = "INSERT INTO users(users_name, company_name, users_email ,users_password, user_role, user_unique_id, client_type, mail_type,customer_name,mobile_number,state,status,keywords,is_view_document,start_date,expired_date,duration,all_filters) VALUES ('$email_id','$company_name', '$email_id', '$passc', 'user', '$unique_code','democlient','link','$name','$phone_no','$state','DemoClient','$keywords','yes','$start_date','$expired_date','1','ref_no,keywords,state,city,agency_department,tender_id,due_date,tender_value,tender_department,tender_type')";
      
         $sql1 = mysqli_query($con, $q1);
 
@@ -187,8 +189,9 @@ function get_results($con, $postData)
     return $result;
 }
 
-if ($result === null) {
-    echo json_encode(array("status" => "error"));
+if ($result == null) {
+     $r['message'] = "Email already exists";
+    echo json_encode(array("status" => "error", "data" => $r));
 } else {
     echo json_encode(array("status" => "success", "data" => $result));
 }

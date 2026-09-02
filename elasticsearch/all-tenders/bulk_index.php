@@ -27,7 +27,7 @@ while (true) {
             id, ref_no, tender_id, department, tender_type, city, state, pincode,
             title, description, agency_type,
             publish_date, due_date,
-            tender_value, tender_fee, tender_emd, documents, opening_date, created_at
+            tender_value, tender_fee, tender_emd, documents, opening_date, created_at, tenders
         FROM tenders_all
         ORDER BY id ASC
         LIMIT ?, ?
@@ -92,6 +92,7 @@ while (true) {
             'tender_emd'    => (float)$row['tender_emd'],
             'documents'     => $row['documents'],
             'opening_date'  => $openingDate,
+            'tenders'       => $row['tenders'],
             'created_at'    => $createdAt
         ]);
 

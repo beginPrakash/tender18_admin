@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $user_id = $_POST['user_id'];
-    $pass = md5($_POST['password']);
+    $pass = md5(trim($_POST['password']));
     $user_role = $_POST['user_role'];
     $unique_code = $_POST['unique_code'];
     $fetch = mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE  (users_name='$username' OR users_email='$email') and user_id!='$user_id'"));
@@ -87,6 +87,7 @@ if (isset($_POST['submit'])) {
             $passw = "";
 
         $q = "UPDATE `users` SET users_name='$username', users_email='$email', user_role='$user_role' $passw where user_id='$user_id' and user_unique_id='$unique_code'";
+        
         $sql = mysqli_query($con, $q);
 
         $log_qu = "INSERT INTO clients_log(`user_id`,`action_type`) VALUES ($user_id,'update')";
@@ -868,17 +869,17 @@ if (!empty($_SESSION['error'])) {
                             </div>
                         </div>
 
-                        <div class="col-xxl-12 col-md-12 hidden_fields">
+                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_tender_value" class="form-label">Filter Tender Max Value :</label>
-                                <input type="text" name="filter_tender_value" value="<?php echo htmlspecialcode_generator($fetch_users['filter_tender_value']); ?>" placeholder=" " class="form-control" id="filter_tender_value">
+                                <label for="filter_tender_min_value" class="form-label">Filter Tender Min Value :</label>
+                                <input type="text" name="filter_tender_min_value" value="<?php echo htmlspecialcode_generator($fetch_users['filter_tender_min_value']); ?>" placeholder=" " class="form-control" id="filter_tender_min_value">
                             </div>
                         </div>
 
                         <div class="col-xxl-12 col-md-12 hidden_fields">
                             <div class="col-md-6">
-                                <label for="filter_tender_min_value" class="form-label">Filter Tender Min Value :</label>
-                                <input type="text" name="filter_tender_min_value" value="<?php echo htmlspecialcode_generator($fetch_users['filter_tender_min_value']); ?>" placeholder=" " class="form-control" id="filter_tender_min_value">
+                                <label for="filter_tender_value" class="form-label">Filter Tender Max Value :</label>
+                                <input type="text" name="filter_tender_value" value="<?php echo htmlspecialcode_generator($fetch_users['filter_tender_value']); ?>" placeholder=" " class="form-control" id="filter_tender_value">
                             </div>
                         </div>
 

@@ -102,6 +102,7 @@ function get_results($con, $index, $postData)
         'ref_no' => $postData['ref_no'] ?? null,
         'tender_id' => $postData['tender_id'] ?? null,
         'due_date' => $postData['due_date'] ?? null,
+        'due_date_sort' => $postData['due_date_sort'] ?? null,
         'tender_value_from' => prefer($postData['tender_value_from'] ?? null, $userFilters['tender_value_from'] ?? null, 0),
         'tender_value_to'   => prefer($postData['tender_value_to'] ?? null, $userFilters['tender_value_to'] ?? null, 0),
         'keyword' => prefer(null, $userFilters['keywords']),

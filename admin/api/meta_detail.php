@@ -136,7 +136,17 @@ function get_results($con, $postData)
     }
 
     if(!empty($metaDepartment)){
-        $dept_data = mysqli_query($con, "SELECT `name`,`title`,`description`,`keywords`,`h1`,`content` FROM `departments` where name LIKE '%$metaDepartment%'");
+        //$dept_data = mysqli_query($con, "SELECT `name`,`title`,`description`,`keywords`,`h1`,`content` FROM `departments` where name LIKE '%$metaDepartment%'");
+        $dept_data = mysqli_query($con, "SELECT *
+FROM departments
+WHERE name LIKE '%$metaDepartment%'
+ORDER BY
+    CASE
+        WHEN LOWER(name) = '$metaDepartment' THEN 1
+        WHEN LOWER(name) LIKE '$metaDepartment %' THEN 2
+        ELSE 3
+    END,
+    name limit 1");
         $dept_result = mysqli_num_rows($dept_data);
         if ($dept_result == 1) {
             while ($row = mysqli_fetch_assoc($dept_data)) {

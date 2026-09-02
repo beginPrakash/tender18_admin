@@ -48,6 +48,7 @@ function get_results($con, $index, $postData)
         'ref_no' => $postData['ref_no'] ?? null,
         'tender_id' => $postData['tender_id'] ?? null,
         'due_date' => $postData['due_date'] ?? null,
+        'due_date_sort' => $postData['due_date_sort'] ?? null,
         'keyword' => $filter_keyword ?? null,
         'state' => $postData['state'] ?? [],
         'city' => $postData['city'] ?? [],

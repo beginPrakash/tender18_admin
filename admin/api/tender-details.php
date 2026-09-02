@@ -572,7 +572,8 @@ function get_results($con, $postData)
 
         }
 
-        $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` WHERE `ref_no`='$ref_no'  order by id desc");
+       // $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` $condition  order by id desc");
+       $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` WHERE `ref_no`='$ref_no'  order by id desc");
 
         $tender_result = mysqli_num_rows($tender_data);
 
@@ -603,7 +604,6 @@ function get_results($con, $postData)
 
         }
 
-
         // $result['sql'] = "SELECT * FROM `tenders_posts` $condition  order by id desc";
 
         if ($tender_result > 0) {
@@ -624,7 +624,6 @@ function get_results($con, $postData)
 
                 }
 
-                
                 //get tenderdetail city meta content
                 $city_sql = "SELECT content FROM tender_detail_content WHERE type = 'city'";
                 $result_citymeta = mysqli_query($con, $city_sql);
@@ -682,8 +681,8 @@ function get_results($con, $postData)
                         $related_key_array[$key]['keywords_meta'] = $keywordmeta;
                     }
                 }
-
                 $result['tenders']['tender_related_keywords'] = $related_key_array;
+
 
                 $result['tenders']['city'] = $row['city'];
 
@@ -711,11 +710,11 @@ function get_results($con, $postData)
 
                 $result['tenders']['agency'] = htmlspecialcode_generator($row['agency_type']);
 
-                $result['tenders']['publish_date'] = date('M d, Y', strtotime($row['publish_date']));
+                $result['tenders']['publish_date'] = !empty($row['publish_date']) ? date('M d, Y', strtotime($row['publish_date'])) : null;
 
-                $result['tenders']['due_date'] = date('M d, Y', strtotime($row['due_date']));
+                $result['tenders']['due_date'] = !empty($row['due_date']) ? date('M d, Y', strtotime($row['due_date'])): null;
 
-                $result['tenders']['opening_date'] = date('M d, Y', strtotime($row['opening_date']));
+                $result['tenders']['opening_date'] = !empty($row['opening_date']) ? date('M d, Y', strtotime($row['opening_date'])) : null;
 
                 $result['tenders']['is_view_document'] = $is_view_document;
 
@@ -849,7 +848,6 @@ function get_results($con, $postData)
                 $agencymeta = str_replace("(Agency)",$row['agency_type'],$row_agencymeta['content']);
                 $result['tenders']['agency_meta'] = $agencymeta;
 
-
                 if (!empty($row['state'])) {
 
                     if (!empty($location)) {
@@ -864,13 +862,12 @@ function get_results($con, $postData)
 
                 }
 
-                $tender_related_keywords = '';
+                 $tender_related_keywords = '';
                 if(!empty($row['tender_related_keywords'])){
                     $tender_related_keywords = explode(',',$row['tender_related_keywords']);
                 }
                 $related_key_array = [];
-
-                //get tenderdetail city meta content
+                //get tenderdetail keyword meta content
                 $keyw_sql = "SELECT content FROM tender_detail_content WHERE type = 'keyword'";
                 $result_keywmeta = mysqli_query($con, $keyw_sql);
                 $row_keywmeta = mysqli_fetch_assoc($result_keywmeta);
@@ -919,11 +916,11 @@ function get_results($con, $postData)
 
                 $result['tenders']['tend_agency'] = str_replace(' ', '-', htmlspecialcode_generator($row['agency_type'])).'-tenders';
 
-                $result['tenders']['publish_date'] = date('M d, Y', strtotime($row['publish_date']));
+                $result['tenders']['publish_date'] = !empty($row['publish_date']) ? date('M d, Y', strtotime($row['publish_date'])) : null;
 
-                $result['tenders']['due_date'] = date('M d, Y', strtotime($row['due_date']));
+                $result['tenders']['due_date'] = !empty($row['due_date']) ? date('M d, Y', strtotime($row['due_date'])): null;
 
-                $result['tenders']['opening_date'] = date('M d, Y', strtotime($row['opening_date']));
+                $result['tenders']['opening_date'] = !empty($row['opening_date']) ? date('M d, Y', strtotime($row['opening_date'])) : null;
 
                 $result['tenders']['is_view_document'] = '';
 

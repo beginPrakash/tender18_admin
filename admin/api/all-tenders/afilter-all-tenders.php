@@ -36,6 +36,7 @@ function get_results($con, $index, $postData)
     $filters = [
         'ref_no' => $postData['ref_no'] ?? null,
         'tender_id' => $postData['tender_id'] ?? null,
+        'due_date_sort' => $postData['due_date_sort'] ?? null,
         'due_date' => $postData['due_date'] ?? null,
         'keyword' => $filter_keyword ?? null,
         'state' => $postData['state'] ?? [],
@@ -105,8 +106,7 @@ function get_results($con, $index, $postData)
             if (!is_array($filter_keyword)) {
                 $filter_keyword = [$filter_keyword];
             }
-           
-            $highlightedResult = highlight_all_keywords($highlightedResult, $filter_keyword);
+            $highlightedResult = highlight_all_keywords($highlightedResult, $filter_keyword, '<b>', '</b>', $row['title'] . ' ' . ($row['description'] ?? ''));
 
             $result['tenders'][$count]['title'] = htmlspecialcode_generator($highlightedResult);
             $result['tenders'][$count]['city'] = $city;
@@ -202,6 +202,8 @@ function get_results($con, $index, $postData)
     } else {
         $result['links'] = [];
     }
+
+    $result['total_records'] = $total_query;
 
     return $result;
 }

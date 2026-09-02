@@ -249,3 +249,11 @@ Stack trace:
 [23-Mar-2026 16:33:32 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
 [23-Mar-2026 16:40:48 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
 [23-Mar-2026 16:43:32 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[20-Jun-2026 20:37:39 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[28-Jul-2026 19:02:48 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[28-Jul-2026 19:04:12 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[28-Jul-2026 19:13:30 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[28-Jul-2026 19:13:55 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[28-Jul-2026 19:14:55 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[28-Jul-2026 19:15:49 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[28-Jul-2026 19:17:03 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7

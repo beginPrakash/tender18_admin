@@ -6,6 +6,103 @@ include '../../elasticsearch/new-tenders/index_sync.php';
 
 error_reporting(0);
 
+/**
+ * Normalizes and parses monetary/currency values into a valid numeric format suitable for MySQL DECIMAL(15,2) columns.
+ *
+ * Requirements:
+ * - Trims whitespace.
+ * - Removes currency symbols (₹, $, €, £, Rs, INR, etc.).
+ * - Removes comma thousand separators (,).
+ * - Preserves decimal values ONLY if present in the source input (does not auto-append .00).
+ * - Returns null for invalid, empty, or non-numeric values.
+ *
+ * Examples:
+ * - "₹ 2,46,000.00" -> "246000.00"
+ * - "2,46,000.00"   -> "246000.00"
+ * - "₹2,46,000"     -> "246000"
+ * - "2,46,000"      -> "246000"
+ * - "246000"        -> "246000"
+ * - "0"             -> "0"
+ * - "" / null       -> null
+ *
+ * @param mixed $value Source monetary value from Excel cell or string/numeric input
+ * @return string|null Cleaned numeric string or null if empty/invalid
+ */
+if (!function_exists('parseTenderAmount')) {
+    function parseTenderAmount($value) {
+        if ($value === null || $value === '' || !is_scalar($value)) {
+            return null;
+        }
+
+        // Convert value to string and trim leading/trailing whitespace
+        $cleaned = trim((string)$value);
+
+        if ($cleaned === '') {
+            return null;
+        }
+
+        // Remove legacy 'value' suffix if attached during cell reading
+        if (substr($cleaned, -5) === 'value') {
+            $cleaned = substr($cleaned, 0, -5);
+            $cleaned = trim($cleaned);
+        }
+
+        if ($cleaned === '') {
+            return null;
+        }
+
+        // Remove Indian Rupee symbol (₹) and other common currency symbols / prefixes
+        $cleaned = str_replace('₹', '', $cleaned);
+        $cleaned = preg_replace('/[\x{20B9}\$€£]|(?:\b(?:Rs|INR)\b\.?)/ui', '', $cleaned);
+
+        // Remove comma thousand separators
+        $cleaned = str_replace(',', '', $cleaned);
+
+        // Trim whitespace remaining after symbol removal
+        $cleaned = trim($cleaned);
+
+        // Validate numeric format (optional negative sign, digits, optional decimal point with digits)
+        if (!preg_match('/^-?\d+(\.\d+)?$/', $cleaned)) {
+            return null;
+        }
+
+        return $cleaned;
+    }
+}
+
+function parseTenderDate($value) {
+    // Empty / NULL input
+    if ($value === null || trim((string)$value) === '') {
+        return null;
+    }
+
+    $value = trim((string)$value);
+
+    // Excel numeric date
+    if (is_numeric($value)) {
+        return date(
+            'Y-m-d',
+            PHPExcel_Shared_Date::ExcelToPHP($value)
+        );
+    }
+
+    // DD-MM-YYYY
+    $date = DateTime::createFromFormat('d-m-Y', $value);
+
+    if ($date !== false) {
+        return $date->format('Y-m-d');
+    }
+
+    // DD/MM/YYYY
+    $date = DateTime::createFromFormat('d/m/Y', $value);
+
+    if ($date !== false) {
+        return $date->format('Y-m-d');
+    }
+
+    // Invalid date
+    return null;
+}
 
 
 // Include the PHPExcel library
@@ -59,9 +156,9 @@ for ($row = 1; $row <= $highestRow; $row++) {
             if ($col == 'G' || $col == 'H' || $col == 'I') {
 
                 $rowData[] = $cellValue . "value";
-            } else {
+        } else {
 
-                $rowData[] = $cellValue;
+            $rowData[] = $cellValue;
             }
         }
     }
@@ -120,11 +217,11 @@ for ($i = 1; $i < count($results); $i++) {
 
     $tender_state = $results[$i][5];
 
-    $tender_value = $results[$i][6];
+    $tender_value = parseTenderAmount($results[$i][6]);
 
-    $tender_fee = $results[$i][7];
+    $tender_fee = parseTenderAmount($results[$i][7]);
 
-    $tender_emd = $results[$i][8];
+    $tender_emd = parseTenderAmount($results[$i][8]);
 
     $documents = $results[$i][12];
 
@@ -136,21 +233,38 @@ for ($i = 1; $i < count($results); $i++) {
 
     $tender_related_keywords = $results[$i][16];
 
+    $publish_date = parseTenderDate($results[$i][9]);
+    $due_date     = parseTenderDate($results[$i][10]);
+    $opening_date = parseTenderDate($results[$i][11]);
+
+    // Prepare dates for SQL
+    $publish_date_sql = ($publish_date === null)
+        ? "NULL"
+        : "'" . mysqli_real_escape_string($con, $publish_date) . "'";
+
+    $due_date_sql = ($due_date === null)
+        ? "NULL"
+        : "'" . mysqli_real_escape_string($con, $due_date) . "'";
+
+    $opening_date_sql = ($opening_date === null)
+    ? "NULL"
+    : "'" . mysqli_real_escape_string($con, $opening_date) . "'";
 
 
-    $publish_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][9]);
 
-    $due_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][10]);
+    // $publish_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][9]);
 
-    $opening_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][11]);
+    // $due_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][10]);
+
+    // $opening_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][11]);
 
 
 
-    $publish_date = date('Y-m-d', $publish_timestap);
+    // $publish_date = date('Y-m-d', $publish_timestap);
 
-    $due_date = date('Y-m-d', $due_timestap);
+    // $due_date = date('Y-m-d', $due_timestap);
 
-    $opening_date = date('Y-m-d', $opening_timestap);
+    // $opening_date = date('Y-m-d', $opening_timestap);
 
 
 
@@ -363,7 +477,7 @@ else {
 
         $tender_ref_no = $tender_ref_no + 1;
 
-        $q1 = "INSERT INTO tenders_posts(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`,`tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "','" . $tender_related_keywords . "')";
+        $q1 = "INSERT INTO tenders_posts(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`,`tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', " . $due_date_sql . ", '" . $tender_value . "', '" . $tender_pincode . "', " . $publish_date_sql . ", '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', " . $opening_date_sql . ",'" . $tender_related_keywords . "')";
 
         $sql1 = mysqli_query($con, $q1);
 
@@ -374,7 +488,7 @@ else {
         }
 
         //save data in all tenders table
-        $all1_query = "INSERT INTO tenders_all(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`, `tenders`, `tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', '" . $due_date . "', '" . $tender_value . "', '" . $tender_pincode . "', '" . $publish_date . "', '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', '" . $opening_date . "', 'new', '" . $tender_related_keywords . "')";
+        $all1_query = "INSERT INTO tenders_all(`title`, `tender_id`, `ref_no`, `agency_type`, `due_date`, `tender_value`, `pincode`, `publish_date`, `tender_fee`, `tender_emd`, `documents`, `city`, `state`, `department`, `description`, `tender_type`, `opening_date`, `tenders`, `tender_related_keywords`) VALUES ('" . $tender_title . "', '" . $tender_id . "', '" . $tender_ref_no . "', '" . $tender_agency . "', " . $due_date_sql . ", '" . $tender_value . "', '" . $tender_pincode . "', " . $publish_date_sql . ", '" . $tender_fee . "', '" . $tender_emd . "', '" . $documents . "', '" . $tender_city . "', '" . $tender_state . "', '" . $tender_department . "', '" . $boq_title . "', '" . $tender_type . "', " . $opening_date_sql . ", 'new', '" . $tender_related_keywords . "')";
 
         $all1_result = mysqli_query($con, $all1_query);
 

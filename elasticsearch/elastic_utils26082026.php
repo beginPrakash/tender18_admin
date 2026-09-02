@@ -844,17 +844,6 @@ function build_elastic_query(array $filters, int $page = 1, int $size = 10): arr
     }
 
     /* ---------- Final Query ---------- */
-    /* ---------- Due Date Sort ---------- */
-    $dueDateSortRule = null;
-    if (!empty($filters['due_date_sort'])) {
-        $sortOrder = strtoupper(trim($filters['due_date_sort']));
-        if ($sortOrder === 'HIGH_TO_LOW') {
-            $dueDateSortRule = ['due_date' => ['order' => 'desc']];
-        } else if ($sortOrder === 'LOW_TO_HIGH') {
-            $dueDateSortRule = ['due_date' => ['order' => 'asc']];
-        }
-    }
-
     return [
         'from' => $from,
         'size' => $size,
@@ -871,22 +860,16 @@ function build_elastic_query(array $filters, int $page = 1, int $size = 10): arr
 
             return $baseQuery;
         })(),
-        'sort' => $dueDateSortRule
+        'sort' => !empty($allKwArray)
         ? array_values(array_filter([
             $allIndiaTendersSort,
-            $dueDateSortRule
+            ['_score' => ['order' => 'desc']],
+            ['title.keyword' => ['order' => 'asc']]
           ]))
-        : (!empty($allKwArray)
-            ? array_values(array_filter([
-                $allIndiaTendersSort,
-                ['_score' => ['order' => 'desc']],
-                ['title.keyword' => ['order' => 'asc']]
-              ]))
-            : (array_merge(
-                $allIndiaTendersSort ? [$allIndiaTendersSort] : [],
-                $sort
-              ))
-          )
+        : (array_merge(
+            $allIndiaTendersSort ? [$allIndiaTendersSort] : [],
+            $sort
+          ))
 
     ];
 }
@@ -1294,34 +1277,8 @@ function build_elastic_user_query(array $filters, int $page = 1, int $size = 10)
         }
     }
 
-    /* ---------- Sorting ---------- */
-    $dueDateSortRule = null;
-    if (!empty($filters['due_date_sort'])) {
-        $sortOrder = strtoupper(trim($filters['due_date_sort']));
-        if ($sortOrder === 'HIGH_TO_LOW') {
-            $dueDateSortRule = ['due_date' => ['order' => 'desc']];
-        } else if ($sortOrder === 'LOW_TO_HIGH') {
-            $dueDateSortRule = ['due_date' => ['order' => 'asc']];
-        }
-    }
-
-    if (isset($filters['all-india-tenders']) && $filters['all-india-tenders'] === true) {
-        $sort[] = [
-            '_script' => [
-                'type' => 'number',
-                'script' => [
-                    'lang' => 'painless',
-                    'source' => "if (doc.containsKey('tenders.keyword') && doc['tenders.keyword'].size() > 0) { def val = doc['tenders.keyword'].value; if (val == 'new') return 1; if (val == 'live') return 2; } return 3;"
-                ],
-                'order' => 'asc'
-            ]
-        ];
-        if ($dueDateSortRule) {
-            $sort[] = $dueDateSortRule;
-        }
-    } else if ($dueDateSortRule) {
-        $sort[] = $dueDateSortRule;
-    } else if (!empty($allKwArray)) {
+    /* ---------- Sorting for Keyword and Words ---------- */
+    if (!empty($allKwArray)) {
         // Primary Sort: Sort by the index of the matched keyword (e.g., if "chair" is first, matches get score 0)
         $sortKeywords = buildKeywordPriority($allKwArray);
         $sort[] = [

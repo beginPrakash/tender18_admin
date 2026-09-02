@@ -21,7 +21,7 @@ $ES_INDEXES = [
         'NEW'      => 'tenders_new_dev'
     ],
     'prod' => [
-        'ALL'      => 'tenders_prod', // tenders_prod_v2
+        'ALL'      => 'tenders_prod_v4', // tenders_prod // tenders_prod_v2
         'LIVE'     => 'tenders_live_prod',
         'ARCHIVE'  => 'tenders_archive_prod',
         'NEW'      => 'tenders_new_prod'
