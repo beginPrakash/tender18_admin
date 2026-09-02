@@ -165,7 +165,7 @@ if (!empty($_SESSION['error'])) {
                                                     Edit</a>
                                             </li>
                                             <li>
-                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>clients?id='<?php echo $row['user_id']; ?>'&unique_code='<?php echo $row['user_unique_id']; ?>'" id="delete_id">
+                                                <input type="hidden" value="<?php echo ADMIN_URL; ?>clients/democlient.php?id='<?php echo $row['user_id']; ?>'&unique_code='<?php echo $row['user_unique_id']; ?>'" id="delete_id">
                                                 <a class="dropdown-item remove-item-btn" data-bs-toggle="modal" data-bs-target=".bs-example-modal-center">
                                                     <i class=" ri-delete-bin-fill align-bottom me-2 text-muted"></i>
                                                     Delete

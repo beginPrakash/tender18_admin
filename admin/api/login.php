@@ -32,7 +32,7 @@ function post_users($con, $postData)
 {
     // return $con;
     $name = $postData['name'];
-    $password = md5($postData['password']);
+    $password = md5(trim($postData['password']));
     $select = mysqli_query($con, "SELECT * FROM `users` WHERE  users_name='$name' OR users_email='$name'");
     $result_data = mysqli_num_rows($select);
     $pass = mysqli_fetch_assoc($select);

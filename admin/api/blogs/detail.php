@@ -107,11 +107,11 @@ function get_results($con, $postData)
 
                 $count = 0;
 
-                while ($row = mysqli_fetch_assoc($faq_data)) {
+                while ($row_faq = mysqli_fetch_assoc($faq_data)) {
 
-                    $result['faqs'][$count]['faq_id'] = $row['id'];
-                    $result['faqs'][$count]['title'] = $row['title'];
-                    $result['faqs'][$count]['description'] =$row['description'];
+                    $result['faqs'][$count]['faq_id'] = $row_faq['id'];
+                    $result['faqs'][$count]['title'] = $row_faq['title'];
+                    $result['faqs'][$count]['description'] =$row_faq['description'];
                     $count++;
                 }
             }else{

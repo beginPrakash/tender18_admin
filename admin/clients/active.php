@@ -16,12 +16,19 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
             window.location.href='../index.php';
             </script>";
 }
-if (isset($_GET['id']) && isset($_GET['unique_code'])) {
-    if (!empty($_GET['id']) && !empty($_GET['unique_code'])) {
-        mysqli_query($con, "DELETE FROM `users` where user_id={$_GET['id']} AND user_unique_id={$_GET['unique_code']}");
-        echo "<script>
-            window.location.href='" . ADMIN_URL . "clients/active.php';
-            </script>";
+if (!empty($_GET['id']) && !empty($_GET['unique_code'])) {
+
+    $id = $_GET['id'];
+    $unique_code = $_GET['unique_code'];
+
+    $stmt = $con->prepare("DELETE FROM users WHERE user_id = ? AND user_unique_id = ?");
+    $stmt->bind_param("is", $id, $unique_code);
+
+    if ($stmt->execute()) {
+        header("Location: " . ADMIN_URL . "clients/active.php");
+        exit;
+    } else {
+        echo $stmt->error;
     }
 }
 

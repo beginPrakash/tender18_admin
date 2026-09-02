@@ -8,7 +8,11 @@ $mapping = array(
     'settings' => array(
         'analysis' => array(
             'analyzer' => array(
-                'default' => array('type' => 'english')
+                'default' => array('type' => 'english'),
+                'minimal' => array(
+                    'tokenizer' => 'standard',
+                    'filter' => array('lowercase', 'kstem')
+                )
             )
         )
     ),
@@ -69,6 +73,10 @@ $mapping = array(
                     'keyword' => array(
                         'type' => 'keyword',
                         'ignore_above' => 256
+                    ),
+                    'minimal' => array(
+                        'type' => 'text',
+                        'analyzer' => 'minimal'
                     )
                 )
             ),
@@ -76,7 +84,13 @@ $mapping = array(
 
             // https://etenders.kerala.gov.in/...
             'description' => array(
-                'type' => 'text'
+                'type' => 'text',
+                'fields' => array(
+                    'minimal' => array(
+                        'type' => 'text',
+                        'analyzer' => 'minimal'
+                    )
+                )
             ),
 
             // local self government department LSGD

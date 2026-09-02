@@ -41,6 +41,7 @@ function get_results($con, $index, $postData)
         'ref_no' => $postData['ref_no'] ?? null,
         'tender_id' => $postData['tender_id'] ?? null,
         'due_date' => $postData['due_date'] ?? null,
+        'due_date_sort' => $postData['due_date_sort'] ?? null,
         'tender_value' => $postData['tender_value'] ?? null,
         'tender_value_to' => $postData['tender_value_to'] ?? null,
         'keyword' => $filter_keyword ?? null,

@@ -1,0 +1,11 @@
+[01-Jun-2026 14:01:53 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[01-Jun-2026 14:02:21 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[01-Jun-2026 14:02:54 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[01-Jun-2026 14:06:38 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[01-Jun-2026 14:06:53 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[01-Jun-2026 14:16:07 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[06-Jun-2026 13:27:10 UTC] PHP Notice:  Undefined index: HTTP_HOST in /home/tender18/public_html/admin/includes/connection.php on line 7
+[06-Jun-2026 18:57:10 Asia/Kolkata] PHP Warning:  mysqli_stmt_bind_param() expects parameter 1 to be mysqli_stmt, bool given in /home/tender18/public_html/elasticsearch/delete/delete-by-ref-no.php on line 82
+[06-Jun-2026 18:57:10 Asia/Kolkata] PHP Warning:  mysqli_stmt_execute() expects parameter 1 to be mysqli_stmt, bool given in /home/tender18/public_html/elasticsearch/delete/delete-by-ref-no.php on line 83
+[06-Jun-2026 18:57:10 Asia/Kolkata] PHP Warning:  mysqli_stmt_get_result() expects parameter 1 to be mysqli_stmt, bool given in /home/tender18/public_html/elasticsearch/delete/delete-by-ref-no.php on line 84
+[06-Jun-2026 18:57:10 Asia/Kolkata] PHP Warning:  mysqli_fetch_assoc() expects parameter 1 to be mysqli_result, null given in /home/tender18/public_html/elasticsearch/delete/delete-by-ref-no.php on line 85
