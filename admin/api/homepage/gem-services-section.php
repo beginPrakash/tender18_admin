@@ -67,6 +67,20 @@ function get_results($con)
     } else {
         $result['keyword'] = "No data found";
     }
+
+    $agency_services_details_data = mysqli_query($con, "SELECT * FROM `homepage_services_agency`");
+    $agency_services_details_result = mysqli_num_rows($agency_services_details_data);
+    if ($agency_services_details_result > 0) {
+        $count = 1;
+        while ($row = mysqli_fetch_assoc($agency_services_details_data)) {
+            $result['agency'][$count]['title'] = htmlspecialcode_generator($row['title']);
+            $result['agency'][$count]['link'] = $row['link'];
+            $count++;
+        }
+    } else {
+        $result['agency'] = "No data found";
+    }
+    
     $gem_services_details_data = mysqli_query($con, "SELECT * FROM `homepage_services_gem`");
     $gem_services_details_result = mysqli_num_rows($gem_services_details_data);
     if ($gem_services_details_result > 0) {

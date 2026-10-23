@@ -139,13 +139,36 @@ if (isset($_POST['submit'])) {
     //about section
     $about_title = mysqli_real_escape_string($con, $_POST['about_title']);
     $about_description = mysqli_real_escape_string($con, $_POST['about_description']);
+    $hidden_about_image = $_POST['hidden_about_image'];
     $about_link = $_POST['about_link'];
     $about_title1 = mysqli_real_escape_string($con, $_POST['about_title1']);
     $about_description1 = mysqli_real_escape_string($con, $_POST['about_description1']);
 
+    $file_about = $_FILES['about_image'];
+    $filename_about = $file_about['name'];
+    $filepath_about = $file_about['tmp_name'];
+    $fileerror_about = $file_about['error'];
+
+    if (!empty($filename_about)) {
+        if ($fileerror_about == 0) {
+            $string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            $files =  substr(str_shuffle($string), 0, 8);
+            $temp = explode(".", $filename_about);
+            $newfilename = time() . $files . '.' . end($temp);
+            $destfile = '../../uploads/images/' . $newfilename;
+            move_uploaded_file($filepath_about, $destfile);
+        }
+    }
+
+    if (!empty($filename_about)) {
+        $filevalue =  $newfilename;
+    } else {
+        $filevalue = $hidden_about_image;
+    }
+
     $query_delete = mysqli_query($con, "DELETE FROM `homepage_about`");
 
-    $q = "INSERT INTO homepage_about(`title`, `description`, `link`, `title1`, `description1`) VALUES ('$about_title', '$about_description', '$about_link', '$about_title1', '$about_description1')";
+    $q = "INSERT INTO homepage_about(`title`, `description`, `link`, `title1`, `description1`, `image`) VALUES ('$about_title', '$about_description', '$about_link', '$about_title1', '$about_description1', '$filevalue')";
     $sql1 = mysqli_query($con, $q);
 
     //gem section
@@ -203,6 +226,20 @@ if (isset($_POST['submit'])) {
         }
     }
 
+    $agency_details_title = $_POST['agency_details_title'];
+    $agency_details_link = $_POST['agency_details_link'];
+
+    $query_delete = mysqli_query($con, "DELETE FROM `homepage_services_agency`");
+
+    foreach ($agency_details_title as $key => $agency_title) {
+        if (!empty($agency_title)) {
+            $agency_title = mysqli_real_escape_string($con, $agency_title);
+            $agency_description = $agency_details_link[$key];
+            $q = "INSERT INTO homepage_services_agency(`title`, `link`) VALUES ('$agency_title', '$agency_description')";
+            $sql2 = mysqli_query($con, $q);
+        }
+    }
+
     $gem_details_title = $_POST['gem_details_title'];
 
     $query_delete = mysqli_query($con, "DELETE FROM `homepage_services_gem`");
@@ -216,16 +253,40 @@ if (isset($_POST['submit'])) {
     }
 
     //why section
+    $hidden_why_image = $_POST['hidden_why_image'];
+    $why_heading = mysqli_real_escape_string($con, $_POST['why_heading']);
     $why_title = mysqli_real_escape_string($con, $_POST['why_title']);
     $why_description = mysqli_real_escape_string($con, $_POST['why_description']);
 
     $why_details_title = $_POST['why_details_title'];
     $why_details_sub_title = $_POST['why_details_sub_title'];
 
+    $file_why = $_FILES['why_image'];
+    $filename_why = $file_why['name'];
+    $filepath_why = $file_why['tmp_name'];
+    $fileerror_why = $file_why['error'];
+
+    if (!empty($filename_why)) {
+        if ($fileerror_why == 0) {
+            $string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+            $files =  substr(str_shuffle($string), 0, 8);
+            $temp = explode(".", $filename_why);
+            $newfilename = time() . $files . '.' . end($temp);
+            $destfile = '../../uploads/images/' . $newfilename;
+            move_uploaded_file($filepath_why, $destfile);
+        }
+    }
+
+    if (!empty($filename_why)) {
+        $filevalue =  $newfilename;
+    } else {
+        $filevalue = $hidden_why_image;
+    }
+
     $query_delete = mysqli_query($con, "DELETE FROM `homepage_why_section`");
     $query_delete = mysqli_query($con, "DELETE FROM `homepage_why_details`");
 
-    $q = "INSERT INTO homepage_why_section(`title`, `description`) VALUES ('$why_title', '$why_description')";
+    $q = "INSERT INTO homepage_why_section(`image`, `heading`, `title`, `description`) VALUES ('$filevalue', '$why_heading', '$why_title', '$why_description')";
     $sql1 = mysqli_query($con, $q);
     // print_r($why_details_title);
 
@@ -235,6 +296,51 @@ if (isset($_POST['submit'])) {
             $why_description = mysqli_real_escape_string($con, $why_details_sub_title[$key]);
             $q = "INSERT INTO homepage_why_details(`title`, `icon`) VALUES ('$why_title', '$why_description')";
             // var_dump($q);
+            $sql2 = mysqli_query($con, $q);
+        }
+    }
+
+    //GeM Service Offer section
+    $gem_service_offer_section_title = mysqli_real_escape_string($con, $_POST['gem_service_offer_section_title']);
+    $gem_service_offer_section_description = mysqli_real_escape_string($con, $_POST['gem_service_offer_section_description']);
+
+    $gem_service_offer_title = $_POST['gem_service_offer_title'];
+    $gem_service_offer_sub_title = $_POST['gem_service_offer_sub_title'];
+    $hidden_gem_service_offer_image = $_POST['hidden_gem_service_offer_image'];
+
+    $query_delete = mysqli_query($con, "DELETE FROM `homepage_gem_service_offer_section`");
+    $query_delete = mysqli_query($con, "DELETE FROM `homepage_gem_service_offer`");
+
+    $q = "INSERT INTO homepage_gem_service_offer_section(`title`, `description`) VALUES ('$gem_service_offer_section_title', '$gem_service_offer_section_description')";
+    $sql1 = mysqli_query($con, $q);
+
+    foreach ($gem_service_offer_title as $key => $gem_service_offer_title) {
+        if (!empty($gem_service_offer_title)) {
+            $file = $_FILES['gem_service_offer_image'];
+            $filename = $file['name'][$key];
+            $filepath = $file['tmp_name'][$key];
+            $fileerror = $file['error'][$key];
+
+            if (!empty($filename)) {
+                if ($fileerror == 0) {
+                    $string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
+                    $files =  substr(str_shuffle($string), 0, 8);
+                    $temp = explode(".", $filename);
+                    $newfilename = time() . $files . '.' . end($temp);
+                    $destfile = '../../uploads/images/gem-service-offer/' . $newfilename;
+                    move_uploaded_file($filepath, $destfile);
+                }
+            }
+
+            if (!empty($filename)) {
+                $filevalue1 =  $newfilename;
+            } else {
+                $filevalue1 = $hidden_gem_service_offer_image[$key];
+            }
+            $gem_service_offer_title = mysqli_real_escape_string($con, $gem_service_offer_title);
+            $gem_service_offer_desc = mysqli_real_escape_string($con, $gem_service_offer_sub_title[$key]);
+
+            $q = "INSERT INTO homepage_gem_service_offer(`title`, `description` ,`image`) VALUES ('$gem_service_offer_title', '$gem_service_offer_desc', '$filevalue1')";
             $sql2 = mysqli_query($con, $q);
         }
     }
@@ -353,6 +459,7 @@ $about_description = "";
 $about_link = "";
 $about_title1 = "";
 $about_description1 = "";
+$about_image = "";
 
 
 $about_data = mysqli_query($con, "SELECT * FROM `homepage_about`");
@@ -364,6 +471,7 @@ if ($about_result == 1) {
         $about_link = $row['link'];
         $about_title1 = $row['title1'];
         $about_description1 = $row['description1'];
+        $about_image = $row['image'];
     }
 }
 
@@ -398,10 +506,15 @@ $city_services_details_result = mysqli_num_rows($city_services_details_data);
 $keyword_services_details_data = mysqli_query($con, "SELECT * FROM `homepage_services_keyword`");
 $keyword_services_details_result = mysqli_num_rows($keyword_services_details_data);
 
+$agency_services_details_data = mysqli_query($con, "SELECT * FROM `homepage_services_agency`");
+$agency_services_details_result = mysqli_num_rows($agency_services_details_data);
+
 $gem_services_details_data = mysqli_query($con, "SELECT * FROM `homepage_services_gem`");
 $gem_services_details_result = mysqli_num_rows($gem_services_details_data);
 
 //why section
+$why_image = "";
+$why_heading = "";
 $why_title = "";
 $why_description = "";
 $why_details_title = "";
@@ -412,12 +525,33 @@ $why_data = mysqli_query($con, "SELECT * FROM `homepage_why_section`");
 $why_result = mysqli_num_rows($why_data);
 if ($why_result == 1) {
     while ($row = mysqli_fetch_assoc($why_data)) {
+        $why_image = $row['image'];
+        $why_heading = $row['heading'];
         $why_title = $row['title'];
         $why_description = $row['description'];
     }
 }
 $why_details_data = mysqli_query($con, "SELECT * FROM `homepage_why_details`");
 $why_details_result = mysqli_num_rows($why_details_data);
+
+//service section
+$gem_service_offer_section_title = "";
+$gem_service_offer_section_description = "";
+$gem_service_offer_title = "";
+$gem_service_offer_sub_title = "";
+$gem_service_offer_image = "";
+
+$gem_service_offer_section_data = mysqli_query($con, "SELECT * FROM `homepage_gem_service_offer_section`");
+$gem_service_offer_section_result = mysqli_num_rows($gem_service_offer_section_data);
+if ($gem_service_offer_section_result == 1) {
+    while ($row = mysqli_fetch_assoc($gem_service_offer_section_data)) {
+        $gem_service_offer_section_title = $row['title'];
+        $gem_service_offer_section_description = $row['description'];
+    }
+}
+
+$gem_service_offer_data = mysqli_query($con, "SELECT * FROM `homepage_gem_service_offer`");
+$gem_service_offer_result = mysqli_num_rows($gem_service_offer_data);
 ?>
 
 <div class="row">
@@ -631,6 +765,20 @@ $why_details_result = mysqli_num_rows($why_details_data);
                                 <input type="text" name="about_link" class="form-control" value="<?php echo $about_link; ?>" id="about_link">
                             </div>
                         </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="about_image" class="form-label">Image: <?php if ($about_result < 1) {
+                                                                                                echo '<span class="text-danger">*</span>';
+                                                                                            } ?></label>
+                                <input class="form-control" type="file" name="about_image" id="about_image">
+                                <input type="hidden" name="hidden_about_image" value="<?php echo $about_image; ?>">
+                                <?php
+                                if (!empty($about_image)) {
+                                    echo '<img src="../../uploads/images/' . $about_image . '" class="img-thumbnail mt-2" width="100" height="100">';
+                                }
+                                ?>
+                            </div>
+                        </div>
                         <!-- <div class="col-lg-12">
                             <div class="text-start">
                                 <button type="submit" class="btn btn-primary" name="submit">Update</button>
@@ -775,6 +923,37 @@ $why_details_result = mysqli_num_rows($why_details_data);
                     </div>
                 </div>
                 <div class="card-header">
+                    <h4 class="card-title mb-0">Agency Details Section</h4>
+                </div>
+                <div class="ps-3">
+                    <button class="btn btn-success mt-3" id="add_more_agency" type="button">Add more</button>
+                </div>
+                <div class="card-body details_banner_section agency">
+                    <div class="row gy-4">
+                        <?php
+                        if ($agency_services_details_result > 0) {
+                            while ($row = mysqli_fetch_assoc($agency_services_details_data)) {
+                                $agency_details_title = $row['title'];
+                                $agency_details_link = $row['link'];
+                        ?>
+                                <div class="details-block keyword col-xxl-12 col-md-12 mt-4">
+                                    <div class="col-xxl-6 col-md-6 bg-light pt-3 pb-4 ps-2 pe-2">
+                                        <i class="ri-delete-bin-5-fill remove"></i>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="agency_details_title" class="form-label">Title : <span class="text-danger">*</span></label>
+                                            <input type="text" name="agency_details_title[]" class="form-control" value="<?php echo htmlspecialcode_generator($agency_details_title); ?>" id="agency_details_title">
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="agency_details_link" class="form-label">Link : <span class="text-danger">*</span></label>
+                                            <input type="text" name="agency_details_link[]" class="form-control" id="agency_details_link" value='<?php echo $agency_details_link; ?>'>
+                                        </div>
+                                    </div>
+                                </div>
+                        <?php }
+                        } ?>
+                    </div>
+                </div>
+                <div class="card-header">
                     <h4 class="card-title mb-0">GeM Details Section</h4>
                 </div>
                 <div class="ps-3">
@@ -832,6 +1011,26 @@ $why_details_result = mysqli_num_rows($why_details_data);
                     <div class="row gy-4">
                         <div class="col-xxl-12 col-md-12">
                             <div class="col-md-6">
+                                <label for="why_image" class="form-label">Image: <?php if ($about_result < 1) {
+                                                                                                echo '<span class="text-danger">*</span>';
+                                                                                            } ?></label>
+                                <input class="form-control" type="file" name="why_image" id="why_image">
+                                <input type="hidden" name="hidden_why_image" value="<?php echo $why_image; ?>">
+                                <?php
+                                if (!empty($why_image)) {
+                                    echo '<img src="../../uploads/images/' . $why_image . '" class="img-thumbnail mt-2" width="100" height="100">';
+                                }
+                                ?>
+                            </div>
+                        </div>
+                         <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="why_heading" class="form-label">Heading : <span class="text-danger">*</span></label>
+                                <input type="text" name="why_heading" class="form-control" value="<?php echo htmlspecialcode_generator($why_heading); ?>" id="why_heading">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
                                 <label for="why_title" class="form-label">Title : <span class="text-danger">*</span></label>
                                 <input type="text" name="why_title" class="form-control" value="<?php echo htmlspecialcode_generator($why_title); ?>" id="why_title">
                             </div>
@@ -880,6 +1079,69 @@ $why_details_result = mysqli_num_rows($why_details_data);
                         } ?>
                     </div>
                 </div>
+
+                <div class="card-header">
+                    <h4 class="card-title mb-0">GeM Service Offer Section</h4>
+                </div>
+                <div class="card-body">
+                    <div class="row gy-4">
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="gem_service_offer_section_title" class="form-label">Title : <span class="text-danger">*</span></label>
+                                <input type="text" name="gem_service_offer_section_title" class="form-control" value="<?php echo htmlspecialcode_generator($gem_service_offer_section_title); ?>" id="gem_service_offer_section_title">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="gem_service_offer_section_description" class="form-label">Description : <span class="text-danger">*</span></label>
+                                <textarea rows="3" name="gem_service_offer_section_description" class="form-control" id="gem_service_offer_section_description"><?php echo htmlspecialcode_generator($gem_service_offer_section_description); ?></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ps-3">
+                    <button class="btn btn-success mt-3" id="add_more_gem_service_offer" type="button">Add more</button>
+                </div>
+                <div class="card-body details_banner_section gem_service_offer">
+                    <div class="row gy-4">
+                        <?php
+                        if ($gem_service_offer_result > 0) {
+                            while ($row = mysqli_fetch_assoc($gem_service_offer_data)) {
+                                $gem_service_offer_title = $row['title'];
+                                $gem_service_offer_sub_title = $row['description'];
+                                $gem_service_offer_link = $row['link'];
+                                $gem_service_offer_image = $row['image'];
+                        ?>
+                                <div class="details-block service col-xxl-12 col-md-12 mt-4">
+                                    <div class="col-xxl-6 col-md-6 bg-light pt-3 pb-4 ps-2 pe-2">
+                                        <i class="ri-delete-bin-5-fill remove"></i>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="gem_service_offer_title" class="form-label">Title : <span class="text-danger">*</span></label>
+                                            <input type="text" name="gem_service_offer_title[]" class="form-control" value="<?php echo htmlspecialcode_generator($gem_service_offer_title); ?>" id="gem_service_offer_title">
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="gem_service_offer_sub_title" class="form-label">Sub Title : <span class="text-danger">*</span></label>
+                                            <textarea rows="3" name="gem_service_offer_sub_title[]" class="form-control" id="gem_service_offer_sub_title"><?php echo htmlspecialcode_generator($gem_service_offer_sub_title); ?></textarea>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="gem_service_offer_image" class="form-label">Image: <?php if ($gem_service_offer_result < 1) {
+                                                                                                                echo '<span class="text-danger">*</span>';
+                                                                                                            } ?></label>
+                                            <input class="form-control" type="file" name="gem_service_offer_image[]" id="gem_service_offer_image">
+                                            <input type="hidden" name="hidden_gem_service_offer_image[]" value="<?php echo $gem_service_offer_image; ?>">
+                                            <?php
+                                            if (!empty($gem_service_offer_image)) {
+                                                echo '<img src="../../uploads/images/gem-service-offer/' . $gem_service_offer_image . '" class="img-thumbnail mt-2" width="100" height="100">';
+                                            }
+                                            ?>
+                                        </div>
+                                    </div>
+                                </div>
+                        <?php }
+                        } ?>
+                    </div>
+                </div>
+
                 <div class="card-body">
                     <div class="row gy-4">
                         <div class="col-lg-12">
@@ -1084,6 +1346,25 @@ $why_details_result = mysqli_num_rows($why_details_data);
     });
 </script>
 <script>
+    $("#add_more_agency").click(function() {
+        // if ($(".details-block.agency").length < 8) {
+        var i = $(".details-block.agency:last-child").attr('data-id');
+        if ($(".details-block.agency:last-child").length > 0) {
+            i = parseInt(i);
+        } else {
+            i = 0;
+        }
+        i = i + 1;
+        var html = '<div class="details-block agency col-xxl-12 col-md-12 mt-4" data-id="' + i + '"><div class="col-xxl-6 col-md-6 bg-light pt-3 pb-4 ps-2 pe-2"><i class="ri-delete-bin-5-fill remove"></i><div class="col-md-6 mt-3"><label for="agency_details_title" class="form-label">Title : <span class="text-danger">*</span></label><input type="text" name="agency_details_title[]" class="form-control" id="agency_details_title"></div><div class="col-md-6 mt-3"><label for="agency_details_link" class="form-label">Link : <span class="text-danger">*</span></label><input type="text" name="agency_details_link[]" class="form-control" id="agency_details_link"></div></div></div>';
+
+        $(".details_banner_section.agency .row.gy-4").append(html);
+        // }
+    });
+    $(document).on('click', ".details-block.agency .remove", function() {
+        $(this).parent().parent().remove();
+    });
+</script>
+<script>
     $("#add_more_gem").click(function() {
         // if ($(".details-block.gem").length < 8) {
         var i = $(".details-block.gem:last-child").attr('data-id');
@@ -1099,6 +1380,25 @@ $why_details_result = mysqli_num_rows($why_details_data);
         // }
     });
     $(document).on('click', ".details-block.gem .remove", function() {
+        $(this).parent().parent().remove();
+    });
+</script>
+<script>
+    $("#add_more_gem_service_offer").click(function() {
+        if ($(".details-block.gem_service_offer").length < 4) {
+            var i = $(".details-block.service:last-child").attr('data-id');
+            if ($(".details-block.gem_service_offer:last-child").length > 0) {
+                i = parseInt(i);
+            } else {
+                i = 0;
+            }
+            i = i + 1;
+            var html = '<div class="details-block gem_service_offer col-xxl-12 col-md-12 mt-4" data-id="' + i + '"><div class="col-xxl-6 col-md-6 bg-light pt-3 pb-4 ps-2 pe-2"><i class="ri-delete-bin-5-fill remove"></i><div class="col-md-6 mt-3"><label for="gem_service_offer_title" class="form-label">Title : <span class="text-danger">*</span></label><input type="text" name="gem_service_offer_title[]" class="form-control" id="gem_service_offer_title"></div><div class="col-md-6 mt-3"><label for="gem_service_offer_sub_title" class="form-label">Sub Title : <span class="text-danger">*</span></label><textarea rows="3" name="gem_service_offer_sub_title[]" class="form-control" id="gem_service_offer_sub_title"></textarea></div><div class="col-md-6 mt-3"><label for="gem_service_offer_image" class="form-label">Image: <span class="text-danger">*</span></label><input class="form-control" type="file" name="gem_service_offer_image[]" id="gem_service_offer_image"></div></div></div>';
+
+            $(".details_banner_section.gem_service_offer .row.gy-4").append(html);
+        }
+    });
+    $(document).on('click', ".details-block.gem_service_offer .remove", function() {
         $(this).parent().parent().remove();
     });
 </script>

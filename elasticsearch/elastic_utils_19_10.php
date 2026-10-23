@@ -242,6 +242,17 @@ if (!function_exists('buildKeywordPriority')) {
 
 function highlight_get_stem_pattern($word) {
     $word = strtolower(trim($word));
+    if ($word === '') {
+        return '';
+    }
+
+    // If multi-word phrase, stem each word and join with \s+
+    if (strpos($word, ' ') !== false) {
+        $words = array_values(array_filter(array_map('trim', explode(' ', $word))));
+        $patterns = array_map('highlight_get_stem_pattern', $words);
+        return implode('\s+', $patterns);
+    }
+
     // If the word has non-alphanumeric characters, just quote it and return
     if (!preg_match('/^[a-z0-9]+$/i', $word)) {
         return preg_quote($word, '/');
@@ -267,15 +278,31 @@ function highlight_get_stem_pattern($word) {
         $singular = preg_replace('/ating$/i', 'ate', $singular);
     } elseif (preg_match('/ated$/i', $singular)) {
         $singular = preg_replace('/ated$/i', 'ate', $singular);
-    } elseif (preg_match('/ing$/i', $singular) && strlen($singular) > 6) {
+    } elseif (preg_match('/ing$/i', $singular) && strlen($singular) > 4 && !in_array($singular, ['ring', 'sing', 'wing', 'king', 'bring', 'spring', 'string', 'thing'])) {
         $singular = substr($singular, 0, -3);
-    } elseif (preg_match('/ed$/i', $singular) && strlen($singular) > 5) {
+    } elseif (preg_match('/ed$/i', $singular) && strlen($singular) > 4 && !in_array($singular, ['need', 'feed', 'seed', 'weed', 'bleed', 'speed', 'breed'])) {
         $singular = substr($singular, 0, -2);
+    }
+
+    // Strip doubled consonants from inflections (e.g. "planning" -> "plann" -> "plan", "running" -> "run", "stopped" -> "stop")
+    // Keep natural double letters like "ll", "ss", "ff"
+    if (preg_match('/([b-df-hj-np-tv-z])\1$/i', $singular) && !preg_match('/(?:ll|ss|ff)$/i', $singular)) {
+        $singular = substr($singular, 0, -1);
     }
 
     // Step 2: Determine suffixes based on singular form ending
     if ($singular === 'install') {
         return 'install(?:ation|ations|s|ed|ing|er|ers)?';
+    }
+
+    // Handle architect / architectural / architecture
+    if (preg_match('/^architect(?:ural|ure)?$/i', $singular)) {
+        return 'architect(?:s|ure|ures|ural|urally)?';
+    }
+
+    // Handle consult / consultancy / consultant / consultation
+    if (preg_match('/^consult(?:anc|ant|at)?$/i', $singular) || $singular === 'consult') {
+        return 'consult(?:ant|ants|ancy|ancies|ation|ations|ing|ed|s)?';
     }
 
     if (preg_match('/ment$/i', $singular) && strlen($singular) > 5) {
@@ -329,6 +356,11 @@ function highlight_get_stem_pattern($word) {
     }
 
     if (strlen($singular) > 3) {
+        // Check if root ends in single consonant preceded by single vowel (CVC rule like plan, stop, fit, scan, drop, rob, bid)
+        if (preg_match('/[aeiou][b-df-hj-np-tv-z]$/i', $singular) && !preg_match('/[wxy]$/i', $singular)) {
+            $c = substr($singular, -1);
+            return preg_quote($singular, '/') . '(?:' . preg_quote($c, '/') . '?(?:ed|ing|ings|er|ers)|s|ation|ations|ration|rations|eration|erations|al|als|ment|ments)?';
+        }
         return preg_quote($singular, '/') . '(?:s|ed|ing|ings|er|ers|ered|ering|erings|ation|ations|ration|rations|eration|erations|al|als|ment|ments)?';
     }
 
@@ -343,6 +375,9 @@ function highlight_search_term($text, $searchTerm, $highlightMarkup = '<b>', $cl
     
     // Generate English stemming-aware regex pattern for the search term, enforcing strict word boundaries on both ends
     $stemPattern = highlight_get_stem_pattern($searchTerm);
+    if (empty($stemPattern)) {
+        return $text;
+    }
     $regex = '/\b(' . $stemPattern . ')\b/iu';
 
     // Split the HTML into alternating tokens:
@@ -402,9 +437,10 @@ function highlight_all_keywords($text, $keywords, $markup = '<b>', $closingMarku
     }
     $flat_keywords = array_values(array_unique($flat_keywords));
 
-    // For each multi-word phrase keyword, check if ALL its words match the context (stemmed).
+    $valid_phrases = [];
     $valid_words = [];
-    
+    $matchTarget = !empty($contextText) ? strip_tags($contextText) : strip_tags($text);
+
     foreach ($flat_keywords as $phrase) {
         $phrase = trim($phrase);
         if ($phrase === '') continue;
@@ -417,45 +453,75 @@ function highlight_all_keywords($text, $keywords, $markup = '<b>', $closingMarku
         $words = array_values(array_filter(array_map('trim', explode(' ', $cleanPhrase))));
         if (empty($words)) continue;
 
-        // If it's a multi-word phrase, check if ALL words match the context (taking stemming into account)
-        $phrase_matches = true;
-        $matchTarget = !empty($contextText) ? strip_tags($contextText) : strip_tags($text);
-        foreach ($words as $word) {
+        if (count($words) === 1) {
+            $word = $words[0];
             $stemPattern = highlight_get_stem_pattern($word);
-            // Enforce strict word boundary on both ends
-            if (!preg_match('/\b(' . $stemPattern . ')\b/iu', $matchTarget)) {
-                $phrase_matches = false;
-                break;
-            }
-        }
-
-        // If the phrase matches fully, we add all its individual words to the highlight list
-        if ($phrase_matches) {
-            foreach ($words as $word) {
+            if (preg_match('/\b(' . $stemPattern . ')\b/iu', $matchTarget)) {
                 if (!in_array($word, $valid_words)) {
                     $valid_words[] = $word;
                 }
             }
         } else {
-            // Fallback: if the phrase did not match via strict stemmed logic,
-            // check if the exact phrase (or its clean version) is present in the text.
-            $cleanText = strip_tags($text);
-            $quotedWords = array_map(function($w) {
-                return preg_quote($w, '/');
-            }, $words);
-            $phraseRegex = '/\b' . implode('\s+', $quotedWords) . '\b/iu';
-            if (preg_match($phraseRegex, $cleanText)) {
-                $fullPhrase = implode(' ', $words);
-                if (!in_array($fullPhrase, $valid_words)) {
-                    $valid_words[] = $fullPhrase;
+            // Multi-word phrase: check if ALL words match the context (taking stemming into account)
+            $phrase_matches = true;
+            foreach ($words as $word) {
+                $stemPattern = highlight_get_stem_pattern($word);
+                // Enforce strict word boundary on both ends
+                if (!preg_match('/\b(' . $stemPattern . ')\b/iu', $matchTarget)) {
+                    $phrase_matches = false;
+                    break;
+                }
+            }
+
+            if ($phrase_matches) {
+                // Check if the phrase appears as an adjacent stemmed phrase in the text
+                $cleanPhraseStr = implode(' ', $words);
+                $phraseStemPattern = highlight_get_stem_pattern($cleanPhraseStr);
+                $phraseRegex = '/\b(' . $phraseStemPattern . ')\b/iu';
+
+                if (preg_match($phraseRegex, strip_tags($text))) {
+                    // Match found as adjacent phrase in text
+                    if (!in_array($cleanPhraseStr, $valid_phrases)) {
+                        $valid_phrases[] = $cleanPhraseStr;
+                    }
+                } else {
+                    // Words matched in context but are separated in text
+                    foreach ($words as $word) {
+                        if (!in_array($word, $valid_words)) {
+                            $valid_words[] = $word;
+                        }
+                    }
+                }
+            } else {
+                // Fallback: if the phrase did not match via strict stemmed logic,
+                // check if the exact phrase (or its clean version) is present in the text.
+                $cleanText = strip_tags($text);
+                $quotedWords = array_map(function($w) {
+                    return preg_quote($w, '/');
+                }, $words);
+                $phraseRegex = '/\b' . implode('\s+', $quotedWords) . '\b/iu';
+                if (preg_match($phraseRegex, $cleanText)) {
+                    $fullPhrase = implode(' ', $words);
+                    if (!in_array($fullPhrase, $valid_phrases)) {
+                        $valid_phrases[] = $fullPhrase;
+                    }
                 }
             }
         }
     }
 
-    if (empty($valid_words)) {
+    if (empty($valid_phrases) && empty($valid_words)) {
         return $text;
     }
+
+    // Sort valid phrases longest first
+    usort($valid_phrases, function ($a, $b) {
+        $lengthComparison = strlen($b) - strlen($a);
+        if ($lengthComparison !== 0) {
+            return $lengthComparison;
+        }
+        return strcmp($a, $b);
+    });
 
     // Sort valid words longest first to prevent sub-string highlight conflicts
     usort($valid_words, function ($a, $b) {
@@ -466,11 +532,22 @@ function highlight_all_keywords($text, $keywords, $markup = '<b>', $closingMarku
         return strcmp($a, $b);
     });
 
-    // Run highlight_search_term for each valid word
     $highlighted = $text;
+
+    // First highlight full phrases
+    foreach ($valid_phrases as $phrase) {
+        $highlighted = highlight_search_term($highlighted, $phrase, $markup, $closingMarkup);
+    }
+
+    // Next highlight individual words
     foreach ($valid_words as $word) {
         $highlighted = highlight_search_term($highlighted, $word, $markup, $closingMarkup);
     }
+
+    // Clean up any adjacent highlight tags separated only by whitespace (e.g. <b>word1</b> <b>word2</b> -> <b>word1 word2</b>)
+    $escapedMarkup = preg_quote($markup, '/');
+    $escapedClosing = preg_quote($closingMarkup, '/');
+    $highlighted = preg_replace('/' . $escapedClosing . '(\s+)' . $escapedMarkup . '/u', '$1', $highlighted);
 
     return $highlighted;
 }
@@ -844,6 +921,17 @@ function build_elastic_query(array $filters, int $page = 1, int $size = 10): arr
     }
 
     /* ---------- Final Query ---------- */
+    /* ---------- Due Date Sort ---------- */
+    $dueDateSortRule = null;
+    if (!empty($filters['due_date_sort'])) {
+        $sortOrder = strtoupper(trim($filters['due_date_sort']));
+        if ($sortOrder === 'HIGH_TO_LOW') {
+            $dueDateSortRule = ['due_date' => ['order' => 'desc']];
+        } else if ($sortOrder === 'LOW_TO_HIGH') {
+            $dueDateSortRule = ['due_date' => ['order' => 'asc']];
+        }
+    }
+
     return [
         'from' => $from,
         'size' => $size,
@@ -860,16 +948,22 @@ function build_elastic_query(array $filters, int $page = 1, int $size = 10): arr
 
             return $baseQuery;
         })(),
-        'sort' => !empty($allKwArray)
+        'sort' => $dueDateSortRule
         ? array_values(array_filter([
             $allIndiaTendersSort,
-            ['_score' => ['order' => 'desc']],
-            ['title.keyword' => ['order' => 'asc']]
+            $dueDateSortRule
           ]))
-        : (array_merge(
-            $allIndiaTendersSort ? [$allIndiaTendersSort] : [],
-            $sort
-          ))
+        : (!empty($allKwArray)
+            ? array_values(array_filter([
+                $allIndiaTendersSort,
+                ['_score' => ['order' => 'desc']],
+                ['title.keyword' => ['order' => 'asc']]
+              ]))
+            : (array_merge(
+                $allIndiaTendersSort ? [$allIndiaTendersSort] : [],
+                $sort
+              ))
+          )
 
     ];
 }
@@ -1277,8 +1371,34 @@ function build_elastic_user_query(array $filters, int $page = 1, int $size = 10)
         }
     }
 
-    /* ---------- Sorting for Keyword and Words ---------- */
-    if (!empty($allKwArray)) {
+    /* ---------- Sorting ---------- */
+    $dueDateSortRule = null;
+    if (!empty($filters['due_date_sort'])) {
+        $sortOrder = strtoupper(trim($filters['due_date_sort']));
+        if ($sortOrder === 'HIGH_TO_LOW') {
+            $dueDateSortRule = ['due_date' => ['order' => 'desc']];
+        } else if ($sortOrder === 'LOW_TO_HIGH') {
+            $dueDateSortRule = ['due_date' => ['order' => 'asc']];
+        }
+    }
+
+    if (isset($filters['all-india-tenders']) && $filters['all-india-tenders'] === true) {
+        $sort[] = [
+            '_script' => [
+                'type' => 'number',
+                'script' => [
+                    'lang' => 'painless',
+                    'source' => "if (doc.containsKey('tenders.keyword') && doc['tenders.keyword'].size() > 0) { def val = doc['tenders.keyword'].value; if (val == 'new') return 1; if (val == 'live') return 2; } return 3;"
+                ],
+                'order' => 'asc'
+            ]
+        ];
+        if ($dueDateSortRule) {
+            $sort[] = $dueDateSortRule;
+        }
+    } else if ($dueDateSortRule) {
+        $sort[] = $dueDateSortRule;
+    } else if (!empty($allKwArray)) {
         // Primary Sort: Sort by the index of the matched keyword (e.g., if "chair" is first, matches get score 0)
         $sortKeywords = buildKeywordPriority($allKwArray);
         $sort[] = [

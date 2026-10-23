@@ -38,7 +38,7 @@ while (true) {
         SELECT 
             id, publish_date, created_at
         FROM tenders_posts
-        WHERE publish_date IS NULL
+        WHERE publish_date IS NULL OR publish_date != DATE(created_at)
         ORDER BY id ASC
         LIMIT ?
     ";

@@ -24,6 +24,7 @@ function get_results($con)
             $result['main']['title'] = htmlspecialcode_generator($row['title']);
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
             $result['main']['link'] = $row['link'];
+            $result['main']['image'] = ADMIN_URL . 'uploads/images/' . $row['image'];
         }
     } else {
         $result['main'] = "No data found";

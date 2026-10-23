@@ -4,7 +4,7 @@
  * Supports multiple indexes & environments
  */
 
-$ES_ENV = 'dev'; // dev | prod
+$ES_ENV = 'prod'; // dev | prod
 
 /* ------------------ HOSTS ------------------ */
 $ES_HOSTS = [

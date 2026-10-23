@@ -91,9 +91,6 @@ if (isset($_GET['ftype'])) {
                     <option value="gem_city" <?php if ($ftype == "gem_city") {
                                                     echo "selected";
                                                 } ?>>GEM City Inquiry</option>
-                    <option value="gem_agency" <?php if ($ftype == "gem_agency") {
-                                                    echo "selected";
-                                                } ?>>Tender Bidding Agency Inquiry</option>                            
                 </select>
             </div>
         </div>
@@ -109,7 +106,7 @@ if (isset($_GET['ftype'])) {
                     <thead>
                         <tr>
                             <th>SR No.</th>
-                            <th>GEM State/City/Agency</th>
+                            <th>GEM State/City</th>
                             <th>Name</th>
                             <th>Company Name</th>
                             <th>Email</th>
@@ -145,8 +142,6 @@ if (isset($_GET['ftype'])) {
                                         echo "GEM State";
                                     }else if($data['type'] == 'gem_city') {
                                         echo "GEM City"; 
-                                    }else if($data['type'] == 'gem_agency') {
-                                        echo "Tender Bidding Agency"; 
                                     }?></td>
                                     <td><?php echo $data['state']; ?></td>
                                     <td><?php echo (new DateTime($data['created_at']))->format('d-m-Y H:i:s'); ?></td>

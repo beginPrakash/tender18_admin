@@ -89,5 +89,5 @@ function sync_tender_by_id($id, $index) {
 
 /* ------------------ TEST ------------------ */
 // echo "<pre>";
-// print_r(sync_tender_by_id(13544400, $index));
+// print_r(sync_tender_by_id(18809251, $index));
 // die();

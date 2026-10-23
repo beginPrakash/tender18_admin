@@ -12,9 +12,19 @@
 </style>
 <?php
 if (isset($_POST['submit'])) {
+    $query_delete = mysqli_query($con, "DELETE FROM `homepage_testimonials_section`");
+
+    $title = mysqli_real_escape_string($con, $_POST['title']);
+    $section_description = mysqli_real_escape_string($con, $_POST['description']);
+
+    $q = "INSERT INTO homepage_testimonials_section(`title`, `description`) VALUES ('$title', '$section_description')";
+    $sql1 = mysqli_query($con, $q);
+
+
     $details_title = $_POST['details_title'];
     $details_sub_title = $_POST['details_sub_title'];
     $details_description = $_POST['details_description'];
+    $details_company_name  = $_POST['company_name'];
 
     $query_delete = mysqli_query($con, "DELETE FROM `testimonials`");
 
@@ -23,7 +33,8 @@ if (isset($_POST['submit'])) {
             $title = mysqli_real_escape_string($con, $title);
             $subtitle = mysqli_real_escape_string($con, $details_sub_title[$key]);
             $description = mysqli_real_escape_string($con, $details_description[$key]);
-            $q = "INSERT INTO testimonials(`title`, `name`, `description`) VALUES ('$title', '$subtitle','$description')";
+            $company_name = mysqli_real_escape_string($con, $details_company_name[$key]);
+            $q = "INSERT INTO testimonials(`title`, `name`, `description`, `company_name`) VALUES ('$title', '$subtitle','$description','$company_name')";
             // var_dump($q);
             $sql2 = mysqli_query($con, $q);
         }
@@ -81,9 +92,22 @@ if (!empty($_SESSION['error'])) {
 <!-- end page title -->
 
 <?php
+$title = "";
+$description = "";
+
+$testimonials_section_data = mysqli_query($con, "SELECT * FROM `homepage_testimonials_section`");
+$testimonials_section_result = mysqli_num_rows($testimonials_section_data);
+if ($testimonials_section_result == 1) {
+    while ($row = mysqli_fetch_assoc($testimonials_section_data)) {
+        $title = $row['title'];
+        $description = $row['description'];
+    }
+}
+
 $details_title = "";
 $details_sub_title = "";
 $details_description = "";
+$company_name = "";
 
 $banner_details_data = mysqli_query($con, "SELECT * FROM `testimonials`");
 $banner_details_result = mysqli_num_rows($banner_details_data);
@@ -96,6 +120,24 @@ $banner_details_result = mysqli_num_rows($banner_details_data);
                 <div class="card-header">
                     <h4 class="card-title mb-0">Testimonials Section</h4>
                 </div>
+                
+                <div class="card-body">
+                    <div class="row gy-4">
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="title" class="form-label">Title : <span class="text-danger">*</span></label>
+                                <input type="text" name="title" class="form-control" value="<?php echo htmlspecialcode_generator($title); ?>" id="title">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="description" class="form-label">Sub Title : <span class="text-danger">*</span></label>
+                                <input type="text" name="description" class="form-control" value="<?php echo htmlspecialcode_generator($description); ?>" id="description">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="ps-3">
                     <button class="btn btn-success mt-3" id="add_more" type="button">Add more</button>
                 </div>
@@ -107,6 +149,7 @@ $banner_details_result = mysqli_num_rows($banner_details_data);
                                 $details_title = $row['title'];
                                 $details_sub_title = $row['name'];
                                 $details_description = $row['description'];
+                                $company_name = $row['company_name'];
                         ?>
                                 <div class="details-block col-xxl-12 col-md-12 mt-4">
                                     <div class="col-xxl-6 col-md-6 bg-light pt-3 pb-4 ps-2 pe-2">
@@ -122,6 +165,10 @@ $banner_details_result = mysqli_num_rows($banner_details_data);
                                         <div class="col-md-6 mt-3">
                                             <label for="details_sub_title" class="form-label">Name : <span class="text-danger">*</span></label>
                                             <input type="text" name="details_sub_title[]" class="form-control" id="details_sub_title" value='<?php echo htmlspecialcode_generator($details_sub_title); ?>'>
+                                        </div>
+                                        <div class="col-md-6 mt-3">
+                                            <label for="company_name" class="form-label">Company Name : </label>
+                                            <input type="text" name="company_name[]" class="form-control" id="company_name" value='<?php echo htmlspecialcode_generator($company_name); ?>'>
                                         </div>
                                     </div>
                                 </div>
@@ -171,7 +218,7 @@ $banner_details_result = mysqli_num_rows($banner_details_data);
                 i = 0;
             }
             i = i + 1;
-            var html = '<div class="details-block col-xxl-12 col-md-12 mt-4" data-id="' + i + '"><div class="col-xxl-6 col-md-6 bg-light pt-3 pb-4 ps-2 pe-2"><i class="ri-delete-bin-5-fill remove"></i><div class="col-md-6 mt-3"><label for="details_title" class="form-label">Title : <span class="text-danger">*</span></label><input type="text" name="details_title[]" class="form-control" id="details_title"></div><div class="col-md-6 mt-3"><label for="details_description" class="form-label">Description : <span class="text-danger">*</span></label><textarea name="details_description[]" rows="5" class="form-control" id="details_description"></textarea></div><div class="col-md-6 mt-3"><label for="details_sub_title" class="form-label">Name : <span class="text-danger">*</span></label><input type="text" name="details_sub_title[]" class="form-control" id="details_sub_title"></div></div></div>';
+            var html = '<div class="details-block col-xxl-12 col-md-12 mt-4" data-id="' + i + '"><div class="col-xxl-6 col-md-6 bg-light pt-3 pb-4 ps-2 pe-2"><i class="ri-delete-bin-5-fill remove"></i><div class="col-md-6 mt-3"><label for="details_title" class="form-label">Title : <span class="text-danger">*</span></label><input type="text" name="details_title[]" class="form-control" id="details_title"></div><div class="col-md-6 mt-3"><label for="details_description" class="form-label">Description : <span class="text-danger">*</span></label><textarea name="details_description[]" rows="5" class="form-control" id="details_description"></textarea></div><div class="col-md-6 mt-3"><label for="details_sub_title" class="form-label">Name : <span class="text-danger">*</span></label><input type="text" name="details_sub_title[]" class="form-control" id="details_sub_title"></div><div class="col-md-6 mt-3"><label for="company_name" class="form-label">Company Name : </label><input type="text" name="company_name[]" class="form-control" id="company_name"></div></div></div>';
 
             $(".details_banner_section .row.gy-4").append(html);
         }

@@ -204,29 +204,51 @@ function get_results($con, $postData)
 
     $tkmeta_arr = [];
 
+    // if(!empty($metaAgency)){
 
+    //     $state_data = mysqli_query($con, "SELECT `agency_type` FROM `tenders_all` where agency_type LIKE '%$metaAgency%' order by `id` desc limit 1");
+
+    //     $state_result = mysqli_num_rows($state_data);
+
+    //     if ($state_result == 1) {
+
+    //         while ($row = mysqli_fetch_assoc($state_data)) {
+
+    //             $agencymeta_arr =  $row;
+
+    //         }
+
+    //     }
+
+    // }
 
     $agencymeta_arr = [];
 
-    if(!empty($metaAgency)){
+    if (!empty($metaAgency)) {
 
-        $state_data = mysqli_query($con, "SELECT `agency_type` FROM `tenders_all` where agency_type LIKE '%$metaAgency%' order by `id` desc limit 1");
+        $sql = "SELECT agency_type
+                FROM tenders_all
+                WHERE MATCH(agency_type)
+                    AGAINST(? IN BOOLEAN MODE)
+                LIMIT 1";
 
-        $state_result = mysqli_num_rows($state_data);
+        $stmt = mysqli_prepare($con, $sql);
 
-        if ($state_result == 1) {
+        if ($stmt) {
+            $agencyTypeSearch = '+"' . $metaAgency . '"';
 
-            while ($row = mysqli_fetch_assoc($state_data)) {
+            mysqli_stmt_bind_param($stmt, "s", $agencyTypeSearch);
+            mysqli_stmt_execute($stmt);
 
-                $agencymeta_arr =  $row;
+            $agency_type_data = mysqli_stmt_get_result($stmt);
 
+            if ($agency_type_data && mysqli_num_rows($agency_type_data) > 0) {
+                $agencymeta_arr = mysqli_fetch_assoc($agency_type_data);
             }
 
+            mysqli_stmt_close($stmt);
         }
-
     }
-
-
 
     if(!empty($metaState) && !empty($metaAgency) && ($type == 'agency-state' || $type == 'state-agency')){
 

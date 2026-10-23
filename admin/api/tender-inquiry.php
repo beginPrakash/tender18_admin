@@ -39,14 +39,16 @@ function daily_alert($con, $postData)
     $email = mysqli_real_escape_string($con, $postData['email']);
     $mobile = mysqli_real_escape_string($con, $postData['mobile']);
     $state = mysqli_real_escape_string($con, $postData['state']);
+    $product_or_service = mysqli_real_escape_string($con, $postData['product_or_service']);
     $inquiry_url = mysqli_real_escape_string($con, $postData['inquiry_url']);
+    $source = mysqli_real_escape_string($con, $postData['source']);
     $client_type = $postData['client_type'] ?? '';
 
     if($client_type == 'democlient'){
         $q1 = "INSERT INTO client_demo_inquiries(`tender_id`, `name`, `company_name`, `email`, `mobile`, `state`) VALUES ('$tender_id', '$name', '$company_name', '$email', '$mobile', '$state')";
         
     }else{
-        $q1 = "INSERT INTO inquiries(`tender_id`, `name`, `company_name`, `email`, `mobile`, `state`,`type`) VALUES ('$tender_id', '$name', '$company_name', '$email', '$mobile', '$state','tender_inquiry')";
+        $q1 = "INSERT INTO inquiries(`tender_id`, `name`, `company_name`, `email`, `mobile`, `state`,`type`,`product_or_service`) VALUES ('$tender_id', '$name', '$company_name', '$email', '$mobile', '$state','tender_inquiry','$product_or_service')";
     }
     mysqli_query($con, $q1);
 
@@ -69,6 +71,7 @@ function daily_alert($con, $postData)
         'email'  => $email,
         'mobile_no'  => $mobile,
         'state'  => $state,
+        'product_or_service'  => $product_or_service,
         'description'  => '',
         'gem_state_city'  => '',
     ];
@@ -126,8 +129,11 @@ function daily_alert($con, $postData)
     $message .= '<b>Email :</b> ' . htmlspecialcode_generator($email) . '<br>';
     $message .= '<b>Mobile :</b> ' . htmlspecialcode_generator($mobile) . '<br>';
     $message .= '<b>State :</b> ' . htmlspecialcode_generator($state) . '<br>';
+    if ($source === 'homepage') {
+        $message .= '<b>Product/Service :</b> ' . htmlspecialcode_generator($product_or_service) . '<br>';
+    }
     $message .= '';
-    $subject = 'Tender Inquiry';
+    $subject = ($source === 'homepage') ? 'Free Sample Tender Alerts' : 'Tender Inquiry';
     $mail = new PHPMailer(true);
     try {
         // Server settings
@@ -164,6 +170,7 @@ function daily_alert($con, $postData)
     $result['email'] = htmlspecialcode_generator($email);
     $result['mobile'] = htmlspecialcode_generator($mobile);
     $result['state'] = htmlspecialcode_generator($state);
+    $result['product_or_service'] = htmlspecialcode_generator($product_or_service);
     $result['message'] = "Data saved";
     return $result;
 }

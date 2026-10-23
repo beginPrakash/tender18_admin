@@ -63,9 +63,10 @@ function get_results($con, $postData)
     $blog_title = str_replace("-"," ",$blog_id);
     $originalString = urldecode($blog_title);
     
-    $user_data = mysqli_query($con, "SELECT * FROM `blogs` WHERE  `title` LIKE '%$originalString%'");
+    $user_data = mysqli_query($con, "SELECT * FROM `blogs` WHERE  LOWER(TRIM(`title`)) LIKE LOWER(TRIM('$originalString'))");
+//echo "SELECT * FROM `blogs` WHERE  `LOWER(TRIM(title))` LIKE LOWER(TRIM($originalString))";exit;
 
-
+//echo "SELECT * FROM `blogs` WHERE  `title` LIKE '%$originalString%'";exit;
 
     $user_result = mysqli_num_rows($user_data);
 
@@ -99,25 +100,7 @@ function get_results($con, $postData)
 
             $result['meta']['faq_main_title'] = $row['faq_main_title'];
 
-            $faq_data = mysqli_query($con, "SELECT * FROM `blog_service_faq_meta` where `type`= 'blog' and `blog_service_id`= '$blog_id' order by id desc");
-
-            $faq_result = mysqli_num_rows($faq_data);
-
-            if ($faq_result > 0) {
-
-                $count = 0;
-
-                while ($row_faq = mysqli_fetch_assoc($faq_data)) {
-
-                    $result['faqs'][$count]['faq_id'] = $row_faq['id'];
-                    $result['faqs'][$count]['title'] = $row_faq['title'];
-                    $result['faqs'][$count]['description'] =$row_faq['description'];
-                    $count++;
-                }
-            }else{
-                $result['faqs'] = [];
-            }
-
+           
             $main_title = $row['main_title'];
 
             //get blog links
@@ -183,6 +166,26 @@ function get_results($con, $postData)
             }else{
                 $result['title_urls2'] = [];
             }
+
+            $faq_data = mysqli_query($con, "SELECT * FROM `blog_service_faq_meta` where `type`= 'blog' and `blog_service_id`= '$blog_id' order by id desc");
+
+            $faq_result = mysqli_num_rows($faq_data);
+
+            if ($faq_result > 0) {
+
+                $count = 0;
+
+                while ($row_faq = mysqli_fetch_assoc($faq_data)) {
+
+                    $result['faqs'][$count]['faq_id'] = $row_faq['id'];
+                    $result['faqs'][$count]['title'] = $row_faq['title'];
+                    $result['faqs'][$count]['description'] =$row_faq['description'];
+                    $count++;
+                }
+            }else{
+                $result['faqs'] = [];
+            }
+
 
         }
 

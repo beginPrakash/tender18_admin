@@ -136,7 +136,6 @@ function get_results($con, $postData)
     }
 
     if(!empty($metaDepartment)){
-        //$dept_data = mysqli_query($con, "SELECT `name`,`title`,`description`,`keywords`,`h1`,`content` FROM `departments` where name LIKE '%$metaDepartment%'");
         $dept_data = mysqli_query($con, "SELECT *
 FROM departments
 WHERE name LIKE '%$metaDepartment%'

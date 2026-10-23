@@ -21,6 +21,8 @@ function get_results($con)
     $whyResult = mysqli_num_rows($whyData);
     if ($whyResult == 1) {
         while ($row = mysqli_fetch_assoc($whyData)) {
+            $result['main']['heading'] = htmlspecialcode_generator($row['heading']);
+            $result['main']['image'] = ADMIN_URL . 'uploads/images/' . $row['image'];
             $result['main']['title'] = htmlspecialcode_generator($row['title']);
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
         }

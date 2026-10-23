@@ -17,6 +17,17 @@ switch ($endpoint) {
 function get_results($con)
 {
     // return $con;
+    $testimonialsSectionData = mysqli_query($con, "SELECT * FROM `homepage_testimonials_section`");
+    $testimonialsSectionResult = mysqli_num_rows($testimonialsSectionData);
+    if ($testimonialsSectionResult == 1) {
+        while ($row = mysqli_fetch_assoc($testimonialsSectionData)) {
+            $result['main']['title'] = htmlspecialcode_generator($row['title']);
+            $result['main']['description'] = htmlspecialcode_generator($row['description']);
+        }
+    } else {
+        $result['main'] = "No data found";
+    }
+    
     $testimonialsData = mysqli_query($con, "SELECT * FROM `testimonials`");
     $testimonialsResult = mysqli_num_rows($testimonialsData);
     if ($testimonialsResult > 0) {
@@ -25,6 +36,7 @@ function get_results($con)
             $result['main'][$count]['title'] = htmlspecialcode_generator($row['title']);
             $result['main'][$count]['name'] = htmlspecialcode_generator($row['name']);
             $result['main'][$count]['description'] = htmlspecialcode_generator($row['description']);
+            $result['main'][$count]['company_name'] = htmlspecialcode_generator($row['company_name']);
             $count++;
         }
     } else {
