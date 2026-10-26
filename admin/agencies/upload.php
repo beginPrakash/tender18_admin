@@ -3,8 +3,8 @@
 <?php $pages = 'agencies'; ?>
 <?php include '../includes/header.php' ?>
 <?php
-// Include the PHPExcel library
-require '../PHPExcel/Classes/PHPExcel.php';
+// Include PhpSpreadsheet (replaces PHPExcel, which does not run on PHP 8)
+require '../includes/excel.php';
 error_reporting(0);
 ?>
 <?php
@@ -32,8 +32,8 @@ if (isset($_POST['submit_excel'])) {
             if (move_uploaded_file($fileTmpName, $newFileName)) {
                 // echo 'File uploaded successfully.';
 
-                // Now you can process the Excel file using PHPExcel
-                $objPHPExcel = PHPExcel_IOFactory::load($newFileName);
+                // Now you can process the Excel file using PhpSpreadsheet
+                $objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($newFileName);
                 $worksheet = $objPHPExcel->getActiveSheet();
 
                 // $cellValue = $worksheet->getCell('A2')->getValue();
@@ -42,6 +42,7 @@ if (isset($_POST['submit_excel'])) {
                 // Get the highest row and column in the worksheet
                 $highestRow = $worksheet->getHighestRow();
                 $highestColumn = $worksheet->getHighestColumn();
+                $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
 
                 // Initialize an array to store the results
                 $results = array();
@@ -49,8 +50,8 @@ if (isset($_POST['submit_excel'])) {
                 // Loop through the rows and columns to get the data
                 for ($row = 1; $row <= $highestRow; $row++) {
                     $rowData = array();
-                    for ($col = 'A'; $col <= $highestColumn; $col++) {
-                        $cellValue = $worksheet->getCell($col . $row)->getValue();
+                    for ($col = 1; $col <= $highestColumnIndex; $col++) {
+                        $cellValue = $worksheet->getCell([$col, $row])->getValue();
                         $rowData[] = $cellValue;
                     }
                     $results[] = $rowData;

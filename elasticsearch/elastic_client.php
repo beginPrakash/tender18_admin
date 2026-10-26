@@ -29,7 +29,6 @@ function es_request($method, $path, $body = null) {
     $errno = curl_errno($ch);
     $err = curl_error($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    curl_close($ch);
     if ($errno) {
         throw new Exception('cURL error: ' . $err);
     }

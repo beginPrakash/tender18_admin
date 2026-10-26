@@ -29,7 +29,7 @@ function get_results($con)
     $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `tenders_posts` WHERE DATE(NOW()) BETWEEN DATE(publish_date) AND DATE(due_date) order by id desc "));
     $total_query = $sql_query['total'];
     $total = ceil($total_query / $limit);
-    $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
+    $page = isset($_GET['page_no']) ? max(1, (int) $_GET['page_no']) : 1;
     $offset = ($page * $limit) - $limit;
     $tender_data = mysqli_query($con, "SELECT * FROM `tenders_posts` WHERE DATE(NOW()) BETWEEN DATE(publish_date) AND DATE(due_date) order by id desc LIMIT $offset, $limit");
     $tender_result = mysqli_num_rows($tender_data);

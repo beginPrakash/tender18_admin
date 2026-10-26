@@ -36,7 +36,7 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
 }
 
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
-    $_SESSION['page_limit'] = $_GET['page-limit'];
+    $_SESSION['page_limit'] = min(100, max(1, (int)$_GET['page-limit'] ?: 10));
 }
 
 if (isset($_GET['search_term']) && !empty($_GET['search_term']) && isset($_GET['upload_date']) && !empty($_GET['upload_date'])) {
@@ -172,7 +172,7 @@ if (!empty($_SESSION['error'])) {
                 <input type="hidden" name="ids" id="ids">
                 <input type="hidden" name="upload_date" id="upload_date" value="<?php echo $upload_date; ?>">
                 <input type="hidden" name="search_term" id="search_term" value="<?php echo $_GET['search_term']; ?>">
-                <input type="hidden" name="page_no" id="page_no" value="<?php echo $_GET['page_no']; ?>">
+                <input type="hidden" name="page_no" id="page_no" value="<?php echo (int)($_GET['page_no'] ?? 1); ?>">
             </form>
 
             <div id="example_filter" class="dataTables_filter">
@@ -221,14 +221,14 @@ if (!empty($_SESSION['error'])) {
                     <tbody>
                         <?php
                          if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit'])) {
-                            $limit = $_SESSION['page_limit'];
+                            $limit = min(100, max(1, (int)$_SESSION['page_limit'] ?: 10));
                         } else {
                             $limit = 10;
                         }
 
                         $total_query = mysqli_fetch_array(mysqli_query($con, "SELECT COUNT(*) FROM `cms_customer` $condition order by `customer_id` ASC "))[0];
                         $total = ceil($total_query / $limit);
-                        $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
+                        $page = isset($_GET['page_no']) ? max(1, (int) $_GET['page_no']) : 1;
                         $offset = ($page * $limit) - $limit;
 
                         $tenders_data = mysqli_query($con, "SELECT * FROM `cms_customer` $condition order by `customer_id` ASC LIMIT $offset, $limit");

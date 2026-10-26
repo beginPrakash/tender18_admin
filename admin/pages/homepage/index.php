@@ -1109,7 +1109,6 @@ $gem_service_offer_result = mysqli_num_rows($gem_service_offer_data);
                             while ($row = mysqli_fetch_assoc($gem_service_offer_data)) {
                                 $gem_service_offer_title = $row['title'];
                                 $gem_service_offer_sub_title = $row['description'];
-                                $gem_service_offer_link = $row['link'];
                                 $gem_service_offer_image = $row['image'];
                         ?>
                                 <div class="details-block service col-xxl-12 col-md-12 mt-4">

@@ -5,7 +5,7 @@ require_once 'date_ranges.php';
 $index = ES_INDEXES['ARCHIVE'];
 
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
-    $_SESSION['page_limit'] = $_GET['page-limit'];
+    $_SESSION['page_limit'] = min(100, max(1, (int)$_GET['page-limit'] ?: 10));
 }
 
 $customer_id = base64_decode($_GET['id']);
@@ -29,14 +29,14 @@ if (!empty($_GET['date_range'])) {
 }
 
 if (!empty($_GET['page_no'])) {
-    $baseParams['page_no'] = $_GET['page_no'];
+    $baseParams['page_no'] = max(1, (int)$_GET['page_no']);
 }
 
 $baseUrl = ADMIN_URL . 'cms_tender/archive.php';
 // Pagination Utils END
 
-$page = $_GET['page_no'] ?? 1;
-$size = $_SESSION['page_limit'] ?? 10;
+$page = max(1, (int)($_GET['page_no'] ?? 1));
+$size = min(100, max(1, (int)($_SESSION['page_limit'] ?? 10) ?: 10));
 
 // Compute date ranges ONCE — reused by both get_results() and the dropdown
 $dateRangesGlobal = getMonthYearList();

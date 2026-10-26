@@ -284,7 +284,6 @@ function daily_alert($con, $postData)
 
         $curlError = curl_error($ch);
 
-        curl_close($ch);
 
 
 

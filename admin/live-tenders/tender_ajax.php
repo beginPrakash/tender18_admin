@@ -3,13 +3,13 @@ include '../includes/authentication.php';
 
 error_reporting(0);
 
-// Include the PHPExcel library
-require '../PHPExcel/Classes/PHPExcel.php';
+// Include PhpSpreadsheet (replaces PHPExcel, which does not run on PHP 8)
+require '../includes/excel.php';
 
 $newFileName = $_POST['filename'];
 
-// Now you can process the Excel file using PHPExcel
-$objPHPExcel = PHPExcel_IOFactory::load($newFileName);
+// Now you can process the Excel file using PhpSpreadsheet
+$objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($newFileName);
 $worksheet = $objPHPExcel->getActiveSheet();
 
 // $cellValue = $worksheet->getCell('A2')->getValue();
@@ -18,6 +18,7 @@ $worksheet = $objPHPExcel->getActiveSheet();
 // Get the highest row and column in the worksheet
 $highestRow = $worksheet->getHighestRow();
 $highestColumn = $worksheet->getHighestColumn();
+$highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
 
 // Initialize an array to store the results
 $results = array();
@@ -25,8 +26,8 @@ $results = array();
 // Loop through the rows and columns to get the data
 for ($row = 1; $row <= $highestRow; $row++) {
     $rowData = array();
-    for ($col = 'A'; $col <= $highestColumn; $col++) {
-        $cellValue = $worksheet->getCell($col . $row)->getValue();
+    for ($col = 1; $col <= $highestColumnIndex; $col++) {
+        $cellValue = $worksheet->getCell([$col, $row])->getValue();
         if ($cellValue === null || $cellValue === '') {
             $rowData[] = null;
         } else {
@@ -78,9 +79,9 @@ for ($i = 1; $i < count($results); $i++) {
     $boq_title = $results[$i][14];
     $tender_type = $results[$i][15];
 
-    $publish_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][9]);
-    $due_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][10]);
-    $opening_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][11]);
+    $publish_timestap = excel_date_to_timestamp($results[$i][9]);
+    $due_timestap = excel_date_to_timestamp($results[$i][10]);
+    $opening_timestap = excel_date_to_timestamp($results[$i][11]);
 
     $publish_date = date('Y-m-d', $publish_timestap);
     $due_date = date('Y-m-d', $due_timestap);

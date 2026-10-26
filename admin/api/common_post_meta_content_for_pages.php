@@ -66,20 +66,20 @@ function get_results($con,$postData)
 
 
     if(!empty($meta_arr)){
-        $result['meta']['title'] = utf8_encode($meta_arr['title']);
-        $result['meta']['description'] = utf8_encode($meta_arr['description']);
-        $result['meta']['keywords'] = utf8_encode($meta_arr['keywords']);
-        $result['meta']['h1'] = utf8_encode($meta_arr['h1']);
-        $result['meta']['content'] = utf8_encode($meta_arr['content']);
-        $result['meta']['tab_title'] = utf8_encode($meta_arr['tab_title']);
-        $result['meta']['tab_description'] = utf8_encode($meta_arr['tab_description']);
-        $result['meta']['tab_title2'] = utf8_encode($meta_arr['tab_title2']);
-        $result['meta']['tab_description2'] = utf8_encode($meta_arr['tab_description2']);
-        $result['meta']['tab_title3'] = utf8_encode($meta_arr['tab_title3']);
-        $result['meta']['tab_description3'] = utf8_encode($meta_arr['tab_description3']);
-        $result['meta']['tab_title4'] = utf8_encode($meta_arr['tab_title4']);
-        $result['meta']['tab_description4'] = utf8_encode($meta_arr['tab_description4']);
-        $result['meta']['faq_main_title'] = utf8_encode($meta_arr['faq_main_title']);
+        $result['meta']['title'] = latin1_to_utf8($meta_arr['title']);
+        $result['meta']['description'] = latin1_to_utf8($meta_arr['description']);
+        $result['meta']['keywords'] = latin1_to_utf8($meta_arr['keywords']);
+        $result['meta']['h1'] = latin1_to_utf8($meta_arr['h1']);
+        $result['meta']['content'] = latin1_to_utf8($meta_arr['content']);
+        $result['meta']['tab_title'] = latin1_to_utf8($meta_arr['tab_title']);
+        $result['meta']['tab_description'] = latin1_to_utf8($meta_arr['tab_description']);
+        $result['meta']['tab_title2'] = latin1_to_utf8($meta_arr['tab_title2']);
+        $result['meta']['tab_description2'] = latin1_to_utf8($meta_arr['tab_description2']);
+        $result['meta']['tab_title3'] = latin1_to_utf8($meta_arr['tab_title3']);
+        $result['meta']['tab_description3'] = latin1_to_utf8($meta_arr['tab_description3']);
+        $result['meta']['tab_title4'] = latin1_to_utf8($meta_arr['tab_title4']);
+        $result['meta']['tab_description4'] = latin1_to_utf8($meta_arr['tab_description4']);
+        $result['meta']['faq_main_title'] = latin1_to_utf8($meta_arr['faq_main_title']);
         
     }else{
         $result['meta'] = [];

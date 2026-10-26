@@ -32,7 +32,7 @@ function getRandomCode()
 //---------- senitize input fields ----------//
 function make_safe($variable)
 {
-    $variable = strip_tags(mysqli_real_escape_string($GLOBALS['con'], trim($variable)));
+    $variable = strip_tags(mysqli_real_escape_string($GLOBALS['con'], trim((string)$variable)));
     return $variable;
 }
 
@@ -44,6 +44,13 @@ function make_post_safe($array)
     return $_POST;
 }
 //---------- end senitize input fields ----------//
+
+//---------- ISO-8859-1 to UTF-8 ----------//
+// Same output as utf8_encode(), which is deprecated since PHP 8.2
+function latin1_to_utf8($string)
+{
+    return mb_convert_encoding((string)$string, 'UTF-8', 'ISO-8859-1');
+}
 
 //---------- get user data ----------//
 function get_user_details($user_id)
@@ -76,6 +83,10 @@ function getRandomCodeoffourlength()
 
 function htmlspecialcode_generator($string)
 {
+    // PHP 8.1+: passing null to strpos() is deprecated; null is returned unchanged as before
+    if ($string === null) {
+        return $string;
+    }
     if (strpos($string, "'")) {
         if (strpos($string, "\'")) {
             $string = str_replace("\'", "&#39;", $string);
@@ -94,7 +105,12 @@ function htmlspecialcode_generator($string)
 }
 
 function _get_user_perby_role($user_id,$key_name,$con){
-    $fetch_per = mysqli_fetch_assoc(mysqli_query($GLOBALS['con'], "SELECT `key_value` FROM `user_permission` where user_id={$user_id} AND key_name='{$key_name}'"));
+    // Empty user_id made invalid SQL; mysqli_fetch_assoc(false) is a fatal TypeError on PHP 8
+    if (empty($user_id)) {
+        return '';
+    }
+    $query = mysqli_query($GLOBALS['con'], "SELECT `key_value` FROM `user_permission` where user_id=" . (int)$user_id . " AND key_name='" . mysqli_real_escape_string($GLOBALS['con'], $key_name) . "'");
+    $fetch_per = $query ? mysqli_fetch_assoc($query) : null;
     $val = (!empty($fetch_per['key_value'])) ? $fetch_per['key_value'] : '';
     return $val;
 }

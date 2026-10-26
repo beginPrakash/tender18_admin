@@ -4,7 +4,7 @@ include '../../elasticsearch/elastic_utils.php';
 $index = ES_INDEXES['LIVE'];
 
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
-    $_SESSION['page_limit'] = $_GET['page-limit'];
+    $_SESSION['page_limit'] = min(100, max(1, (int)$_GET['page-limit'] ?: 10));
 }
 
 $customer_id = base64_decode($_GET['id']);
@@ -26,8 +26,8 @@ if (!empty($_GET['search_term'])) {
 $baseUrl = ADMIN_URL . 'cms_tender/live.php';
 // Pagination Utils END
 
-$page = $_GET['page_no'] ?? 1;
-$size = $_SESSION['page_limit'] ?? 35;
+$page = max(1, (int)($_GET['page_no'] ?? 1));
+$size = min(100, max(1, (int)($_SESSION['page_limit'] ?? 35) ?: 35));
 
 $result = get_results($con, $index, $page, $size, $customer_id);
 

@@ -82,7 +82,6 @@ function daily_alert($con, $postData)
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $curlError = curl_error($ch);
-    curl_close($ch);
 
     // Check response
     // if ($curlError) {

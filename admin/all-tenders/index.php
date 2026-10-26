@@ -48,18 +48,18 @@ $get_month_list = get_month_year_list();
 $latest_date = $get_month_list[0]['value'];
 
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
-    $_SESSION['page_limit'] = $_GET['page-limit'];
+    $_SESSION['page_limit'] = min(100, max(1, (int)$_GET['page-limit'] ?: 10));
 }
 
-$page = $_GET['page_no'] ?? 1;
-$size = $_SESSION['page_limit'] ?? 10;
+$page = max(1, (int)($_GET['page_no'] ?? 1));
+$size = min(100, max(1, (int)($_SESSION['page_limit'] ?? 10) ?: 10));
 
 
 $result = get_results($con, $index, $page, $size, $latest_date);
 
 function get_results($con, $index, $page, $size, $latest_date)
 {
-    $search = $_GET['search_term'];
+    $search = $_GET['search_term'] ?? null;
     if(isset($_GET['due_date']) && !empty($_GET['due_date'])) {
         $due_date = $_GET['due_date'];    
     } else {
@@ -68,7 +68,7 @@ function get_results($con, $index, $page, $size, $latest_date)
     
     $arr = explode('/', $due_date);
     $from = date('Y-m-d', strtotime($arr[0]));
-    $to = date('Y-m-d', strtotime($arr[1]));
+    $to = date('Y-m-d', strtotime($arr[1] ?? $arr[0]));
 
     // return $con;
     $start_date = $from;
@@ -235,7 +235,7 @@ if (!empty($_SESSION['error'])) {
                             if (isset($result['total']) && $size > $result['total']) {
                                 $size = $result['total'];
                             }
-                            $total = ceil($result['total'] / $size);
+                            $total = ceil(($result['total'] ?? 0) / $size);
 
 
                             if (!empty($result['data']) && $result['data'] > 0) {
@@ -275,7 +275,7 @@ if (!empty($_SESSION['error'])) {
                 </table>
                 <div class="row">
                     <div class="col-sm-12 col-md-5">
-                        <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing <?php if (isset($result['data']) && $result['data'] > 0) { echo ($offset + 1); } else { echo "0"; } ?> to <?php echo ($page * $size); ?> of <?php echo $result['total']; ?> entries</div>
+                        <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing <?php if (isset($result['data']) && $result['data'] > 0) { echo ($offset + 1); } else { echo "0"; } ?> to <?php echo ($page * $size); ?> of <?php echo $result['total'] ?? 0; ?> entries</div>
                     </div>
                     <div class="col-sm-12 col-md-7">
                         <?php

@@ -23,7 +23,15 @@ if (!$con) {
 }
 
 // ─── PHPExcel ────────────────────────────────────────────────────────────────
-require_once __DIR__ . '/../../admin/PHPExcel/Classes/PHPExcel.php';
+// PhpSpreadsheet (replaces PHPExcel, which does not run on PHP 8)
+require_once __DIR__ . '/../includes/excel.php';
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Border;
 
 // ─── Query ───────────────────────────────────────────────────────────────────
 $sql = "
@@ -51,7 +59,7 @@ if (!$result) {
 $totalRows = mysqli_num_rows($result);
 
 // ─── Build Excel ──────────────────────────────────────────────────────────────
-$objPHPExcel = new PHPExcel();
+$objPHPExcel = new Spreadsheet();
 
 // ── Metadata ─────────────────────────────────────────────────────────────────
 $objPHPExcel->getProperties()
@@ -70,12 +78,12 @@ $sheet->setTitle('Orphan Tenders');
 $headerStyle = [
     'font'      => ['bold' => true, 'color' => ['argb' => 'FFFFFFFF']],
     'fill'      => [
-        'type'       => PHPExcel_Style_Fill::FILL_SOLID,
-        'startcolor' => ['argb' => 'FF2D5986'],
+        'fillType'   => Fill::FILL_SOLID,
+        'startColor' => ['argb' => 'FF2D5986'],
     ],
-    'alignment' => ['horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER],
+    'alignment' => ['horizontal' => Alignment::HORIZONTAL_CENTER],
     'borders'   => [
-        'allborders' => ['style' => PHPExcel_Style_Border::BORDER_THIN],
+        'allBorders' => ['borderStyle' => Border::BORDER_THIN],
     ],
 ];
 
@@ -94,11 +102,11 @@ $colLetter = 'A';
 foreach ($columns as $colName) {
     $sheet->setCellValue($colLetter . '1', strtoupper($colName));
     $sheet->getColumnDimension($colLetter)->setAutoSize(true);
-    $colLetter++;
+    $colLetter = str_increment($colLetter);
 }
 
 // Apply header style
-$lastColLetter = chr(ord('A') + $colCount - 1);
+$lastColLetter = Coordinate::stringFromColumnIndex($colCount);
 $sheet->getStyle('A1:' . $lastColLetter . '1')->applyFromArray($headerStyle);
 
 // Freeze header row
@@ -111,7 +119,7 @@ $rowNum = 2;
 $colLetter = 'A';
 foreach ($firstRow as $value) {
     $sheet->setCellValue($colLetter . $rowNum, $value);
-    $colLetter++;
+    $colLetter = str_increment($colLetter);
 }
 $rowNum++;
 
@@ -120,7 +128,7 @@ while ($row = mysqli_fetch_assoc($result)) {
     $colLetter = 'A';
     foreach ($row as $value) {
         $sheet->setCellValue($colLetter . $rowNum, $value);
-        $colLetter++;
+        $colLetter = str_increment($colLetter);
     }
     $rowNum++;
 }
@@ -130,8 +138,8 @@ mysqli_free_result($result);
 // ── Alternating row colors ────────────────────────────────────────────────────
 $evenStyle = [
     'fill' => [
-        'type'       => PHPExcel_Style_Fill::FILL_SOLID,
-        'startcolor' => ['argb' => 'FFF0F4FA'],
+        'fillType'   => Fill::FILL_SOLID,
+        'startColor' => ['argb' => 'FFF0F4FA'],
     ],
 ];
 
@@ -150,7 +158,7 @@ $isCli = (php_sapi_name() === 'cli');
 if ($isCli) {
     // Save to disk next to this script
     $savePath = __DIR__ . '/' . $filename;
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $objWriter = IOFactory::createWriter($objPHPExcel, 'Xlsx');
     $objWriter->save($savePath);
     echo "✅ Export complete!\n";
     echo "   Total rows  : {$totalRows}\n";
@@ -166,7 +174,7 @@ if ($isCli) {
     header('Cache-Control: cache, must-revalidate');
     header('Pragma: public');
 
-    $objWriter = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel2007');
+    $objWriter = IOFactory::createWriter($objPHPExcel, 'Xlsx');
     $objWriter->save('php://output');
     exit;
 }

@@ -82,7 +82,7 @@ function parseTenderDate($value) {
     if (is_numeric($value)) {
         return date(
             'Y-m-d',
-            PHPExcel_Shared_Date::ExcelToPHP($value)
+            excel_date_to_timestamp($value)
         );
     }
 
@@ -105,9 +105,9 @@ function parseTenderDate($value) {
 }
 
 
-// Include the PHPExcel library
+// Include PhpSpreadsheet (replaces PHPExcel, which does not run on PHP 8)
 
-require '../PHPExcel/Classes/PHPExcel.php';
+require '../includes/excel.php';
 
 
 
@@ -116,9 +116,9 @@ $newFileName = $_POST['filename'];
 $new_tenders_index = ES_INDEXES['NEW'];
 $all_india_tenders_index = ES_INDEXES['ALL'];
 
-// Now you can process the Excel file using PHPExcel
+// Now you can process the Excel file using PhpSpreadsheet
 
-$objPHPExcel = PHPExcel_IOFactory::load($newFileName);
+$objPHPExcel = \PhpOffice\PhpSpreadsheet\IOFactory::load($newFileName);
 
 $worksheet = $objPHPExcel->getActiveSheet();
 
@@ -129,6 +129,8 @@ $worksheet = $objPHPExcel->getActiveSheet();
 $highestRow = $worksheet->getHighestRow();
 
 $highestColumn = $worksheet->getHighestColumn();
+
+$highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
 
 
 
@@ -144,9 +146,9 @@ for ($row = 1; $row <= $highestRow; $row++) {
 
     $rowData = array();
 
-    for ($col = 'A'; $col <= $highestColumn; $col++) {
+    for ($col = 1; $col <= $highestColumnIndex; $col++) {
 
-        $cellValue = $worksheet->getCell($col . $row)->getValue();
+        $cellValue = $worksheet->getCell([$col, $row])->getValue();
 
         if ($cellValue === null || $cellValue === '') {
 
@@ -183,7 +185,7 @@ fclose($fileHandle);
 
 
 $header_data = mysqli_query($con, "SELECT `value` FROM `settings` where `key` ='last_ref_id'");
-$header_result = mysqli_num_rows($header_data);
+$header_result = $header_data ? mysqli_num_rows($header_data) : 0;
 
 if ($header_result == 1) {
     while ($row = mysqli_fetch_assoc($header_data)) {
@@ -191,7 +193,7 @@ if ($header_result == 1) {
     }
 }
 // Free the result set immediately after use
-mysqli_free_result($header_data);
+if ($header_data) mysqli_free_result($header_data);
 
 for ($i = 1; $i < count($results); $i++) {
 
@@ -252,11 +254,11 @@ for ($i = 1; $i < count($results); $i++) {
 
 
 
-    // $publish_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][9]);
+    // $publish_timestap = excel_date_to_timestamp($results[$i][9]);
 
-    // $due_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][10]);
+    // $due_timestap = excel_date_to_timestamp($results[$i][10]);
 
-    // $opening_timestap = PHPExcel_Shared_Date::ExcelToPHP($results[$i][11]);
+    // $opening_timestap = excel_date_to_timestamp($results[$i][11]);
 
 
 
@@ -313,11 +315,11 @@ if (!empty($tender_pincode)) {
         $tender_city  = $row['city'];
         $tender_state = $row['state'];
 
-        mysqli_free_result($result);
+        if ($result) mysqli_free_result($result);
 
     } else {
 
-        mysqli_free_result($result);
+        if ($result) mysqli_free_result($result);
 
         // 2️⃣ If zipcode not found → try by CITY
         if (!empty($tender_city)) {
@@ -338,7 +340,7 @@ if (!empty($tender_pincode)) {
                 $error_print_status = true;
             }
 
-            mysqli_free_result($result2);
+            if ($result2) mysqli_free_result($result2);
 
         } else {
             $error_print_status = true;
@@ -365,7 +367,7 @@ elseif (!empty($tender_city)) {
         $error_print_status = true;
     }
 
-    mysqli_free_result($result3);
+    if ($result3) mysqli_free_result($result3);
 
 }
 elseif (!empty($tender_state)) {
@@ -382,7 +384,7 @@ elseif (!empty($tender_state)) {
         $error_print_status = true;
     }
 
-    mysqli_free_result($result4);
+    if ($result4) mysqli_free_result($result4);
 
 }
 else {
@@ -409,9 +411,9 @@ else {
 
     if (!empty($tender_agency)) {
 
-        $tenders_data = mysqli_query($con, "SELECT * FROM `tender_agencies` where `pseudo_name`='" . $tender_agency . "'");
+        $tenders_data = mysqli_query($con, "SELECT * FROM `tender_agencies` where `pseudo_name`='" . mysqli_real_escape_string($con, $tender_agency) . "'");
 
-        $tenders_result = mysqli_num_rows($tenders_data);
+        $tenders_result = $tenders_data ? mysqli_num_rows($tenders_data) : 0;
 
         if ($tenders_result > 0) {
 
@@ -423,7 +425,7 @@ else {
             $error_print_status1 = true;
         }
 
-        mysqli_free_result($tenders_data);
+        if ($tenders_data) mysqli_free_result($tenders_data);
     }
 
 
