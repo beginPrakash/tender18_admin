@@ -6,6 +6,9 @@ include '../../elasticsearch/new-tenders/index_sync.php';
 
 error_reporting(0);
 
+// Large sheets (8,000+ rows) run past PHP's default time limit; let the import finish
+set_time_limit(0);
+
 /**
  * Normalizes and parses monetary/currency values into a valid numeric format suitable for MySQL DECIMAL(15,2) columns.
  *
