@@ -569,6 +569,24 @@ function highlight_all_keywords($text, $keywords, $markup = '<b>', $closingMarku
 }
 
 
+/**
+ * Fill optional filter keys that callers may omit, so the query builders
+ * don't raise "Undefined array key" warnings on PHP 8+.
+ * Empty string matches the old behaviour of a missing key (filter skipped).
+ */
+function with_filter_defaults(array $filters): array
+{
+    return $filters + [
+        'tender_value_from' => '',
+        'tender_value_to'   => '',
+        'state'             => '',
+        'city'              => '',
+        'agency'            => '',
+        'department'        => '',
+        'tender_type'       => '',
+    ];
+}
+
 function normalize_filters_array($value, $toLower = true)
 {
     if (empty($value)) return [];
@@ -739,6 +757,7 @@ function buildDetailedWordsQuery($wordsInput)
 
 function build_elastic_query(array $filters, int $page = 1, int $size = 10): array
 {
+    $filters = with_filter_defaults($filters);
     $from = ($page - 1) * $size;
 
     $must = [];
@@ -987,6 +1006,7 @@ function build_elastic_query(array $filters, int $page = 1, int $size = 10): arr
 
 function build_elastic_wise_query(array $filters, int $page = 1, int $size = 10): array
 {
+    $filters = with_filter_defaults($filters);
     $from = ($page - 1) * $size;
 
     $filter = [];
@@ -1325,6 +1345,7 @@ function build_elastic_wise_query(array $filters, int $page = 1, int $size = 10)
 
 function build_elastic_user_query(array $filters, int $page = 1, int $size = 10): array
 {
+    $filters = with_filter_defaults($filters);
     $from = ($page - 1) * $size;
 
     $must = [];
@@ -1595,6 +1616,7 @@ function build_elastic_user_query(array $filters, int $page = 1, int $size = 10)
  */
 function build_elastic_cms_archive_query(array $filters, int $page = 1, int $size = 10): array
 {
+    $filters = with_filter_defaults($filters);
     $from = ($page - 1) * $size;
 
     $must     = [];
@@ -1686,6 +1708,7 @@ function build_elastic_cms_archive_query(array $filters, int $page = 1, int $siz
 
 function build_elastic_cms_query(array $filters, int $page = 1, int $size = 10): array
 {
+    $filters = with_filter_defaults($filters);
     $from = ($page - 1) * $size;
 
     $must = [];
@@ -1924,6 +1947,7 @@ function build_elastic_cms_query(array $filters, int $page = 1, int $size = 10):
 
 function build_elastic_admin_query(array $filters, int $page = 1, int $size = 10): array
 {
+    $filters = with_filter_defaults($filters);
     $from = ($page - 1) * $size;
     $filter = [];
     $should = [];
@@ -2033,6 +2057,7 @@ function build_elastic_admin_query(array $filters, int $page = 1, int $size = 10
 
 function build_elastic_client_query(array $filters, int $page = 1, int $size = 10): array
 {
+    $filters = with_filter_defaults($filters);
     $from = ($page - 1) * $size;
 
     $must = [];

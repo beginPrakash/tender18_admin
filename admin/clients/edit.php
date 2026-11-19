@@ -76,7 +76,7 @@ if (isset($_POST['submit'])) {
     $username = $_POST['username'];
     $email = $_POST['email'];
     $user_id = $_POST['user_id'];
-    $pass = md5(trim($_POST['password']));
+    $pass = md5(trim($_POST['password'] ?? ''));
     $user_role = $_POST['user_role'];
     $unique_code = $_POST['unique_code'];
     $fetch = mysqli_num_rows(mysqli_query($con, "SELECT * FROM users WHERE  (users_name='$username' OR users_email='$email') and user_id!='$user_id'"));

@@ -31,6 +31,13 @@ function get_wise_results($con, $index, $postData)
     $resp = es_search($index, $body);
     $data = isset($resp['body']['hits']['hits']) ? $resp['body']['hits']['hits'] : array();
 
+    // WhatsApp Number
+    $whatsapp_no = "";
+    $header_data = mysqli_query($con, "SELECT * FROM `header`");
+    if ($header_data && mysqli_num_rows($header_data) == 1) {
+        $whatsapp_no = mysqli_fetch_assoc($header_data)['whatsapp_num'];
+    }
+
     $tenders = [];
     if (isset($data) && count($data) > 0) {
         $count = 1;

@@ -44,7 +44,7 @@ if (isset($_GET['id'])) {
 
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
 
-    $_SESSION['page_limit'] = $_GET['page-limit'];
+    $_SESSION['page_limit'] = min(100, max(1, (int)$_GET['page-limit'] ?: 10));
 
 }
 
@@ -438,7 +438,7 @@ if (!empty($_SESSION['error'])) {
 
                         if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit'])) {
 
-                            $limit = $_SESSION['page_limit'];
+                            $limit = min(100, max(1, (int)$_SESSION['page_limit'] ?: 10));
 
                         } else {
 
@@ -452,7 +452,7 @@ if (!empty($_SESSION['error'])) {
 
                         $total = ceil($total_query / $limit);
 
-                        $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
+                        $page = isset($_GET['page_no']) ? max(1, (int) $_GET['page_no']) : 1;
 
                         $offset = ($page * $limit) - $limit;
 

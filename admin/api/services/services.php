@@ -69,7 +69,7 @@ function get_results($con)
 
     $total = ceil($total_query / $limit);
 
-    $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
+    $page = isset($_GET['page_no']) ? max(1, (int) $_GET['page_no']) : 1;
 
     if (empty($page) || $page < 1) {
 

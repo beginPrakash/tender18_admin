@@ -78,7 +78,6 @@ function daily_alert($con, $postData)
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     $curlError = curl_error($ch);
-    curl_close($ch);
 
 
     $mai_data = mysqli_query($con, "SELECT * FROM `smtp_management` where id = 1");

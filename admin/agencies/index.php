@@ -88,7 +88,7 @@ if (isset($_POST['submit_excel'])) {
 ?>
 <?php
 if (isset($_GET['page-limit']) && !empty($_GET['page-limit'])) {
-    $_SESSION['page_limit'] = $_GET['page-limit'];
+    $_SESSION['page_limit'] = min(100, max(1, (int)$_GET['page-limit'] ?: 10));
 }
 ?>
 <?php
@@ -230,14 +230,14 @@ if (!empty($_SESSION['error'])) {
                     <tbody>
                         <?php
                         if (isset($_SESSION['page_limit']) && !empty($_SESSION['page_limit'])) {
-                            $limit = $_SESSION['page_limit'];
+                            $limit = min(100, max(1, (int)$_SESSION['page_limit'] ?: 10));
                         } else {
                             $limit = 10;
                         }
                         $total_query = mysqli_fetch_array(mysqli_query($con, "SELECT COUNT(*) FROM `tender_agencies` $condition order by `id` DESC "))[0];
                         // print_r($total_query);
                         $total = ceil($total_query / $limit);
-                        $page = isset($_GET['page_no']) ? abs((int) $_GET['page_no']) : 1;
+                        $page = isset($_GET['page_no']) ? max(1, (int) $_GET['page_no']) : 1;
                         $offset = ($page * $limit) - $limit;
 
                         $tenders_data = mysqli_query($con, "SELECT * FROM `tender_agencies` $condition order by `id` DESC LIMIT $offset, $limit");
