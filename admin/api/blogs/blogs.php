@@ -107,9 +107,7 @@ function get_results($con)
 
             }
 
-            $url_title = str_replace(" ","-",$row['title']);
-
-            $url_title = rtrim($url_title, "-");
+            $url_title = !empty($row['slug']) ? $row['slug'] : make_slug($row['title']);
 
             $result['blogs'][$count]['blog_id'] = $row['id'];
 

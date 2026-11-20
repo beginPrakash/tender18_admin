@@ -34,6 +34,14 @@ if (isset($_POST['submit'])) {
         $hidden_blog_image = $_POST['hidden_blog_image'];
         $blog_id = $_POST['blog_id']; 
         $title = mysqli_real_escape_string($con, $_POST['title']);
+        $slug = make_slug($_POST['slug'] ?? '');
+        $slug_error = '';
+        if ($slug === '') {
+            $slug_error = 'Please enter a valid slug.';
+        } elseif (blog_slug_exists($con, $slug, (int) trim($blog_id, "'\""))) {
+            $slug_error = 'The slug "' . htmlspecialchars($slug) . '" is already used by another blog. Please choose a different slug.';
+        }
+        $slug = mysqli_real_escape_string($con, $slug);
         $description = $_POST['description'];
         $file = $_FILES['blog_image'];
         $filename = $file['name'];
@@ -51,6 +59,9 @@ if (isset($_POST['submit'])) {
         $con_desc = preg_replace('/(<a\s+[^>]*)(\w+)="([^"]*)"/', '$1$2=$3', $description);
         $con_desc =mysqli_real_escape_string($con, $con_desc);
         $faq_main_title = mysqli_real_escape_string($con, $_POST['faq_main_title']);
+    if ($slug_error !== '') {
+        $_SESSION['error'] = $slug_error;
+    } else {
         if (!empty($filename)) {
             if ($fileerror == 0) {
                 $string = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz';
@@ -67,7 +78,7 @@ if (isset($_POST['submit'])) {
         } else {
             $filevalue = $hidden_blog_image;
         }  
-        $q = "UPDATE `blogs` SET title='$title', description='$con_desc', blog_image='$filevalue', main_title='$main_title', title_urls='$link_arr', main_title1='$main_title1', title_urls1='$link_arr1', main_title2='$main_title2', title_urls2='$link_arr2',faq_main_title='$faq_main_title',meta_title='$meta_title', meta_description='$meta_description' where id='$blog_id'";
+        $q = "UPDATE `blogs` SET title='$title', slug='$slug', description='$con_desc', blog_image='$filevalue', main_title='$main_title', title_urls='$link_arr', main_title1='$main_title1', title_urls1='$link_arr1', main_title2='$main_title2', title_urls2='$link_arr2',faq_main_title='$faq_main_title',meta_title='$meta_title', meta_description='$meta_description' where id='$blog_id'";
         // var_dump($q);
         $sql = mysqli_query($con, $q);
 
@@ -88,6 +99,7 @@ if (isset($_POST['submit'])) {
         } else {
             $_SESSION['error'] = 'Something went wrong.';
         }
+    }
 }
 ?>
 <?php
@@ -149,6 +161,13 @@ if (!empty($_SESSION['error'])) {
                             <div class="col-md-6">
                                 <label for="title" class="form-label">Title : <span class="text-danger">*</span></label>
                                 <input type="text" name="title" placeholder="Enter Title " class="form-control" id="title" value="<?php echo $fetch_blogs['title']; ?>">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="slug" class="form-label">Slug : <span class="text-danger">*</span></label>
+                                <input type="text" name="slug" placeholder="enter-blog-slug" class="form-control" id="slug" data-auto="0" maxlength="200" autocomplete="off" value="<?php echo htmlspecialchars($fetch_blogs['slug'] ?? ''); ?>">
+                                <small class="text-muted d-block mt-1">URL: /blog-details/<span id="slug_preview">…</span> &mdash; lowercase letters, numbers and dashes only; must be unique. Changing it changes the live URL.</small>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -442,11 +461,13 @@ if (!empty($_SESSION['error'])) {
     </div>
 </div>
 <?php include "../includes/footer.php" ?>
+<script src="blog-slug.js?v=1"></script>
 <script>
     $(document).ready(function() {
         $('#blog_form').validate({
             rules: {
                 'title': "required",
+                'slug': blogSlugRule(<?php echo (int) trim($_GET['id'] ?? 0, "'\""); ?>),
                 'description': "required",
             },
             

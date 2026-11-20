@@ -32,6 +32,13 @@ if (isset($_POST['submit'])) {
     $main_title2 = $_POST['main_title2'];
     $link_arr2 = $_POST['link_arr2'];
     $title = mysqli_real_escape_string($con, $_POST['title']);
+    // Slug: use the one typed in the form, else build it from the title.
+    // The form already checks uniqueness; if it was taken meanwhile, add -2, -3 ...
+    $slug = make_slug($_POST['slug'] ?? '');
+    if ($slug === '') {
+        $slug = make_slug($_POST['title']);
+    }
+    $slug = mysqli_real_escape_string($con, unique_blog_slug($con, $slug));
     $description = $_POST['description'];
     $file = $_FILES['blog_image'];
     $filename = $file['name'];
@@ -62,7 +69,11 @@ if (isset($_POST['submit'])) {
     }
     $created_by = $_SESSION['user_id']; 
     $meta_title = mysqli_real_escape_string($con, $_POST['meta_title']);
-        $q = "INSERT INTO blogs(`title`, `description`, `blog_image`, `created_by`,`main_title`,`title_urls`,`main_title1`,`title_urls1`,`main_title2`,`title_urls2`,`faq_main_title`,`meta_title`,`meta_description`) VALUES ('$title', '$con_desc', '$filevalue',$created_by,'$main_title','$link_arr','$main_title1','$link_arr1','$main_title2','$link_arr2','$faq_main_title','$meta_title','$meta_description')";
+    if ($slug === '') {
+        $sql = false;
+        $_SESSION['error'] = 'Please enter a valid slug.';
+    } else {
+        $q = "INSERT INTO blogs(`title`, `slug`, `description`, `blog_image`, `created_by`,`main_title`,`title_urls`,`main_title1`,`title_urls1`,`main_title2`,`title_urls2`,`faq_main_title`,`meta_title`,`meta_description`) VALUES ('$title', '$slug', '$con_desc', '$filevalue',$created_by,'$main_title','$link_arr','$main_title1','$link_arr1','$main_title2','$link_arr2','$faq_main_title','$meta_title','$meta_description')";
 
         $sql = mysqli_query($con, $q);
 
@@ -85,6 +96,7 @@ if (isset($_POST['submit'])) {
         } else {
             $_SESSION['error'] = 'Something went wrong.';
         }
+    }
 }
 ?>
 <?php
@@ -142,6 +154,13 @@ if (!empty($_SESSION['error'])) {
                             <div class="col-md-6">
                                 <label for="title" class="form-label">Title : <span class="text-danger">*</span></label>
                                 <input type="text" name="title" placeholder="Enter Title " class="form-control" id="title">
+                            </div>
+                        </div>
+                        <div class="col-xxl-12 col-md-12">
+                            <div class="col-md-6">
+                                <label for="slug" class="form-label">Slug : <span class="text-danger">*</span></label>
+                                <input type="text" name="slug" placeholder="enter-blog-slug" class="form-control" id="slug" data-auto="1" maxlength="200" autocomplete="off">
+                                <small class="text-muted d-block mt-1">URL: /blog-details/<span id="slug_preview">…</span> &mdash; lowercase letters, numbers and dashes only; must be unique.</small>
                             </div>
                         </div>
                         <div class="col-xxl-12 col-md-12">
@@ -335,11 +354,13 @@ if (!empty($_SESSION['error'])) {
     </div>
 </div>
 <?php include "../includes/footer.php" ?>
+<script src="blog-slug.js?v=1"></script>
 <script>
 $(document).ready(function() {
         $('#blog_form').validate({
             rules: {
                 'title': "required",
+                'slug': blogSlugRule(0),
                 'description': "required",
                 'blog_image': "required",
             },

@@ -58,12 +58,23 @@ function get_results($con, $postData)
 
 {
 
-    $blog_id = $postData['id'];
+    $param = urldecode((string) ($postData['id'] ?? ''));
 
-    $blog_title = str_replace("-"," ",$blog_id);
-    $originalString = urldecode($blog_title);
-    
-    $user_data = mysqli_query($con, "SELECT * FROM `blogs` WHERE  LOWER(TRIM(`title`)) LIKE LOWER(TRIM('$originalString'))");
+    // 1) Look up by slug
+    $slug = make_slug($param);
+    $stmt = mysqli_prepare($con, "SELECT * FROM `blogs` WHERE `slug` = ? LIMIT 1");
+    mysqli_stmt_bind_param($stmt, 's', $slug);
+    mysqli_stmt_execute($stmt);
+    $user_data = mysqli_stmt_get_result($stmt);
+
+    // 2) Old links were the title with spaces turned into dashes ("What-Is-EMD-in-Tender")
+    if (mysqli_num_rows($user_data) !== 1) {
+        $old_title = trim(str_replace("-", " ", $param));
+        $stmt = mysqli_prepare($con, "SELECT * FROM `blogs` WHERE LOWER(TRIM(`title`)) = LOWER(?) LIMIT 1");
+        mysqli_stmt_bind_param($stmt, 's', $old_title);
+        mysqli_stmt_execute($stmt);
+        $user_data = mysqli_stmt_get_result($stmt);
+    }
 //echo "SELECT * FROM `blogs` WHERE  `LOWER(TRIM(title))` LIKE LOWER(TRIM($originalString))";exit;
 
 //echo "SELECT * FROM `blogs` WHERE  `title` LIKE '%$originalString%'";exit;
@@ -89,6 +100,8 @@ function get_results($con, $postData)
             $blog_id = $row['id'];
 
             $result['main']['title'] = htmlspecialcode_generator($row['title']);
+
+            $result['main']['slug'] = $row['slug'];
 
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
 

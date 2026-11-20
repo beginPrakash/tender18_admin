@@ -220,3 +220,44 @@ function highlight_keywords_in_text($text, $keywords)
 
     return $highlighted;
 }
+
+/**
+ * Build a URL slug: lowercase, only a-z, 0-9 and single dashes.
+ */
+function make_slug($text)
+{
+    $text = html_entity_decode((string) $text, ENT_QUOTES, 'UTF-8');
+    $text = strtolower(trim($text));
+    $text = str_replace('&', ' and ', $text);
+    $text = preg_replace('/[^a-z0-9]+/', '-', $text);
+    $text = trim($text, '-');
+    return substr($text, 0, 200);
+}
+
+/**
+ * True when another blog already uses $slug. $exclude_id skips the blog being edited.
+ */
+function blog_slug_exists($con, $slug, $exclude_id = 0)
+{
+    $stmt = mysqli_prepare($con, "SELECT id FROM `blogs` WHERE `slug` = ? AND `id` != ? LIMIT 1");
+    $exclude_id = (int) $exclude_id;
+    mysqli_stmt_bind_param($stmt, 'si', $slug, $exclude_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    $exists = mysqli_stmt_num_rows($stmt) > 0;
+    mysqli_stmt_close($stmt);
+    return $exists;
+}
+
+/**
+ * Return $slug, or $slug-2, $slug-3 ... if it is already taken.
+ */
+function unique_blog_slug($con, $slug, $exclude_id = 0)
+{
+    $candidate = $slug;
+    $i = 2;
+    while (blog_slug_exists($con, $candidate, $exclude_id)) {
+        $candidate = $slug . '-' . $i++;
+    }
+    return $candidate;
+}
