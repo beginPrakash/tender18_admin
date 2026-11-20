@@ -1,6 +1,16 @@
 // Slug field behaviour for blogs/add.php and blogs/edit.php.
 // #slug[data-auto="1"] follows the title until the user edits the slug by hand.
+//
+// Uniqueness is checked in the background (check_slug.php) while typing, and the
+// result is fed to a synchronous validation rule. We deliberately do NOT use
+// jQuery Validate's "remote" rule: when a remote check is still pending at submit
+// time, the plugin swallows the first click on Submit and the form isn't saved.
+// The server checks uniqueness again on save.
 (function ($) {
+    var blogId = 0;
+    var taken = {};   // slug -> error message, for slugs the server reported as used
+    var checked = {}; // slug -> true once the server answered
+
     function makeSlug(text) {
         return String(text || '')
             .toLowerCase()
@@ -8,6 +18,28 @@
             .replace(/[^a-z0-9]+/g, '-')
             .replace(/^-+|-+$/g, '')
             .substring(0, 200);
+    }
+
+    $.validator.addMethod('slugFree', function (value) {
+        return !taken[value];
+    }, function (params, element) {
+        return taken[$(element).val()] || 'This slug is already used by another blog.';
+    });
+
+    function checkSlug(slug) {
+        if (!slug || checked[slug]) {
+            $('#slug').valid();
+            return;
+        }
+        $.getJSON('check_slug.php', { slug: slug, id: blogId }).done(function (res) {
+            checked[slug] = true;
+            if (res === true) {
+                delete taken[slug];
+            } else {
+                taken[slug] = res;
+            }
+            if ($('#slug').val() === slug) $('#slug').valid();
+        });
     }
 
     $(function () {
@@ -20,9 +52,7 @@
         function refresh() {
             $preview.text($slug.val() || '…');
             clearTimeout(timer);
-            timer = setTimeout(function () {
-                if ($slug.val() !== '') $slug.valid();
-            }, 400);
+            timer = setTimeout(function () { checkSlug($slug.val()); }, 400);
         }
 
         $title.on('input', function () {
@@ -49,17 +79,8 @@
     });
 
     // jQuery Validate rule shared by both forms
-    window.blogSlugRule = function (blogId) {
-        return {
-            required: true,
-            remote: {
-                url: 'check_slug.php',
-                type: 'get',
-                data: {
-                    slug: function () { return $('#slug').val(); },
-                    id: blogId || 0
-                }
-            }
-        };
+    window.blogSlugRule = function (id) {
+        blogId = id || 0;
+        return { required: true, slugFree: true };
     };
 })(jQuery);

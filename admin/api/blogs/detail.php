@@ -103,6 +103,25 @@ function get_results($con, $postData)
 
             $result['main']['slug'] = $row['slug'];
 
+            // Author, dates, tags
+            $author = null;
+            if (!empty($row['author_id'])) {
+                $author = mysqli_fetch_assoc(mysqli_query($con, "SELECT name, designation, bio FROM `blog_authors` WHERE id = " . (int) $row['author_id']));
+            }
+            $result['main']['author'] = [
+                'name' => $author['name'] ?? 'Tender18 Team',
+                'designation' => $author['designation'] ?? '',
+                'bio' => $author['bio'] ?? '',
+            ];
+            $publish_date = $row['publish_date'] ?: date('Y-m-d', strtotime($row['created_at']));
+            $result['main']['publish_date'] = $publish_date;
+            $result['main']['publish_date_display'] = format_blog_date($publish_date);
+            $result['main']['updated_at'] = date('Y-m-d', strtotime($row['updated_at']));
+            $result['main']['reading_minutes'] = max(1, (int) ceil(str_word_count(strip_tags(html_entity_decode($row['description']))) / 200));
+            $result['main']['tags'] = array_map(function ($t) {
+                return ['name' => $t['name'], 'slug' => $t['slug']];
+            }, get_blog_tags($con, $row['id']));
+
             $result['main']['description'] = htmlspecialcode_generator($row['description']);
 
             $result['main']['meta_title'] = $row['meta_title'];

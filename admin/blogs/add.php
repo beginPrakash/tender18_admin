@@ -79,6 +79,7 @@ if (isset($_POST['submit'])) {
 
         if ($sql) {
             $last_id = mysqli_insert_id($con);
+            save_blog_meta($con, $last_id, $_POST);
             $terms_details_title = $_POST['terms_details_title'];
             $terms_details_description = $_POST['terms_details_description'];
             foreach ($terms_details_title as $key => $title) {
@@ -342,6 +343,13 @@ if (!empty($_SESSION['error'])) {
                             </div>
                         </div>
 
+                        <?php
+                        $meta_author_id = 0;      // optional: empty = Tender18 Team
+                        $meta_publish_date = '';  // optional: empty = today
+                        $meta_tags = [];
+                        include '_meta_fields.php';
+                        ?>
+
                         <div class="col-lg-12">
                             <div class="text-start">
                                 <button type="submit" class="btn btn-primary" name="submit">Submit</button>
@@ -354,7 +362,7 @@ if (!empty($_SESSION['error'])) {
     </div>
 </div>
 <?php include "../includes/footer.php" ?>
-<script src="blog-slug.js?v=1"></script>
+<script src="blog-slug.js?v=2"></script>
 <script>
 $(document).ready(function() {
         $('#blog_form').validate({

@@ -81,6 +81,9 @@ if (isset($_POST['submit'])) {
         $q = "UPDATE `blogs` SET title='$title', slug='$slug', description='$con_desc', blog_image='$filevalue', main_title='$main_title', title_urls='$link_arr', main_title1='$main_title1', title_urls1='$link_arr1', main_title2='$main_title2', title_urls2='$link_arr2',faq_main_title='$faq_main_title',meta_title='$meta_title', meta_description='$meta_description' where id='$blog_id'";
         // var_dump($q);
         $sql = mysqli_query($con, $q);
+        if ($sql) {
+            save_blog_meta($con, trim($blog_id, "'\""), $_POST);
+        }
 
         $query_delete2 = mysqli_query($con, "DELETE FROM `blog_service_faq_meta` where `type`='blog' and `blog_service_id`='$blog_id'");
         $terms_details_title = $_POST['terms_details_title'];
@@ -449,6 +452,13 @@ if (!empty($_SESSION['error'])) {
                             </div>
                         </div>
 
+                        <?php
+                        $meta_author_id = (int) ($fetch_blogs['author_id'] ?? 0);
+                        $meta_publish_date = $fetch_blogs['publish_date'] ?? '';
+                        $meta_tags = array_column(get_blog_tags($con, $fetch_blogs['id']), 'name');
+                        include '_meta_fields.php';
+                        ?>
+
                         <div class="col-lg-12">
                             <div class="text-start">
                                 <button type="submit" class="btn btn-primary" name="submit">Submit</button>
@@ -461,7 +471,7 @@ if (!empty($_SESSION['error'])) {
     </div>
 </div>
 <?php include "../includes/footer.php" ?>
-<script src="blog-slug.js?v=1"></script>
+<script src="blog-slug.js?v=2"></script>
 <script>
     $(document).ready(function() {
         $('#blog_form').validate({

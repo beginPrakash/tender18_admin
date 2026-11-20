@@ -148,6 +148,18 @@
                             <span data-key="t-dashboards">Blogs</span>
                         </a>
                     </li>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php echo $pages == 'blog_authors' ? 'active' : ''; ?>" href="<?php echo ADMIN_URL; ?>blog-authors/index.php">
+                            <i class="ti ti-user-edit"></i>
+                            <span>Blog Authors</span>
+                        </a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link menu-link <?php echo $pages == 'blog_tags' ? 'active' : ''; ?>" href="<?php echo ADMIN_URL; ?>blog-tags/index.php">
+                            <i class="ti ti-tags"></i>
+                            <span>Blog Tags</span>
+                        </a>
+                    </li>
                 <?php } ?>
                 <?php if($_SESSION['role']=='admin' || $blogs_link_per == 1) { ?>
                     <li class="nav-item active">
