@@ -19,6 +19,7 @@ if($_SESSION['role']!='admin' && $_SESSION['role']!='employee'){
 if (isset($_GET['id'])) {
     if (!empty($_GET['id'])) {
         mysqli_query($con, "DELETE FROM `blogs` where id={$_GET['id']}");
+        mysqli_query($con, "DELETE FROM `blog_tag_relations` WHERE blog_id = " . (int) trim($_GET['id'], "'\""));
         echo "<script>
             window.location.href='" . ADMIN_URL . "blogs/index.php';
             </script>";
@@ -58,6 +59,8 @@ if (isset($_GET['id'])) {
                             <th>SR No.</th>
                             <th>Blog Image</th>
                             <th>Title</th>
+                            <th>Author</th>
+                            <th>Publish Date</th>
                             <th>Description</th>
                             <th>Action</th>
                         </tr>
@@ -65,7 +68,7 @@ if (isset($_GET['id'])) {
                     <tbody>
                         <?php
                         $i = 1;
-                        $fetching_data = mysqli_query($con, "SELECT * FROM blogs order by id desc");
+                        $fetching_data = mysqli_query($con, "SELECT b.*, a.name AS author_name FROM blogs b LEFT JOIN blog_authors a ON a.id = b.author_id order by b.id desc");
                         while ($row = mysqli_fetch_assoc($fetching_data)) {
                         ?>
                             <tr>
@@ -76,6 +79,8 @@ if (isset($_GET['id'])) {
                                 }
                                 ?></td>
                                 <td><?php echo $row['title']; ?></td>
+                                <td><?php echo htmlspecialchars($row['author_name'] ?? ''); ?></td>
+                                <td data-order="<?php echo htmlspecialchars($row['publish_date'] ?? ''); ?>"><?php echo format_blog_date($row['publish_date'] ?? ''); ?></td>
                                 <td><?php echo substr($row['description'], 0, 100); ?>...</td>
                                 <td>
                                     <div class="dropdown d-inline-block">

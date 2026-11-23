@@ -65,7 +65,20 @@ function get_results($con)
 
     $limit = 10;
 
-    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `blogs` order by id desc "));
+    // Optional tag filter: blogs.php?endpoint=getBlogsData&tag=<tag-slug>
+    $tag_join = "";
+    $result['tag'] = null;
+    $tag_slug = make_slug($_GET['tag'] ?? '');
+    if ($tag_slug !== '') {
+        $tag_stmt = mysqli_prepare($con, "SELECT id, name, slug FROM `blog_tags` WHERE slug = ? LIMIT 1");
+        mysqli_stmt_bind_param($tag_stmt, 's', $tag_slug);
+        mysqli_stmt_execute($tag_stmt);
+        $tag_row = mysqli_fetch_assoc(mysqli_stmt_get_result($tag_stmt));
+        $tag_id = $tag_row ? (int) $tag_row['id'] : 0;
+        $tag_join = " JOIN `blog_tag_relations` btr ON btr.blog_id = b.id AND btr.tag_id = $tag_id ";
+        $result['tag'] = $tag_row ? ['name' => $tag_row['name'], 'slug' => $tag_row['slug']] : ['name' => $tag_slug, 'slug' => $tag_slug];
+    }
+    $sql_query = mysqli_fetch_assoc(mysqli_query($con, "SELECT COUNT(*) as total FROM `blogs` b $tag_join"));
 
     $total_query = $sql_query['total'];
 
@@ -81,7 +94,9 @@ function get_results($con)
 
     $offset = ($page * $limit) - $limit;
 
-    $tender_data = mysqli_query($con, "SELECT * FROM `blogs` order by id desc LIMIT $offset, $limit");
+    $tender_data = mysqli_query($con, "SELECT b.*, a.name AS author_name FROM `blogs` b $tag_join
+        LEFT JOIN `blog_authors` a ON a.id = b.author_id
+        ORDER BY b.publish_date DESC, b.id DESC LIMIT $offset, $limit");
 
     $tender_result = mysqli_num_rows($tender_data);
 
@@ -107,15 +122,19 @@ function get_results($con)
 
             }
 
-            $url_title = str_replace(" ","-",$row['title']);
-
-            $url_title = rtrim($url_title, "-");
+            $url_title = !empty($row['slug']) ? $row['slug'] : make_slug($row['title']);
 
             $result['blogs'][$count]['blog_id'] = $row['id'];
 
             $result['blogs'][$count]['title'] = htmlspecialcode_generator($row['title']);
 
-            $result['blogs'][$count]['url_title'] = $url_title;
+            $result['blogs'][$count]['url_title'] = $url_title;
+
+            $result['blogs'][$count]['author_name'] = !empty($row['author_name']) ? $row['author_name'] : 'Tender18 Team';
+
+            $result['blogs'][$count]['publish_date'] = $row['publish_date'] ?: date('Y-m-d', strtotime($row['created_at']));
+
+            $result['blogs'][$count]['publish_date_display'] = format_blog_date($result['blogs'][$count]['publish_date']);
 
             $result['blogs'][$count]['description'] = htmlspecialcode_generator($row['description']);
 

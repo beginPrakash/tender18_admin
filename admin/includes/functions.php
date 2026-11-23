@@ -220,3 +220,158 @@ function highlight_keywords_in_text($text, $keywords)
 
     return $highlighted;
 }
+
+/**
+ * Build a URL slug: lowercase, only a-z, 0-9 and single dashes.
+ */
+function make_slug($text)
+{
+    $text = html_entity_decode((string) $text, ENT_QUOTES, 'UTF-8');
+    $text = strtolower(trim($text));
+    $text = str_replace('&', ' and ', $text);
+    $text = preg_replace('/[^a-z0-9]+/', '-', $text);
+    $text = trim($text, '-');
+    return substr($text, 0, 200);
+}
+
+/**
+ * True when another blog already uses $slug. $exclude_id skips the blog being edited.
+ */
+function blog_slug_exists($con, $slug, $exclude_id = 0)
+{
+    $stmt = mysqli_prepare($con, "SELECT id FROM `blogs` WHERE `slug` = ? AND `id` != ? LIMIT 1");
+    $exclude_id = (int) $exclude_id;
+    mysqli_stmt_bind_param($stmt, 'si', $slug, $exclude_id);
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_store_result($stmt);
+    $exists = mysqli_stmt_num_rows($stmt) > 0;
+    mysqli_stmt_close($stmt);
+    return $exists;
+}
+
+/**
+ * Return $slug, or $slug-2, $slug-3 ... if it is already taken.
+ */
+function unique_blog_slug($con, $slug, $exclude_id = 0)
+{
+    $candidate = $slug;
+    $i = 2;
+    while (blog_slug_exists($con, $candidate, $exclude_id)) {
+        $candidate = $slug . '-' . $i++;
+    }
+    return $candidate;
+}
+
+/* ---------- Blog authors & tags ---------- */
+
+/** Active authors as [id => name] (plus $include_id even if inactive, so edit forms keep it). */
+function get_blog_author_options($con, $include_id = 0)
+{
+    $include_id = (int) $include_id;
+    $out = [];
+    $res = mysqli_query($con, "SELECT id, name, status FROM `blog_authors` WHERE status = 1 OR id = $include_id ORDER BY name ASC");
+    while ($res && $row = mysqli_fetch_assoc($res)) {
+        $out[(int) $row['id']] = $row['name'] . ($row['status'] ? '' : ' (inactive)');
+    }
+    return $out;
+}
+
+/** Id of the first-created author ("Tender18 Team"), used as default. */
+function get_default_blog_author_id($con)
+{
+    $row = mysqli_fetch_assoc(mysqli_query($con, "SELECT id FROM `blog_authors` WHERE status = 1 ORDER BY id ASC LIMIT 1"));
+    return $row ? (int) $row['id'] : 0;
+}
+
+/** Tags of one blog, in saved order: [['id','name','slug'], ...] */
+function get_blog_tags($con, $blog_id)
+{
+    $blog_id = (int) $blog_id;
+    $out = [];
+    $res = mysqli_query($con, "SELECT t.id, t.name, t.slug FROM `blog_tag_relations` r
+        JOIN `blog_tags` t ON t.id = r.tag_id WHERE r.blog_id = $blog_id ORDER BY r.sort_order ASC, t.name ASC");
+    while ($res && $row = mysqli_fetch_assoc($res)) {
+        $out[] = $row;
+    }
+    return $out;
+}
+
+/** Replace a blog's tags with the comma-separated names in $csv. New tags are created. */
+function save_blog_tags($con, $blog_id, $csv)
+{
+    $blog_id = (int) $blog_id;
+    mysqli_query($con, "DELETE FROM `blog_tag_relations` WHERE blog_id = $blog_id");
+
+    $seen = [];
+    $order = 0;
+    foreach (explode(',', (string) $csv) as $name) {
+        $name = trim(preg_replace('/\s+/', ' ', strip_tags($name)));
+        $name = mb_substr($name, 0, 100);
+        $slug = make_slug($name);
+        if ($name === '' || $slug === '' || isset($seen[$slug])) {
+            continue;
+        }
+        $seen[$slug] = true;
+
+        $stmt = mysqli_prepare($con, "SELECT id FROM `blog_tags` WHERE slug = ? LIMIT 1");
+        mysqli_stmt_bind_param($stmt, 's', $slug);
+        mysqli_stmt_execute($stmt);
+        $row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+        if ($row) {
+            $tag_id = (int) $row['id'];
+        } else {
+            $stmt = mysqli_prepare($con, "INSERT INTO `blog_tags` (`name`, `slug`) VALUES (?, ?)");
+            mysqli_stmt_bind_param($stmt, 'ss', $name, $slug);
+            mysqli_stmt_execute($stmt);
+            $tag_id = (int) mysqli_insert_id($con);
+        }
+        if ($tag_id) {
+            mysqli_query($con, "INSERT IGNORE INTO `blog_tag_relations` (`blog_id`, `tag_id`, `sort_order`) VALUES ($blog_id, $tag_id, " . $order++ . ")");
+        }
+    }
+}
+
+/** All tag names, for the tag input suggestions. */
+function get_all_blog_tag_names($con)
+{
+    $out = [];
+    $res = mysqli_query($con, "SELECT name FROM `blog_tags` ORDER BY name ASC");
+    while ($res && $row = mysqli_fetch_assoc($res)) {
+        $out[] = $row['name'];
+    }
+    return $out;
+}
+
+/** "2026-11-18" -> "18 Nov 2026" */
+function format_blog_date($date)
+{
+    $ts = $date ? strtotime($date) : false;
+    return $ts ? date('d M Y', $ts) : '';
+}
+
+/** Save author, publish date and tags posted from the blog add/edit form. */
+function save_blog_meta($con, $blog_id, $post)
+{
+    $blog_id = (int) $blog_id;
+
+    $author_id = (int) ($post['author_id'] ?? 0);
+    $exists = $author_id ? mysqli_num_rows(mysqli_query($con, "SELECT id FROM `blog_authors` WHERE id = $author_id")) : 0;
+    if (!$exists) {
+        $author_id = get_default_blog_author_id($con);
+    }
+
+    // Optional: empty publish date = the date the blog was created
+    $date = DateTime::createFromFormat('Y-m-d', (string) ($post['publish_date'] ?? ''));
+    if ($date) {
+        $publish_date = $date->format('Y-m-d');
+    } else {
+        $created = mysqli_fetch_assoc(mysqli_query($con, "SELECT DATE(created_at) d FROM `blogs` WHERE id = $blog_id"));
+        $publish_date = $created['d'] ?? date('Y-m-d');
+    }
+
+    $stmt = mysqli_prepare($con, "UPDATE `blogs` SET author_id = ?, publish_date = ?, updated_at = NOW() WHERE id = ?");
+    mysqli_stmt_bind_param($stmt, 'isi', $author_id, $publish_date, $blog_id);
+    mysqli_stmt_execute($stmt);
+
+    save_blog_tags($con, $blog_id, $post['tags'] ?? '');
+}
